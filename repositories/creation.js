@@ -1,6 +1,7 @@
 import { pool } from './runDB.js';
 
 export const drop = async () => {
+    await pool.query('USE SurveysDatabase');
     await pool.query('DROP TABLE IF EXISTS Users');
     await pool.query('DROP TABLE IF EXISTS Manager');
     await pool.query('DROP TABLE IF EXISTS answers');

@@ -1,9 +1,9 @@
-const todosDataBase = require('../../database/todosHandlerDB');
-const dotenv = require('dotenv');
-dotenv.config();
-
+// const todosDataBase = require('../../database/todosHandlerDB');
+// const dotenv = require('dotenv');
+// dotenv.config();
 const express = require('express');
 const router = express.Router();
+const questionsController = require('../controllers/questionsController');
 
 router.get('/', async (req, res) => {
     try {

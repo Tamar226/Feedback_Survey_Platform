@@ -1,0 +1,21 @@
+import {create, drop} from './creation.js';
+import mysql from 'mysql2';
+require('dotenv').config();
+
+
+export const pool = mysql.createPool({
+    host: 'process.env.MYSQL_HOST',
+    user: 'process.env.MYSQL_USER',
+    password: 'process.env.MYSQL_PASSWORD',
+    database: 'process.env.MYSQL_DATABASE',
+    port:'process.env.PORT'
+}).promise();
+
+(async () => {
+    try {
+        await drop();
+        await create();
+    } catch (error) {
+        console.error(error);
+    }
+})();
