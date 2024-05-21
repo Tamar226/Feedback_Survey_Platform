@@ -1,21 +1,22 @@
 const mysql = require('mysql2');
 
 
-var con = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "T50226",
-    database: "SurveysDatabase"
-});
+var pool = mysql.createPool({
+    host: process.env.MYSQL_HOST,
+    user: process.env.MYSQL_USER,
+    password: process.env.MYSQL_PASSWORD,
+    database: process.env.MYSQL_DATABASE,
+}).promise();
+
 
 async function getAllAnswers() {
-    const result = await con.promise().query('SELECT * FROM answers');
-    return prepareResults(false, 0, 0, result);
+    const result = await pool.query('SELECT * FROM answers');
+    return prepareResult(false, 0, 0, result);
 }
 
 async function getAnswerById(userId) {
     try {
-        const result = await con.promise().query('SELECT * FROM answers WHERE userId = ?', [userId]);
+        const result = await pool.query('SELECT * FROM answers WHERE userId = ?', [userId]);
         if (result.length === 0) {
             throw new Error(`Answer with ID ${userId} not found`);
         }
@@ -33,7 +34,7 @@ async function addAnswer(newAnswer) {
         }
         else
             newAnswer.completed = 0;
-        const result = await con.promise().query(`INSERT INTO answers (userID, title,completed) VALUES ('${newAnswer.userId}', '${newAnswer.title}','${newAnswer.completed}')`);
+        const result = await pool.query(`INSERT INTO answers (userID, title,completed) VALUES ('${newAnswer.userId}', '${newAnswer.title}','${newAnswer.completed}')`);
         if (result[0].insertId > 0) {
             return prepareResult(false, 0, result[0].insertId)
         }
@@ -47,7 +48,7 @@ async function addAnswer(newAnswer) {
 
 async function updateAnswer(answerId, updatedAnswerData) {
     try {
-        const result = await con.promise().query('UPDATE answers SET ? WHERE id = ?', [updatedAnswerData, answerId]);
+        const result = await pool.query('UPDATE answers SET ? WHERE id = ?', [updatedAnswerData, answerId]);
         if (result[0].affectedRows > 0) {
             return prepareResult(false, result[0].affectedRows, 0)
         }
@@ -62,7 +63,7 @@ async function updateAnswer(answerId, updatedAnswerData) {
 
 async function deleteAnswer(answerId) {
     try {
-        const result = await con.promise().query('DELETE FROM answers WHERE id = ?', answerId);
+        const result = await pool.query('DELETE FROM answers WHERE id = ?', answerId);
         if (result[0].affectedRows > 0) {
             return prepareResult(false, result[0].affectedRows, 0)
 

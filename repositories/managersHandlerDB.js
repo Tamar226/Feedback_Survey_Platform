@@ -2,21 +2,21 @@ const mysql = require('mysql2');
 const dotenv = require('dotenv');
 dotenv.config();
 
-var con = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "T50226",
-    database: "SurveysDatabase"
-});
+var pool = mysql.createPool({
+    host: process.env.MYSQL_HOST,
+    user: process.env.MYSQL_USER,
+    password: process.env.MYSQL_PASSWORD,
+    database: process.env.MYSQL_DATABASE,
+}).promise();
 
 async function getAllManagers() {
-    const result = await con.promise().query('SELECT * FROM Managers');
-    return prepareResults(false, 0, 0, result);
+    const result = await pool.query('SELECT * FROM Managers');
+    return prepareResult(false, 0, 0, result);
 }
 
 async function getManagerById(ManagerId) {
     try {
-        const result = await con.promise().query('SELECT * FROM Managers WHERE id = ?', [ManagerId]);
+        const result = await pool.query('SELECT * FROM Managers WHERE id = ?', [ManagerId]);
         if (result.length === 0) {
             throw new Error(`Manager with ID ${postId} not found`);
         }
@@ -28,7 +28,7 @@ async function getManagerById(ManagerId) {
 
 async function addManager(newManager) {
     try {
-        const result = await con.promise().query(`INSERT INTO Managers (name,email,password,company) VALUES ('${newManager.name}','${newManager.email}','${newManager.password}','${newManager.company}')`);
+        const result = await pool.query(`INSERT INTO Managers (name,email,password,company) VALUES ('${newManager.name}','${newManager.email}','${newManager.password}','${newManager.company}')`);
         if (result[0].insertId > 0) {
             return prepareResult(false, 0, result[0].insertId)
         }
@@ -42,7 +42,7 @@ async function addManager(newManager) {
 
 async function updateManager(ManagerId, updatedManagerData) {
     try {
-        const result = await con.promise().query('UPDATE Managers SET ? WHERE id = ?', [updatedManagerData, ManagerId]);
+        const result = await pool.query('UPDATE Managers SET ? WHERE id = ?', [updatedManagerData, ManagerId]);
         if (result[0].affectedRows > 0) {
             return prepareResult(false, result[0].affectedRows, 0)
         }
@@ -56,7 +56,7 @@ async function updateManager(ManagerId, updatedManagerData) {
 
 async function deleteManager(ManagerId) {
     try {
-        const result = await con.promise().query('DELETE FROM Managers WHERE id = ?', ManagerId);
+        const result = await pool.query('DELETE FROM Managers WHERE id = ?', ManagerId);
         if (result[0].affectedRows > 0) {
             return prepareResult(false, result[0].affectedRows, 0)
 

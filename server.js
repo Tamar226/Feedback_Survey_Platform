@@ -2,6 +2,8 @@
 const cors = require('cors');
 const express = require('express');
 const managersRouter = require('./routes/managersRoute');
+const usersRouter = require('./routes/usersRoute');
+
 
 const server = express();
 const host = 'localhost';
@@ -13,6 +15,8 @@ server.use(express.json());
 
 // Routes
 server.use('/managers', managersRouter);
+server.use('/users', usersRouter);
+
 
 // Default Route
 server.get('/', (req, res) => {

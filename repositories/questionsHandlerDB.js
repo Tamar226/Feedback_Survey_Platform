@@ -1,21 +1,22 @@
 const mysql = require('mysql2');
 
 
-var con = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "T50226",
-    database: "SurveysDatabase"
-});
+var pool = mysql.createPool({
+    host: process.env.MYSQL_HOST,
+    user: process.env.MYSQL_USER,
+    password: process.env.MYSQL_PASSWORD,
+    database: process.env.MYSQL_DATABASE,
+}).promise();
+
 
 async function getAllTodos() {
-    const result = await con.promise().query('SELECT * FROM todos');
-    return prepareResults(false, 0, 0, result);
+    const result = await pool.query('SELECT * FROM todos');
+    return prepareResult(false, 0, 0, result);
 }
 
 async function getTodoById(userId) {
     try {
-        const result = await con.promise().query('SELECT * FROM todos WHERE userId = ?', [userId]);
+        const result = await pool.query('SELECT * FROM todos WHERE userId = ?', [userId]);
         if (result.length === 0) {
             throw new Error(`Todo with ID ${userId} not found`);
         }
@@ -33,7 +34,7 @@ async function addTodo(newTodo) {
         }
         else
             newTodo.completed = 0;
-        const result = await con.promise().query(`INSERT INTO todos (userID, title,completed) VALUES ('${newTodo.userId}', '${newTodo.title}','${newTodo.completed}')`);
+        const result = await pool.query(`INSERT INTO todos (userID, title,completed) VALUES ('${newTodo.userId}', '${newTodo.title}','${newTodo.completed}')`);
         if (result[0].insertId > 0) {
             return prepareResult(false, 0, result[0].insertId)
         }
@@ -47,7 +48,7 @@ async function addTodo(newTodo) {
 
 async function updateTodo(todoId, updatedTodoData) {
     try {
-        const result = await con.promise().query('UPDATE todos SET ? WHERE id = ?', [updatedTodoData, todoId]);
+        const result = await pool.query('UPDATE todos SET ? WHERE id = ?', [updatedTodoData, todoId]);
         if (result[0].affectedRows > 0) {
             return prepareResult(false, result[0].affectedRows, 0)
         }
@@ -62,7 +63,7 @@ async function updateTodo(todoId, updatedTodoData) {
 
 async function deleteTodo(todoId) {
     try {
-        const result = await con.promise().query('DELETE FROM todos WHERE id = ?', todoId);
+        const result = await pool.query('DELETE FROM todos WHERE id = ?', todoId);
         if (result[0].affectedRows > 0) {
             return prepareResult(false, result[0].affectedRows, 0)
 

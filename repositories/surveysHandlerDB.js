@@ -1,20 +1,20 @@
 const mysql = require('mysql2');
 
-var con = mysql.createConnection({
+var pool = mysql.createPool({
+    host: process.env.MYSQL_HOST,
+    user: process.env.MYSQL_USER,
+    password: process.env.MYSQL_PASSWORD,
+    database: process.env.MYSQL_DATABASE,
+}).promise();
 
-    host: "localhost",
-    user: "root",
-    password: "T50226",
-    database: "SurveysDatabase"
-});
 
 async function getAllPosts() {
-    const result = await con.promise().query('SELECT * FROM posts');
-    return prepareResults(false, 0, 0, result);
+    const result = await pool.query('SELECT * FROM posts');
+    return prepareResult(false, 0, 0, result);
 }
 async function getPostById(userId) {
     try {
-        const result = await con.promise().query('SELECT * FROM posts WHERE userId = ' + userId);
+        const result = await pool.query('SELECT * FROM posts WHERE userId = ' + userId);
         if (result.length === 0) {
             throw new Error(`post with ID ${userId} not found`);
         }
@@ -26,7 +26,7 @@ async function getPostById(userId) {
 
 async function addPost(newPost) {
     try {
-        const result = await con.promise().query(`INSERT INTO posts (userID, title,body) VALUES ('${newPost.userId}', '${newPost.title}','${newPost.body}')`);
+        const result = await pool.query(`INSERT INTO posts (userID, title,body) VALUES ('${newPost.userId}', '${newPost.title}','${newPost.body}')`);
         if (result[0].insertId > 0) {
             return prepareResult(false, 0, result[0].insertId)
         }
@@ -40,7 +40,7 @@ async function addPost(newPost) {
 
 async function updatePost(postId, updatedPostData) {
     try {
-        const result = await con.promise().query('UPDATE posts SET ? WHERE id = ?', [updatedPostData, postId]);
+        const result = await pool.query('UPDATE posts SET ? WHERE id = ?', [updatedPostData, postId]);
         if (result[0].affectedRows > 0) {
             return prepareResult(false, result[0].affectedRows, 0);
         }
@@ -54,7 +54,7 @@ async function updatePost(postId, updatedPostData) {
 
 async function deletePost(postId) {
     try {
-        const result = await con.promise().query('DELETE FROM posts WHERE id = ?', postId);
+        const result = await pool.query('DELETE FROM posts WHERE id = ?', postId);
         if (result[0].affectedRows > 0) {
             return prepareResult(false, result[0].affectedRows, 0)
         } else {
