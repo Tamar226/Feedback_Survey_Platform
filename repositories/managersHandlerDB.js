@@ -39,6 +39,15 @@ async function addManager(newManager) {
         throw error;
     }
 }
+async function findManagerByUsername(userName) {
+    try {
+        const [rows] = await pool.query('SELECT * FROM Managers WHERE name = ?', [userName]);
+        return rows;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
 
 async function updateManager(ManagerId, updatedManagerData) {
     try {
@@ -81,6 +90,7 @@ module.exports = {
     getAllManagers,
     getManagerById,
     addManager,
+    findManagerByUsername,
     updateManager,
     deleteManager
 }

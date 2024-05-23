@@ -42,6 +42,37 @@ const updateManager = async (req, res) => {
     }
 };
 
+// const loginManager = async (req, res) => {
+//     const userName = req.body.username;
+//     const password = req.body.password;
+//     try {
+//         const result = await managerService.getManagerDetails(userName, password);
+//         if (result.hasError) {
+//             res.status(404).send('Error');
+//         } else {
+//             res.status(200).send(JSON.stringify(result));
+//         }
+//     } catch (error) {
+//         res.status(500).send('Internal Server Error');
+//     }
+// };
+
+const loginManager = async (req, res) => {
+    const userName = req.body.username;
+    const password = req.body.password;
+    try {
+        const result = await managerService.getManagerDetails(userName, password);
+        if (result.hasError) {
+            res.status(401).send('Authentication failed');
+        } else {
+            res.status(200).json(result);
+        }
+    } catch (error) {
+        res.status(500).send('Internal Server Error');
+    }
+};
+
+
 const deleteManager = async (req, res) => {
     const managerId = req.params.managerId;
     try {
@@ -57,5 +88,6 @@ module.exports = {
     getManagerById,
     addManager,
     updateManager,
+    loginManager,
     deleteManager,
 };
