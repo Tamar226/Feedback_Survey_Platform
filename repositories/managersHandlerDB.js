@@ -18,7 +18,7 @@ async function getManagerById(ManagerId) {
     try {
         const result = await pool.query('SELECT * FROM Managers WHERE id = ?', [ManagerId]);
         if (result.length === 0) {
-            throw new Error(`Manager with ID ${postId} not found`);
+            throw new Error(`Manager with ID ${ManagerId} not found`);
         }
         return prepareResult(false, 0, 0, result[0]);
     } catch (error) {
@@ -28,7 +28,7 @@ async function getManagerById(ManagerId) {
 
 async function addManager(newManager) {
     try {
-        const result = await pool.query(`INSERT INTO Managers (name,username,email,password,company) VALUES ('${newManager.name}','${newManager.userName}','${newManager.email}','${newManager.password}','${newManager.company}')`);
+        const result = await pool.query(`INSERT INTO Managers (name,username,email,password,company) VALUES ('${newManager.name}','${newManager.username}','${newManager.email}','${newManager.password}','${newManager.company}')`);
         if (result[0].insertId > 0) {
             return prepareResult(false, 0, result[0].insertId)
         }

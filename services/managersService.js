@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 dotenv.config();
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret'; // יש לשמור בסוד את ה-secret
+const JWT_SECRET = /*process.env.JWT_SECRET*/'546442' || 'your_jwt_secret'; // יש לשמור בסוד את ה-secret
 
 const getAllManagers = async () => {
     const result = await managerDataBase.getAllManagers();
@@ -40,21 +40,21 @@ async function getManagerDetails(userName, password) {
             throw new Error('Manager not found');
         }
 
-        const user = rows[0];
-        const isMatch = await bcrypt.compare(password, user.password);
+        const manager = rows[0][0];
+        const isMatch = await bcrypt.compare(password, manager.password);
         if (!isMatch) {
             throw new Error('Invalid password');
         }
 
-        const token = jwt.sign({ id: user.id, username: user.username }, JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign({ id: manager.id, username: manager.username }, JWT_SECRET, { expiresIn: '1h' });
 
         return {
             hasError: false,
-            user: {
-                id: user.id,
-                username: user.username,
-                email: user.email,
-                company: user.company
+            manager: {
+                id: manager.id,
+                username: manager.username,
+                email: manager.email,
+                company: manager.company
             },
             token
         };

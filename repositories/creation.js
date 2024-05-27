@@ -20,29 +20,27 @@ export const create = async () => {
     // Create the users table
     await pool.query(`
     CREATE TABLE IF NOT EXISTS Users(
-        id int AUTO_INCREMENT, 
-        name VARCHAR(255) NOT NULL, 
-        username VARCHAR(255), 
-        email VARCHAR(255) NOT NULL,  
-        password VARCHAR(255) NOT NULL, 
-        city VARCHAR(255) NOT NULL, 
-        age VARCHAR(255) NOT NULL, 
-        gender VARCHAR(255) NOT NULL, 
-        job VARCHAR(255) NOT NULL, 
-        PRIMARY KEY(id, username)
-        );`
-        );
+        id int AUTO_INCREMENT PRIMARY KEY,
+        name VARCHAR(255) NOT NULL,
+        username VARCHAR(255) NOT NULL UNIQUE,
+        email VARCHAR(255) NOT NULL,
+        password VARCHAR(255) NOT NULL,
+        city VARCHAR(255) NOT NULL,
+        age INT NOT NULL, 
+        gender VARCHAR(255) NOT NULL,
+        job VARCHAR(255) NOT NULL
+    );`
+    );
 
     //Create the managers table
     await pool.query(`
     CREATE TABLE IF NOT EXISTS Managers(
-        id int AUTO_INCREMENT,
+        id int AUTO_INCREMENT PRIMARY KEY,
         name varchar(255) NOT NULL,
-        username varchar(255) NOT NULL,
+        username varchar(255) NOT NULL UNIQUE,
         email varchar(255) NOT NULL,
         password varchar(255) NOT NULL,
-        company varchar(255) NOT NULL,
-        PRIMARY KEY (id)
+        company varchar(255) NOT NULL
     );`);
     //Create the surveys table
     await pool.query(`

@@ -21,7 +21,7 @@ export const pool = mysql.createPool({
 
 (async () => {
     try {
-        // await drop();
+        await drop();
         await create();
     } catch (error) {
         console.error(error);
