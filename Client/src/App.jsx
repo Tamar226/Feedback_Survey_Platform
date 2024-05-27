@@ -11,8 +11,9 @@ import {
 } from "react-router-dom";
 import "./App.css";
 
-import LogIn from "./components/Login";
-import Register from "./components/Register";
+import Register from './components/Register';
+import Login from './components/Login';
+import AdditionalRegistrationDetails from './components/AdditionalRegistrationDetails';
 // import UserDetails from "./components/UserDetails";
 import Header from "./components/Header";
 
@@ -21,10 +22,11 @@ function App() {
     <>
       <Routes>
         <Route path="/" element={<Navigate to="Header" />} />
-        <Route path="login" element={<LogIn />} />
-        <Route path="register" element={<Outlet />}>
-          <Route index element={<Register />} />
-          {/* <Route path="userDetails" element={<UserDetails />} /> */}
+        <Route path="login" element={<Login />} />
+        <Route path="register" element={<Register />}>
+
+          {/* <Route index element={<Register />} /> */}
+          <Route path="moreDetails" element={<AdditionalRegistrationDetails />} />
         </Route>
         {/* <Route path="*" element={<NotFound />} /> */}
       </Routes>

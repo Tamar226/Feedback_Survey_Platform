@@ -14,7 +14,7 @@ export const pool = mysql.createPool({
     // port:process.env.PORT
     host: 'localhost',
             user: 'root',
-            password: '1570',
+            password: 'T50226',
             // database: 'SurveysDatabase',
             port:'3306'
 }).promise();

@@ -1,68 +1,92 @@
 import { useState } from 'react'
+import { Button } from "primereact/button";
+import { InputText } from "primereact/inputtext";
+import { FloatLabel } from "primereact/floatlabel"
+import { Fieldset } from 'primereact/fieldset';
 import { Link, useNavigate, Outlet } from "react-router-dom"
-// import { getUserDetails } from '../../../JS/request';
-// import ErrorMessege from '../../ErrorMessege';
-export default function Register() {
-  const [worngRequest, setworngRequest] = useState(false);
-  const navigate = useNavigate();
-  const [detailsRegister, setDetailsRegister] = useState({ userName: '', password: '', verifyPassword: '' });
-  const handleInputRegisterChange = (e) => {
-    const { name, value } = e.target
-    setDetailsRegister({
-      ...detailsRegister,
-      [name]: value
-    })
-    e.target.classList.remove("notTouch");
-  }
+import ErrorMessege from '../Messages/ErrorMessage';
 
-  async function register() {
-    if (detailsRegister.password != detailsRegister.verifyPassword) {
-      alert("Passwords don't match");
+
+export default function Register() {
+    const [worngRequest, setworngRequest] = useState(false);
+    const navigate = useNavigate();
+    const [detailsRegister, setDetailsRegister] = useState({ userName: '', password: '', verifyPassword: '' });
+    const handleInputRegisterChange = (e) => {
+        const { name, value } = e.target
+        setDetailsRegister({
+            ...detailsRegister,
+            [name]: value
+        })
+        e.target.classList.remove("notTouch");
     }
-    else {
-      let userDetails = await getUserDetails(detailsRegister.userName, detailsRegister.password, setworngRequest);
-      if (userDetails.code != 100) {
-        if (userDetails.code == 304) {
-          let newUserDetails = {
-            username: detailsRegister.userName,
-            website: detailsRegister.password
-          };
-          navigate(`/register/addDetails`, { state: { userDetails: newUserDetails } });
+
+    async function register() {
+        if (detailsRegister.password != detailsRegister.verifyPassword) {
+            alert("Passwords don't match");
         }
         else {
-          alert("wrong username or password");
-          setDetailsRegister({ userName: '', password: '', verifyPassword: '' })
+            let userDetails = await getUserDetails(detailsRegister.userName, detailsRegister.password, setworngRequest);
+            if (userDetails.code != 100) {
+                if (userDetails.code == 304) {
+                    let newUserDetails = {
+                        username: detailsRegister.userName,
+                        website: detailsRegister.password
+                    };
+                    navigate(`/register/addDetails`, { state: { userDetails: newUserDetails } });
+                }
+                else {
+                    alert("wrong username or password");
+                    setDetailsRegister({ userName: '', password: '', verifyPassword: '' })
+                }
+            }
         }
-      }
+
     }
-
-  }
-  return (
+return (
     <>
-      {!worngRequest ?
-
-        <div id="divRegister">
-          <h2>Register: </h2>
-          <form onSubmit={(e) => {
-            e.preventDefault();
-            register();
-          }}>
-            <label htmlFor="userName">User Name</label><br />
-            <input id="userName" type='text' name='userName' value={detailsRegister.userName} required onChange={(e) => handleInputRegisterChange(e)} /><br />
-            <label htmlFor="password">Password</label><br />
-            <input id="password" type='password' name='password' value={detailsRegister.password} autoComplete='2' required onChange={(e) => handleInputRegisterChange(e)} /><br />
-            <label htmlFor="password">Verify Password</label><br />
-            <input id="verifyPassword" type='password' value={detailsRegister.verifyPassword} name='verifyPassword' autoComplete='2' required onChange={(e) => handleInputRegisterChange(e)} /><br /><br />
-            <button type="submit" style={{ backgroundColor: "rgb(67, 148, 162)", color: 'white' }}   >Register</button>
-          </form>
-          <h4>Already have an acount?</h4>
-          <Link id="linkSign" to="/login">Log in</Link>
-          <Outlet></Outlet>
-        </div> :
-        <ErrorMessege />
-      }
+    {!worngRequest ?
+        <Fieldset legend="Register Here">
+             <FloatLabel>
+                    <InputText
+                        id="name"
+                        value={detailsRegister.name}
+                        onChange={(e) => handleInputRegisterChange(e)}
+                    />
+                    <label htmlFor="Name">Name</label>
+                </FloatLabel>
+                <br /><br />
+                <FloatLabel>
+                    <InputText
+                    id="email"
+                    name="email"
+                    value={detailsRegister.email}
+                    onChange={handleInputRegisterChange}
+                    required
+                    />
+                    <label htmlFor="email">Email</label>
+                </FloatLabel>
+                <br /><br />
+                <FloatLabel>
+                    <InputText
+                        id="password"
+                        value={detailsRegister.password}
+                        onChange={(e) => handleInputRegisterChange(e)}
+                    />
+                    <label htmlFor="password">Password</label>
+                </FloatLabel>
+                <br />
+                <Link to="/AdditionalRegistrationDetails" id="link">
+                A little more details about yourself⬇️
+                </Link><br /><br />
+                <Button onClick={register} label="Registering" />
+                <br /><br />
+                <Link to="/login" id="link">
+                    Already have an acount?
+                </Link>
+        </Fieldset> :
+        <ErrorMessege />}
     </>
-  )
+)
 }
 
 
