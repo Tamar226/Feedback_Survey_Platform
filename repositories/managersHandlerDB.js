@@ -28,7 +28,7 @@ async function getManagerById(ManagerId) {
 
 async function addManager(newManager) {
     try {
-        const result = await pool.query(`INSERT INTO Managers (name,email,password,company) VALUES ('${newManager.name}','${newManager.email}','${newManager.password}','${newManager.company}')`);
+        const result = await pool.query(`INSERT INTO Managers (name,username,email,password,company) VALUES ('${newManager.name}','${newManager.userName}','${newManager.email}','${newManager.password}','${newManager.company}')`);
         if (result[0].insertId > 0) {
             return prepareResult(false, 0, result[0].insertId)
         }
@@ -39,9 +39,9 @@ async function addManager(newManager) {
         throw error;
     }
 }
-async function findManagerByUsername(userName) {
+async function findManagerByUsername(username) {
     try {
-        const [rows] = await pool.query('SELECT * FROM Managers WHERE name = ?', [userName]);
+        const rows = await pool.query('SELECT * FROM Managers WHERE username = ?', [username]);
         return rows;
     } catch (error) {
         console.error(error);

@@ -4,13 +4,17 @@ const express = require('express');
 const managersRouter = require('./routes/managersRoute');
 const usersRouter = require('./routes/usersRoute');
 
+// import cors from 'cors';
+// import express from 'express';
+// import managersRouter from './routes/managersRoute';
+// import usersRouter from './routes/usersRoute';
 
 const server = express();
 const host = 'localhost';
 const port = '3000';  
 
 // Middleware
-// server.use(cors({ origin: '*' }));  
+server.use(cors({ origin: '*' }));  
 server.use(express.json());  
 
 // Routes

@@ -38,6 +38,7 @@ export const create = async () => {
     CREATE TABLE IF NOT EXISTS Managers(
         id int AUTO_INCREMENT,
         name varchar(255) NOT NULL,
+        username varchar(255) NOT NULL,
         email varchar(255) NOT NULL,
         password varchar(255) NOT NULL,
         company varchar(255) NOT NULL,

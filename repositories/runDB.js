@@ -7,24 +7,22 @@ dotenv.config();
 
 
 export const pool = mysql.createPool({
-    host: process.env.MYSQL_HOST,
-    user: process.env.MYSQL_USER,
-    password: process.env.MYSQL_PASSWORD,
-    database: process.env.MYSQL_DATABASE,
-    port:process.env.PORT
+    // host: process.env.MYSQL_HOST,
+    // user: process.env.MYSQL_USER,
+    // password: process.env.MYSQL_PASSWORD,
+    // database: process.env.MYSQL_DATABASE,
+    // port:process.env.PORT
+    host: 'localhost',
+            user: 'root',
+            password: '1570',
+            // database: 'SurveysDatabase',
+            port:'3306'
 }).promise();
 
 (async () => {
     try {
-        console.log({
-            host: process.env,
-            // user: process.env.MYSQL_USER,
-            // password: process.env.MYSQL_PASSWORD,
-            // database: process.env.MYSQL_DATABASE,
-            // port:process.env.PORT
-        });
         // await drop();
-        // await create();
+        await create();
     } catch (error) {
         console.error(error);
     }
