@@ -22,7 +22,10 @@ function App() {
     <>
       <Routes>
         <Route path="/" element={<Header />} />
-        <Route path="login" element={<Login />} />
+        <Route path="login" element={<Login />}>
+          <Route path="manager" element={<Login/>}/>
+          <Route path="user" element={<Login/>}/>
+        </Route>
         <Route path="register" element={<Register />}>
           <Route path="moreDetails" element={<AdditionalRegistrationDetails />} />
         </Route>
