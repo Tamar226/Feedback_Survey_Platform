@@ -21,14 +21,12 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<Navigate to="Header" />} />
+        <Route path="/" element={<Header />} />
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />}>
-
-          {/* <Route index element={<Register />} /> */}
           <Route path="moreDetails" element={<AdditionalRegistrationDetails />} />
         </Route>
-        {/* <Route path="*" element={<NotFound />} /> */}
+         {/* <Route path="*" element={<NotFound />} /> */}
       </Routes>
     </>
   );

@@ -1,36 +1,50 @@
-import { NavLink } from "react-router-dom"
-export default function Header() {
-    function logout() {
-        localStorage.removeItem("currentUser");
-    }
-    const activeStyle = {
-        fontWeight: "bold",
-        color: "white"
-    }
-    function login() {
-        localStorage.setItem("currentUser", "true");
-    if (localStorage.getItem("currentUser") === "true") {
-        return (
-            <>
+// import { NavLink } from "react-router-dom"
+// import { TabMenu } from 'primereact/tabmenu';
 
-            </>
-        );
-        };
-    } 
+// export default function Header() {
+//     function logout() {
+//         localStorage.removeItem("currentUser");
+//     }
+    
+//     function login() {
+//         localStorage.setItem("currentUser", "true");
+//         if (localStorage.getItem("currentUser") === "true") {
+//             return (
+//                 <>
+
+//                 </>
+//             );
+//         };
+//     }
+//     return (
+//     <>
+//             <nav>
+//                 {/* <NavLink className="navLink" to='.' end>HOME</NavLink> */}
+//                 <TabMenu className="navLink" to={`AboutUs`}>About Us</TabMenu>
+//                 <NavLink className="navLink" to={`ContactUs`}>Contact Us</NavLink>
+//                 <NavLink className="navLink" to={`Surveys`}>Surveys</NavLink>
+//                 <NavLink className="navLink" onClick={() => login()} to={`/login`}>Login</NavLink>
+//                 <NavLink className="navLink" onClick={() => logout()} to={`/login`}>Logout</NavLink>
+//             </nav>
+//         </>
+//     )
+// }
+
+
+import React from 'react';
+import { TabMenu } from 'primereact/tabmenu';
+
+export default function BasicDemo() {
+    const items = [
+        { label: 'AboutUs', icon: 'pi pi-home', url: '/AboutUs' },
+        { label: 'ContactUs', icon: 'pi pi-chart-line', url: '/ContactUs' },
+        { label: 'Surveys', icon: 'pi pi-list', url: '/Surveys' },
+        { label: 'Messages', icon: 'pi pi-inbox', url: '/messages' }
+    ];
+
     return (
-        <>
-            <nav>
-                <NavLink className="navLink" to='.' end style={({ isActive }) => isActive ? activeStyle : null}>HOME</NavLink>
-                <NavLink className="navLink" to={`todos`} style={({ isActive }) => isActive ? activeStyle : null}>Todos</NavLink>
-                <NavLink className="navLink" to={`info`} style={({ isActive }) => isActive ? activeStyle : null} >Info</NavLink>
-                <NavLink className="navLink" to={`albums`} style={({ isActive }) => isActive ? activeStyle : null}>Albums</NavLink>
-                <NavLink className="navLink" to={`posts`} style={({ isActive }) => isActive ? activeStyle : null}>Posts</NavLink>
-                <NavLink className="navLink" onClick={() => login()} to={`/login`} style={({ isActive }) => isActive ? activeStyle : null}>Login</NavLink>
-                <NavLink className="navLink" onClick={() => logout()} to={`/login`} style={({ isActive }) => isActive ? activeStyle : null}>Logout</NavLink>
-
-            </nav>
-        </>
+        <div className="card">
+            <TabMenu model={items.map(item => ({ label: <NavLink className="navLink" to={item.url}>{item.label}</NavLink>, icon: item.icon }))} />
+        </div>
     )
 }
-
-
