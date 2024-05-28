@@ -131,4 +131,3 @@ export default function Login() {
     </>
   );
 }
-module.exports ="Login"

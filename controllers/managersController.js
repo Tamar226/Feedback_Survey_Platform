@@ -1,5 +1,6 @@
 
 const managerService = require('../services/managersService');
+const bcrypt = require('bcrypt');
 
 const getAllManagers = async (req, res) => {
     try {
@@ -23,6 +24,8 @@ const getManagerById = async (req, res) => {
 const addManager = async (req, res) => {
     const newManager = req.body;
     try {
+        const hashPassword = await bcrypt.hash(newManager.password, 10);
+        newManager.password = hashPassword;
         const addedManager = await managerService.addManager(newManager);
         res.status(200).send(addedManager);
     } catch (error) {

@@ -39,7 +39,6 @@ async function getManagerDetails(userName, password) {
         if (rows.length === 0) {
             throw new Error('Manager not found');
         }
-
         const manager = rows[0][0];
         const isMatch = await bcrypt.compare(password, manager.password);
         if (!isMatch) {
