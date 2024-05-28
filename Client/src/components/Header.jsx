@@ -39,12 +39,15 @@ export default function BasicDemo() {
         { label: 'AboutUs', icon: 'pi pi-home', url: '/AboutUs' },
         { label: 'ContactUs', icon: 'pi pi-chart-line', url: '/ContactUs' },
         { label: 'Surveys', icon: 'pi pi-list', url: '/Surveys' },
-        { label: 'Messages', icon: 'pi pi-inbox', url: '/messages' }
+        { label: 'Messages', icon: 'pi pi-inbox', url: '/messages' },
+        { label: 'Login', icon: 'pi pi-sign-in', url: '/login', onClick: login() },
+        { label: 'Logout', icon: 'pi pi-sign-out', url: '/logout', onClick: logout() }
     ];
 
     return (
         <div className="card">
-            <TabMenu model={items.map(item => ({ label: <NavLink className="navLink" to={item.url}>{item.label}</NavLink>, icon: item.icon }))} />
+            <TabMenu model={items.map(item => ({ label: <div className="navLink" onClick={item.onClick}>{item.label}</div>, icon: item.icon, command: () => window.location.href = item.url }))} />
         </div>
     )
 }
+
