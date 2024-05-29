@@ -8,26 +8,15 @@ import React from 'react';
 import { TabMenu } from 'primereact/tabmenu';
 import { NavLink } from "react-router-dom"
 // import { ColorPicker } from 'primereact/colorpicker';
+import { useUser } from './UserContext'; 
 export default function Header() {
-    function logout() {
-                localStorage.removeItem("currentUser");
-            }
-            
-            function login() {
-                localStorage.setItem("currentUser", "true");
-                if (localStorage.getItem("currentUser") === "true") {
-                    return (
-                        <>
-        
-                        </>
-                    );
-                }
-            }
+    const { currentUser, login, logout } = useUser();
+
     const items = [
         { label: 'About Us', icon: PrimeIcons.SLACK, url: '/AboutUs'},
         { label: 'Contact Us', icon: PrimeIcons.PHONE, url: '/ContactUs' },
         { label: 'Surveys', icon: PrimeIcons.WAVE_PULSE, url: '/Surveys' },
-        { label: 'Login', icon: PrimeIcons.USERS, url: '/login', onClick: login },
+        { label: currentUser ? `Welcome, ${currentUser}` : 'Login', icon: currentUser ? PrimeIcons.USER : PrimeIcons.USERS, url: currentUser ? '/profile' : '/login', onClick: currentUser ? null : login },
         { label: 'Logout', icon: 'pi pi-sign-out', url: '/logout', onClick: logout }
     ];
 

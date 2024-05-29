@@ -139,10 +139,11 @@ import { FloatLabel } from "primereact/floatlabel";
 import { Fieldset } from "primereact/fieldset";
 import { Link, useNavigate } from "react-router-dom";
 import { RegisterByPostRequest } from '../Requests';
-
+import { useUser } from './UserContext';  //
 export default function Register() {
   const [worngRequest, setworngRequest] = useState(false);
   const [message, setMessage] = useState("");
+  const { setCurrentUser } = useUser();
   const navigate = useNavigate();
   const [detailsRegister, setDetailsRegister] = useState({
     name: "",
@@ -185,7 +186,8 @@ export default function Register() {
     const res = await RegisterByPostRequest(detailsRegister.name, detailsRegister.userName, detailsRegister.email, detailsRegister.password, detailsRegister.company);
     console.log(res);
     if (res.status==200){
-      navigate(`/managers/${res.data.managers.id}`);
+      setCurrentUser(res.data.user); 
+      navigate(`/managers/${res.data.user.id}`);
     }
     if (res.code !== 100) {
       if (res.code === 304) {
