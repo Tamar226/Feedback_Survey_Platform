@@ -9,6 +9,8 @@
     "mysql": "^2.18.1",
     "mysql2": "^3.9.7",
     "nodemon": "^3.1.0",
+    "primeicons": "^7.0.0",
+    "primereact": "^10.6.6",
     "require": "^2.4.20",
     "sequelize": "^6.37.3"
   },
@@ -23,5 +25,15 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "rules": {
+    "no-unused-vars": "off"
+  },
+  "devDependencies": {
+    "@eslint/compat": "^1.0.1",
+    "@eslint/js": "^9.3.0",
+    "eslint": "^9.3.0",
+    "eslint-plugin-react": "^7.34.2",
+    "globals": "^15.3.0"
+  }
 }

@@ -1,3 +1,5 @@
+/* eslint-disable no-undef */
+/* eslint-disable no-useless-catch */
 const mysql = require('mysql2');
 const dotenv = require('dotenv');
 dotenv.config();
@@ -9,9 +11,10 @@ var pool = mysql.createPool({
     // database: process.env.MYSQL_DATABASE,
     host: 'localhost',
     user: 'root',
-    password: 'a1b2c3d4',
+    // password: 'a1b2c3d4',
+    password: '1570',
     database: 'SurveysDatabase',
-    port:'3306'
+    port: '3306'
 }).promise();
 
 async function getAllManagers() {
@@ -44,6 +47,7 @@ async function addManager(newManager) {
         throw error;
     }
 }
+
 async function findManagerByUsername(username) {
     try {
         const rows = await pool.query('SELECT * FROM Managers WHERE username = ?', [username]);

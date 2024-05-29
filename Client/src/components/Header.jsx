@@ -1,44 +1,13 @@
-// import { NavLink } from "react-router-dom"
-// import { TabMenu } from 'primereact/tabmenu';
 
-// export default function Header() {
-//     function logout() {
-//         localStorage.removeItem("currentUser");
-//     }
-    
-//     function login() {
-//         localStorage.setItem("currentUser", "true");
-//         if (localStorage.getItem("currentUser") === "true") {
-//             return (
-//                 <>
-
-//                 </>
-//             );
-//         };
-//     }
-//     return (
-//     <>
-//             <nav>
-//                 {/* <NavLink className="navLink" to='.' end>HOME</NavLink> */}
-//                 <TabMenu className="navLink" to={`AboutUs`}>About Us</TabMenu>
-//                 <NavLink className="navLink" to={`ContactUs`}>Contact Us</NavLink>
-//                 <NavLink className="navLink" to={`Surveys`}>Surveys</NavLink>
-//                 <NavLink className="navLink" onClick={() => login()} to={`/login`}>Login</NavLink>
-//                 <NavLink className="navLink" onClick={() => logout()} to={`/login`}>Logout</NavLink>
-//             </nav>
-//         </>
-//     )
-// }
-
-import 'primereact/resources/themes/saga-blue/theme.css';  // או כל תבנית עיצוב אחרת שתרצה
+import 'primereact/resources/themes/saga-blue/theme.css';
 import 'primereact/resources/primereact.min.css';
 
 import 'primeicons/primeicons.css';
 import { PrimeIcons } from 'primereact/api';
 import React from 'react';
 import { TabMenu } from 'primereact/tabmenu';
- import { NavLink } from "react-router-dom"
-import { ColorPicker } from 'primereact/colorpicker';
+import { NavLink } from "react-router-dom"
+// import { ColorPicker } from 'primereact/colorpicker';
 export default function Header() {
     function logout() {
                 localStorage.removeItem("currentUser");
@@ -52,7 +21,7 @@ export default function Header() {
         
                         </>
                     );
-                };
+                }
             }
     const items = [
         { label: 'About Us', icon: PrimeIcons.SLACK, url: '/AboutUs'},

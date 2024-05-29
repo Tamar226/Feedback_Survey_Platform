@@ -1,31 +1,29 @@
-
 import React, { useState } from "react";
 // import React, { useContext } from 'react';
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
-import {FloatLabel} from "primereact/floatlabel"
-import { Fieldset } from 'primereact/fieldset';
+import { FloatLabel } from "primereact/floatlabel";
+import { Fieldset } from "primereact/fieldset";
 import { Link } from "react-router-dom";
-
-// import getUserDetails from "../Requests"
+import { loginByPostRequest } from "../Requests";
 
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [notValid, setNotValid] = useState(false);
+  // const [notValid, setNotValid] = useState(false);
+  const [message, setMessage] = useState(false);
 
-  
   // function checkPassward() {
   //   fetch(`http://localhost:3000/managers?username=${username}`)
   //     .then((res) => res.json())
   //     .then((data) => checkPassWithId(data));
   // }
 
-  // function checkPassWithId(managerData) {
-  //   if (managerData.length === 0) {
-  //     setNotValid(true);
-  //     return;
-  //   }
+  // function checkPassWithId() {
+  //   // if (managerData.length === 0) {
+  //   //   setNotValid(true);
+  //   //   return;
+  //   // }
   //   fetch(
   //     `http://localhost:3000/managers?id=${managerData[0].id}&password=${password}`
   //   )
@@ -41,6 +39,9 @@ export default function Login() {
   //     });
   // }
 
+  function checkAccessPossibility(){
+    loginByPostRequest(username, password);
+  }
 
   return (
     <>
@@ -53,7 +54,8 @@ export default function Login() {
           />
           <label htmlFor="username">Username</label>
         </FloatLabel>
-        <br /><br />
+        <br />
+        <br />
         <FloatLabel>
           <InputText
             id="password"
@@ -62,14 +64,14 @@ export default function Login() {
           />
           <label htmlFor="password">Password</label>
         </FloatLabel>
-        <br /><br />
-        <Button  label="Log In" />
-        {/* onClick={checkPassward} */}
+        <br />
+        <br />
+        <Button label="Log In" onClick={checkAccessPossibility} />
         <br /> <br /> <br />
         <Link to="/register" id="link">
           Don`t have an account?
         </Link>
-        {notValid && <h3>Invalid username or password</h3>}
+        {message && <h3>Invalid username or password</h3>}
       </Fieldset>
     </>
   );
