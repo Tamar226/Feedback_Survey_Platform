@@ -16,7 +16,7 @@ export default function Header() {
         { label: 'About Us', icon: PrimeIcons.SLACK, url: '/AboutUs'},
         { label: 'Contact Us', icon: PrimeIcons.PHONE, url: '/ContactUs' },
         { label: 'Surveys', icon: PrimeIcons.WAVE_PULSE, url: '/Surveys' },
-        { label: currentUser ? `Welcome, ${currentUser}` : 'Login', icon: currentUser ? PrimeIcons.USER : PrimeIcons.USERS, url: currentUser ? '/profile' : '/login', onClick: currentUser ? null : login },
+        { label: `Hello, ${currentUser}`, icon: currentUser ? PrimeIcons.USER : PrimeIcons.USERS, url: currentUser ? '/profile' : '/login', onClick: currentUser ? null : login },
         { label: 'Logout', icon: 'pi pi-sign-out', url: '/logout', onClick: logout }
     ];
 

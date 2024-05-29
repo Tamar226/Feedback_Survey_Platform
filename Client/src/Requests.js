@@ -51,18 +51,23 @@ export async function loginByPostRequest(username, password) {
     }
 }
 
-export async function RegisterByPostRequest(name,username,email, password,company) {
-    const response = await fetch(`http://localhost:3000/managers/register`, {
-        method: "POST",
-        body: JSON.stringify({ name: name, username: username, email: email, password: password, company: company }),
-        headers: {
-            'Content-type': 'application/json'
-        },
-    });
-    // if (!response.ok) {
-    //     return false;
-    // }
-    const status = response.status;
-    const data = await response.json();
-    return { status, data };
+export async function RegisterByPostRequest(name, username, email, password, company) {
+    try {
+        const response = await fetch(`http://localhost:3000/managers/register`, {
+            method: "POST",
+            body: JSON.stringify({ name: name, username: username, email: email, password: password, company: company }),
+            headers: {
+                'Content-type': 'application/json'
+            },
+        });
+        const status = response.status;
+        const data = await response.json();
+        if (status === 200) {
+            return { status, data };
+        } else {
+            return { status, data: null };
+        }
+    } catch (error) {
+        return { status: null, data: null };
+    }
 }

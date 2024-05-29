@@ -76,7 +76,7 @@ export default function App() {
               <Route path="manager" element={<Register />} />
               <Route path="user" element={<Register />} />
             </Route>
-            <Route path="/" element={<Navigate to="/login" />} />
+            {/* <Route path="/" element={<Navigate to="/login" />} /> */}
           </Routes>
           <Footer />
       </PrimeReactProvider>

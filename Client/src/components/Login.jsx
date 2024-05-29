@@ -5,13 +5,16 @@ import { InputText } from "primereact/inputtext";
 import { FloatLabel } from "primereact/floatlabel";
 import { Fieldset } from "primereact/fieldset";
 import { Message } from "primereact/message";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { loginByPostRequest } from "../Requests";
+import { useUser } from './UserContext';  //
 
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
+  const { setCurrentUser } = useUser();
+
 
   async function checkAccessPossibility() {
     if (username === "" || password === "") {
@@ -21,7 +24,9 @@ export default function Login() {
         const res = await loginByPostRequest(username, password);
         console.log(res);
         if (res.status === 200) {
-          window.location.pathname = `/managers/${res.data.manager.id}`;
+          setCurrentUser(res.data.user); 
+          console.log(res.data.user);
+          Navigate( `/managers/${res.data.manager.id}`);
         } else {
           setMessage("Invalid username or password");
         }
@@ -33,7 +38,7 @@ export default function Login() {
 
   return (
     <>
-      <Fieldset legend="Login here">
+      <Fieldset legend="Login here"><br/>
         <FloatLabel>
           <InputText
             id="username"
@@ -52,18 +57,17 @@ export default function Login() {
           />
           <label htmlFor="password">Password</label>
         </FloatLabel>
-        <br />
-        <br />
+        <br />  
+        {message && (
+          <Message severity="error" text={message} />
+        )}  <br />  <br />
         <Button label="Log In" onClick={checkAccessPossibility} />
         <br /> <br /> <br />
         <Link to="/register" id="link">
           Don`t have an account?
         </Link>
-        <br />
-        <br />
-        {message && (
-          <Message severity="error" text={message} />
-        )}
+        <br /><br />
+        
       </Fieldset>
     </>
   );

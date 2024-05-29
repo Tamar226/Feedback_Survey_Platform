@@ -137,6 +137,7 @@ import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import { FloatLabel } from "primereact/floatlabel";
 import { Fieldset } from "primereact/fieldset";
+import { Message } from 'primereact/message';
 import { Link, useNavigate } from "react-router-dom";
 import { RegisterByPostRequest } from '../Requests';
 import { useUser } from './UserContext';  //
@@ -144,6 +145,7 @@ export default function Register() {
   const [worngRequest, setworngRequest] = useState(false);
   const [message, setMessage] = useState("");
   const { setCurrentUser } = useUser();
+  const { login } = useUser();
   const navigate = useNavigate();
   const [detailsRegister, setDetailsRegister] = useState({
     name: "",
@@ -185,9 +187,14 @@ export default function Register() {
     }
     const res = await RegisterByPostRequest(detailsRegister.name, detailsRegister.userName, detailsRegister.email, detailsRegister.password, detailsRegister.company);
     console.log(res);
+    // const Id=res[0].id;
     if (res.status==200){
       setCurrentUser(res.data.user); 
-      navigate(`/managers/${res.data.user.id}`);
+      login(res.data.user);
+      console.log(res.data);
+      console.log(res.data.user);
+      // let myuser=res.data.user;
+      navigate(`/managers/${res.data.manager}`);
     }
     if (res.code !== 100) {
       if (res.code === 304) {
@@ -208,7 +215,6 @@ export default function Register() {
   return (
     <>
       <Fieldset legend="Register Here">
-        {message && <p style={{ color: "orange" }}>{message}</p>}
         <FloatLabel>
           <InputText
             id="name"
@@ -261,6 +267,7 @@ export default function Register() {
           <label htmlFor="company">Company</label>
         </FloatLabel>
         <br />
+      {message &&( <Message severity="error" text={message} />)}<br/><br/>
         <Button onClick={checkAccessPossibility} label="Registering" />
         <br /><br />
         <Link to="/login" id="link">
