@@ -58,7 +58,7 @@ async function getManagerDetails(userName, password) {
             token
         };
     } catch (error) {
-        console.error(error);
+        console.error("error in services", error);
         throw error;
     }
 }

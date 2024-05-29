@@ -83,7 +83,7 @@ const deleteUser = async (req, res) => {
             res.status(404).send(`User with ID ${userId} not found`);
         }
     } catch (error) {
-        console.error('Error deleting user:', error);
+        console.error('Error deleting user in controllers:', error);
         res.status(500).send('Internal Server Error');
     }
 };
@@ -94,7 +94,7 @@ const addUser = async (req, res) => {
         const addedUser = await usersService.addUser(newUser);
         res.status(200).send(addedUser);
     } catch (error) {
-        console.error('Error adding manager:', error);
+        console.error('Error adding manager in controllers:', error);
         res.status(500).send('Internal Server Error');
     }
 };

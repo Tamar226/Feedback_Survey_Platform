@@ -29,7 +29,7 @@ const addManager = async (req, res) => {
         const addedManager = await managerService.addManager(newManager);
         res.status(200).send(addedManager);
     } catch (error) {
-        console.error('Error adding manager:', error);
+        console.error('Error adding manager in controllers:', error);
         res.status(500).send('Internal Server Error');
     }
 };

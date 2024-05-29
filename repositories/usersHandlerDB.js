@@ -87,7 +87,7 @@ async function getUserDetails(userName, password) {
         const userDetails = await getUserByUsername(result[0][0].username)
         return prepareResult(false, result[0].affectedRows, 0, userDetails[0][0])
     } catch (error) {
-        console.error(error);
+        console.error("error in handleUser", error);
         throw error;
     }
 }

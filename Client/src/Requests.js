@@ -29,16 +29,25 @@ export async function getUserDetails(username, password, setworngRequest) {
 }
 
 export async function loginByPostRequest(username, password) {
-    const response = await fetch(`http://localhost:3000/managers/login`, {
-        method: "POST",
-        body: JSON.stringify({ username: username, password: password }),
-        headers: {
-            'Content-type': 'application/json'
-        },
-    });
-    if (!response.ok) {
-        return false;
+    try {
+        const response = await fetch(`http://localhost:3000/managers/login`, {
+            method: "POST",
+            body: JSON.stringify({ username, password }),
+            headers: {
+                'Content-type': 'application/json'
+            },
+        });
+
+        const status = response.status;
+        const data = await response.json();
+
+        if (status === 200) {
+            return { status, data };
+        } else {
+            return { status, data: null };
+        }
+    } catch (error) {
+        return { status: null, data: null };
     }
-    const promiseData = await response.json();
-    console.log(promiseData);
 }
+

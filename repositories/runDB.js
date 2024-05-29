@@ -25,6 +25,6 @@ export const pool = mysql.createPool({
         await drop();
         await create();
     } catch (error) {
-        console.error(error);
+        console.error("error in DB", error);
     }
 })();

@@ -1,46 +1,34 @@
-import React, { useState } from "react";
+import { useState } from "react";
 // import React, { useContext } from 'react';
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import { FloatLabel } from "primereact/floatlabel";
 import { Fieldset } from "primereact/fieldset";
+import { Message } from "primereact/message";
 import { Link } from "react-router-dom";
 import { loginByPostRequest } from "../Requests";
 
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  // const [notValid, setNotValid] = useState(false);
-  const [message, setMessage] = useState(false);
+  const [message, setMessage] = useState("");
 
-  // function checkPassward() {
-  //   fetch(`http://localhost:3000/managers?username=${username}`)
-  //     .then((res) => res.json())
-  //     .then((data) => checkPassWithId(data));
-  // }
-
-  // function checkPassWithId() {
-  //   // if (managerData.length === 0) {
-  //   //   setNotValid(true);
-  //   //   return;
-  //   // }
-  //   fetch(
-  //     `http://localhost:3000/managers?id=${managerData[0].id}&password=${password}`
-  //   )
-  //     .then((res) => res.json())
-  //     .then((data) => {
-  //       if (data.length === 0) {
-  //         setNotValid(true);
-  //         return;
-  //       } else {
-  //         localStorage.setItem("currentUser", JSON.stringify(managerData[0]));
-  //         window.location.pathname = `/users/${managerData[0].id}`;
-  //       }
-  //     });
-  // }
-
-  function checkAccessPossibility(){
-    loginByPostRequest(username, password);
+  async function checkAccessPossibility() {
+    if (username === "" || password === "") {
+      setMessage("Please fill all the fields");
+    } else {
+      try {
+        const res = await loginByPostRequest(username, password);
+        console.log(res);
+        if (res.status === 200) {
+          window.location.pathname = `/managers/${res.data.manager.id}`;
+        } else {
+          setMessage("Invalid username or password");
+        }
+      } catch (error) {
+        setMessage("Invalid username or password");
+      }
+    }
   }
 
   return (
@@ -71,7 +59,11 @@ export default function Login() {
         <Link to="/register" id="link">
           Don`t have an account?
         </Link>
-        {message && <h3>Invalid username or password</h3>}
+        <br />
+        <br />
+        {message && (
+          <Message severity="error" text={message} />
+        )}
       </Fieldset>
     </>
   );

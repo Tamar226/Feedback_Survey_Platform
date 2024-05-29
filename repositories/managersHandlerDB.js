@@ -53,7 +53,7 @@ async function findManagerByUsername(username) {
         const rows = await pool.query('SELECT * FROM Managers WHERE username = ?', [username]);
         return rows;
     } catch (error) {
-        console.error(error);
+        console.error("error in handler DB", error);
         throw error;
     }
 }
