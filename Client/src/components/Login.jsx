@@ -23,15 +23,17 @@ export default function Login() {
       try {
         const res = await loginByPostRequest(username, password);
         console.log(res);
-        if (res.status === 200) {
-          setCurrentUser(res.data.user); 
-          console.log(res.data.user);
-          Navigate( `/managers/${res.data.manager.id}`);
+        console.log(res.status);
+        if (res.status == 200) {
+          setCurrentUser(res.data.manager); 
+          console.log(res.data.manager.id);
+          Navigate( `/manager/${res.data.manager.id}`);
         } else {
           setMessage("Invalid username or password");
         }
       } catch (error) {
-        setMessage("Invalid username or password");
+       
+        setMessage("catch -Invalid username or password");
       }
     }
   }

@@ -191,10 +191,10 @@ export default function Register() {
     if (res.status==200){
       setCurrentUser(res.data.user); 
       login(res.data.user);
-      console.log(res.data);
-      console.log(res.data.user);
-      // let myuser=res.data.user;
-      navigate(`/managers/${res.data.manager}`);
+      console.log(res.data.data);
+      console.log(res.data.manager.data.id);
+      
+      navigate(`/managers/${res.data.manager.data.id}`);
     }
     if (res.code !== 100) {
       if (res.code === 304) {
