@@ -3,6 +3,7 @@ const cors = require('cors');
 const express = require('express');
 const managersRouter = require('./routes/managersRoute');
 const usersRouter = require('./routes/usersRoute');
+const suerveysRouter = require('./routes/surveysRoute');
 
 // import cors from 'cors';
 // import express from 'express';
@@ -20,6 +21,7 @@ server.use(express.json());
 // Routes
 server.use('/managers', managersRouter);
 server.use('/users', usersRouter);
+server.use('/surveys', suerveysRouter)
 
 
 // Default Route
