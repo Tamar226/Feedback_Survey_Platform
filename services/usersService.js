@@ -1,8 +1,14 @@
 
-const usersDataBase = require('../repositories/usersHandlerDB');
+const userDataBase = require('../repositories/usersHandlerDB');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const dotenv = require('dotenv');
+dotenv.config();
+
+const JWT_SECRET = /*process.env.JWT_SECRET*/'546442' || 'your_jwt_secret'; // יש לשמור בסוד את ה-secret
 
 const getAllUsers = async () => {
-    const result = await usersDataBase.getAllUsers();
+    const result = await userDataBase.getAllUsers();
     if (result.hasError) {
         throw new Error('Error fetching users');
     }
@@ -10,7 +16,7 @@ const getAllUsers = async () => {
 };
 
 const getUserById = async (id) => {
-    const result = await usersDataBase.getUserById(id);
+    const result = await userDataBase.getUserById(id);
     if (result.hasError) {
         throw new Error(`User with ID ${id} not found`);
     }
@@ -18,17 +24,48 @@ const getUserById = async (id) => {
 };
 
 const addUser = async (newUser) => {
-    const result = await usersDataBase.addUser(newUser);
+    const result = await userDataBase.addUser(newUser);
     if (result.insertId > 0) {
-        const insertUser = await usersDataBase.getUserById(result.insertId);
+        const insertUser = await userDataBase.getUserById(result.insertId);
         return insertUser.data;
     } else {
         throw new Error('Error adding user');
     }
 };
 
+async function getUserDetails(userName, password) {
+    try {
+        const rows = await userDataBase.findUserByUsername(userName);
+        if (rows.length === 0) {
+            throw new Error('User not found');
+        }
+        const user = rows[0][0];
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            throw new Error('Invalid password');
+        }
+
+        const token = jwt.sign({ id: user.id, username: user.username }, JWT_SECRET, { expiresIn: '1h' });
+
+        return {
+            hasError: false,
+            user: {
+                id: user.id,
+                username: user.username,
+                email: user.email,
+                company: user.company
+            },
+            token
+        };
+    } catch (error) {
+        console.error("error in services", error);
+        throw error;
+    }
+}
+
+
 const updateUser = async (userId, updatedUserData) => {
-    const result = await usersDataBase.updateUser(userId, updatedUserData);
+    const result = await userDataBase.updateUser(userId, updatedUserData);
     if (result.affectedRows > 0) {
         return `User with ID ${userId} updated successfully`;
     } else {
@@ -37,7 +74,7 @@ const updateUser = async (userId, updatedUserData) => {
 };
 
 const deleteUser = async (userId) => {
-    const result = await usersDataBase.deleteUser(userId);
+    const result = await userDataBase.deleteUser(userId);
     if (result.affectedRows > 0) {
         return `User with ID ${userId} deleted successfully`;
     } else {
@@ -49,6 +86,7 @@ module.exports = {
     getAllUsers,
     getUserById,
     addUser,
+    getUserDetails,
     updateUser,
     deleteUser,
 };

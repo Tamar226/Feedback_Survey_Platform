@@ -12,7 +12,8 @@ var pool = mysql.createPool({
     host: 'localhost',
     user: 'root',
     // password: 'a1b2c3d4',
-    password: 'T50226',
+    // password: 'T50226',
+    password: '1570',
     database: 'SurveysDatabase',
     port: '3306'
 }).promise();

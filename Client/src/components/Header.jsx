@@ -11,7 +11,7 @@ import { NavLink } from "react-router-dom"
 import { useUser } from './UserContext'; 
 export default function Header() {
     const { currentUser, login, logout } = useUser();
-
+    console.log(currentUser);
     const items = [
         { label: 'About Us', icon: PrimeIcons.SLACK, url: '/AboutUs'},
         { label: 'Contact Us', icon: PrimeIcons.PHONE, url: '/ContactUs' },
