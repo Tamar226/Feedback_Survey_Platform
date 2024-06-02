@@ -7,56 +7,28 @@ var pool = mysql.createPool({
     database: process.env.MYSQL_DATABASE,
 }).promise();
 
-
-async function getAllPosts() {
-    const result = await pool.query('SELECT * FROM posts');
+async function getAllSurveys() {
+    const result = await pool.query('SELECT * FROM surveys');
     return prepareResult(false, 0, 0, result);
 }
-async function getPostById(userId) {
+
+async function getSurveyById(surveyId) {
     try {
-        const result = await pool.query('SELECT * FROM posts WHERE userId = ' + userId);
-        if (result.length === 0) {
-            throw new Error(`post with ID ${userId} not found`);
+        const result = await pool.query('SELECT * FROM surveys WHERE id = ?', [surveyId]);
+        if (result[0].length === 0) {
+            throw new Error(`Survey with ID ${surveyId} not found`);
         }
-        return prepareResult(false, 0, 0, result[0]);
+        return prepareResult(false, 0, 0, result[0][0]);
     } catch (error) {
         throw error;
     }
-};
+}
 
-async function addPost(newPost) {
+async function addSurvey(newSurvey) {
     try {
-        const result = await pool.query(`INSERT INTO posts (userID, title,body) VALUES ('${newPost.userId}', '${newPost.title}','${newPost.body}')`);
+        const result = await pool.query(`INSERT INTO surveys (userID, title, body) VALUES (?, ?, ?)`, [newSurvey.userId, newSurvey.title, newSurvey.body]);
         if (result[0].insertId > 0) {
-            return prepareResult(false, 0, result[0].insertId)
-        }
-        else {
-            return prepareResult(true, 0, 0);
-        }
-    } catch (error) {
-        throw error;
-    }
-}
-
-async function updatePost(postId, updatedPostData) {
-    try {
-        const result = await pool.query('UPDATE posts SET ? WHERE id = ?', [updatedPostData, postId]);
-        if (result[0].affectedRows > 0) {
-            return prepareResult(false, result[0].affectedRows, 0);
-        }
-        else {
-            return prepareResult(true, 0, 0);
-        }
-    } catch (error) {
-        throw error;
-    }
-}
-
-async function deletePost(postId) {
-    try {
-        const result = await pool.query('DELETE FROM posts WHERE id = ?', postId);
-        if (result[0].affectedRows > 0) {
-            return prepareResult(false, result[0].affectedRows, 0)
+            return prepareResult(false, 0, result[0].insertId);
         } else {
             return prepareResult(true, 0, 0);
         }
@@ -64,19 +36,46 @@ async function deletePost(postId) {
         throw error;
     }
 }
+
+async function updateSurvey(surveyId, updatedSurveyData) {
+    try {
+        const result = await pool.query('UPDATE surveys SET ? WHERE id = ?', [updatedSurveyData, surveyId]);
+        if (result[0].affectedRows > 0) {
+            return prepareResult(false, result[0].affectedRows, 0);
+        } else {
+            return prepareResult(true, 0, 0);
+        }
+    } catch (error) {
+        throw error;
+    }
+}
+
+async function deleteSurvey(surveyId) {
+    try {
+        const result = await pool.query('DELETE FROM surveys WHERE id = ?', [surveyId]);
+        if (result[0].affectedRows > 0) {
+            return prepareResult(false, result[0].affectedRows, 0);
+        } else {
+            return prepareResult(true, 0, 0);
+        }
+    } catch (error) {
+        throw error;
+    }
+}
+
 function prepareResult(hasErrorT = true, affectedRowsT = 0, insertIdT = -1, dataT = null) {
-    const resultdata = {
+    return {
         hasError: hasErrorT,
         affectedRows: affectedRowsT,
         insertId: insertIdT,
         data: dataT
-    }
-    return resultdata;
+    };
 }
+
 module.exports = {
-    getAllPosts,
-    getPostById,
-    addPost,
-    updatePost,
-    deletePost
+    getAllSurveys,
+    getSurveyById,
+    addSurvey,
+    updateSurvey,
+    deleteSurvey
 };
