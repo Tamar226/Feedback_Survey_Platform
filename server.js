@@ -1,14 +1,9 @@
-// require('dotenv').config({ path: '.env' });  // טוען משתני סביבה מקובץ .env בתיקיית database
-const cors = require('cors');
-const express = require('express');
-const managersRouter = require('./routes/managersRoute');
-const usersRouter = require('./routes/usersRoute');
-const suerveysRouter = require('./routes/surveysRoute');
+import cors from 'cors';
+import express from 'express';
 
-// import cors from 'cors';
-// import express from 'express';
-// import managersRouter from './routes/managersRoute';
-// import usersRouter from './routes/usersRoute';
+import managersRouter from './routes/managersRoute'
+import usersRouter from './routes/usersRoute'
+import suerveysRouter from './routes/surveysRoute'
 
 const server = express();
 const host = 'localhost';
@@ -33,3 +28,5 @@ server.get('/', (req, res) => {
 server.listen(port, host, () => {
     console.log(`Listening to requests at http://${host}:${port}`);
 });
+
+

@@ -71,3 +71,35 @@ export async function RegisterByPostRequest(name, username, email, password, com
         return { status: null, data: null };
     }
 }
+
+export const fetchSurveys = async () => {
+    try {
+        const response = await fetch('http://localhost:3000/surveys');
+        if (!response.ok) {
+            throw new Error('Failed to fetch surveys');
+        }
+        return response.json();
+    } catch (error) {
+        console.error('Error fetching surveys:', error);
+        throw error;
+    }
+};
+
+export const addSurvey = async (survey) => {
+    try {
+        const response = await fetch('http://localhost:3000/surveys', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(survey)
+        });
+        if (!response.ok) {
+            throw new Error('Failed to add survey');
+        }
+        return response.json();
+    } catch (error) {
+        console.error('Error adding survey:', error);
+        throw error;
+    }
+};

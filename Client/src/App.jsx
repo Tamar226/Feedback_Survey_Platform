@@ -59,6 +59,7 @@ import Login from "./components/Login";
 import AdditionalRegistrationDetails from "./components/AdditionalRegistrationDetails";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import Survey from "./components/Survey";
 import { UserProvider } from "./components/UserContext"; 
 
 export default function App() {
@@ -75,6 +76,9 @@ export default function App() {
             <Route path="register" element={<Register />}>
               <Route path="manager" element={<Register />} />
               <Route path="user" element={<Register />} />
+            </Route>
+            <Route path="surveys" element={<Survey/>}>
+
             </Route>
             {/* <Route path="/" element={<Navigate to="/login" />} /> */}
           </Routes>

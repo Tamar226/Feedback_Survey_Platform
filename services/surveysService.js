@@ -1,42 +1,46 @@
-const surveysDataBase = require('../repositories/surveysHandlerDB');
+import surveysRepository from '../repositories/surveysHandlerDB';
 
 async function getAllSurveys() {
-    try {
-        return await surveysRepository.getAllSurveys();
-    } catch (error) {
-        throw error;
+    const result = await surveysRepository.getAllSurveys();
+    if (result.hasError) {
+        throw new Error('Error fetching surveys');
     }
+    return result.data;
 }
 
 async function getSurveyById(surveyId) {
-    try {
-        return await surveysRepository.getSurveyById(surveyId);
-    } catch (error) {
-        throw error;
+    const result = await surveysRepository.getSurveyById(surveyId);
+    if (result.hasError) {
+        throw new Error(`Survey with ID ${surveyId} not found`);
     }
+    return result.data;
 }
 
 async function addSurvey(newSurvey) {
-    try {
-        return await surveysRepository.addSurvey(newSurvey);
-    } catch (error) {
-        throw error;
+    const result = await surveysRepository.addSurvey(newSurvey);
+    if (result.insertId > 0) {
+        const insertSurvey = await surveysRepository.getSurveyById(result.insertId);
+        return insertSurvey.data;
+    } else {
+        throw new Error('Error adding survey');
     }
 }
 
 async function updateSurvey(surveyId, updatedSurveyData) {
-    try {
-        return await surveysRepository.updateSurvey(surveyId, updatedSurveyData);
-    } catch (error) {
-        throw error;
+    const result = await surveysRepository.updateSurvey(surveyId, updatedSurveyData);
+    if (result.affectedRows > 0) {
+        return `Survey with ID ${surveyId} updated successfully`;
+    } else {
+        throw new Error(`Survey with ID ${surveyId} not found`);
     }
 }
 
 async function deleteSurvey(surveyId) {
-    try {
-        return await surveysRepository.deleteSurvey(surveyId);
-    } catch (error) {
-        throw error;
+    const result = await surveysRepository.deleteSurvey(surveyId);
+    if (result.affectedRows > 0) {
+        return `Survey with ID ${surveyId} deleted successfully`;
+    } else {
+        throw new Error(`Survey with ID ${surveyId} not found`);
     }
 }
 

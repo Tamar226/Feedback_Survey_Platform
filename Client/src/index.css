@@ -66,3 +66,32 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 } */
+/* src/index.css */
+
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: #f5f5f5;
+  margin: 0;
+  padding: 0;
+}
+
+.App {
+  padding: 20px;
+}
+
+.p-card {
+  margin-bottom: 20px;
+}
+
+.p-card h3 {
+  margin-top: 0;
+}
+
+.p-card ul {
+  list-style: none;
+  padding: 0;
+}
+
+.p-card ul li {
+  padding: 5px 0;
+}

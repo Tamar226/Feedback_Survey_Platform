@@ -83,7 +83,8 @@
 
 // controllers/surveysController.js
 
-const surveysService = require('../models/surveysService');  
+import surveyService from '../services/surveysService';
+
 const getAllSurveys = async (req, res) => {
     try {
         const result = await surveyService.getAllSurveys();
