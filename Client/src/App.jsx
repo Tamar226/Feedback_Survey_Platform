@@ -61,6 +61,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Survey from "./components/Survey";
 import { UserProvider } from "./components/UserContext"; 
+import SurveysPage from "./components/SurveysPage";
 
 export default function App() {
   return (
@@ -77,7 +78,9 @@ export default function App() {
               <Route path="manager" element={<Register />} />
               <Route path="user" element={<Register />} />
             </Route>
-            <Route path="surveys" element={<Survey/>}>
+            {/* <Route path="surveys" element={<SurveysPage/>}> */}
+            <Route path="surveys" element={<SurveysPage/>}>
+
 
             </Route>
             {/* <Route path="/" element={<Navigate to="/login" />} /> */}
