@@ -1,32 +1,26 @@
 const mysql = require('mysql2');
-require('dotenv').config();
+const dotenv = require('dotenv');
+dotenv.config();
 
 var pool = mysql.createPool({
     host: process.env.MYSQL_HOST,
     user: process.env.MYSQL_USER,
     password: process.env.MYSQL_PASSWORD,
-    database: process.env.MYSQL_DATABASE,
+    database: process.env.MYSQL_DATABASE
 }).promise();
 
-// var pool = mysql.createConnection({
-//     host: "localhost",
-//     user: "root",
-//     password: "T50226",
-//     database: "SurveysDatabase"
-// });
-
 async function getAllUsers() {
-    const result = await pool.query('SELECT * FROM users');
+    const result = await pool.query('SELECT * FROM Users');
     return prepareResult(false, 0, 0, result);
 }
 
-async function getUserById(userId) {
+async function getUserById(UserId) {
     try {
-        const result = await pool.query('SELECT * FROM users WHERE id = ?', [userId]);
+        const result = await pool.query('SELECT * FROM Users WHERE id = ?', [UserId]);
         if (result.length === 0) {
-            throw new Error(`User with ID ${userId} not found`);
+            throw new Error(`User with ID ${UserId} not found`);
         }
-        return prepareResult(false, 0, 0, result);
+        return prepareResult(false, 0, 0, result[0]);
     } catch (error) {
         throw error;
     }
@@ -34,7 +28,7 @@ async function getUserById(userId) {
 
 async function addUser(newUser) {
     try {
-        const result = await pool.query(`INSERT INTO users (name, username, email,password,city,age, gender, job) VALUES ('${newUser.name}', '${newUser.username}', '${newUser.email}', '${newUser.password}','${newUser.city}', '${newUser.age}', '${newUser.gender}','${newUser.job}')`);
+        const result = await pool.query(`INSERT INTO Users (name,username,email,password,city, age, gender, job) VALUES ('${newUser.name}','${newUser.username}','${newUser.email}','${newUser.password}','${newUser.city}','${newUser.age}','${newUser.gender}','${newUser.job}')`);
         if (result[0].insertId > 0) {
             return prepareResult(false, 0, result[0].insertId)
         }
@@ -46,9 +40,19 @@ async function addUser(newUser) {
     }
 }
 
-async function updateUser(userId, updatedUserData) {
+async function findUserByUsername(username) {
     try {
-        const result = await pool.query('UPDATE users SET ? WHERE id = ?', [updatedUserData, userId]);
+        const rows = await pool.query('SELECT * FROM Users WHERE username = ?', [username]);
+        return rows;
+    } catch (error) {
+        console.error("error in handler DB", error);
+        throw error;
+    }
+}
+
+async function updateUser(UserId, updatedUserData) {
+    try {
+        const result = await pool.query('UPDATE Users SET ? WHERE id = ?', [updatedUserData, UserId]);
         if (result[0].affectedRows > 0) {
             return prepareResult(false, result[0].affectedRows, 0)
         }
@@ -60,9 +64,9 @@ async function updateUser(userId, updatedUserData) {
     }
 }
 
-async function deleteUser(userId) {
+async function deleteUser(UserId) {
     try {
-        const result = await pool.query('DELETE FROM users WHERE id = ?', userId);
+        const result = await pool.query('DELETE FROM Users WHERE id = ?', UserId);
         if (result[0].affectedRows > 0) {
             return prepareResult(false, result[0].affectedRows, 0)
 
@@ -73,25 +77,6 @@ async function deleteUser(userId) {
         throw error;
     }
 }
-
-async function getUserByUsername(username) {
-    return await pool.query('SELECT * FROM users WHERE username =?', username);
-}
-async function getUserDetails(userName, password) {
-    try {
-        let query = `SELECT username FROM passwords WHERE username = '${userName}' AND password = '${password}'`;
-        const result = await pool.query(query);
-        if (result.length === 0) {
-            throw new Error(`User not found`);
-        }
-        const userDetails = await getUserByUsername(result[0][0].username)
-        return prepareResult(false, result[0].affectedRows, 0, userDetails[0][0])
-    } catch (error) {
-        console.error("error in handleUser", error);
-        throw error;
-    }
-}
-
 function prepareResult(hasErrorTemp = true, affectedRowsTemp = 0, insertIdTemp = -1, dataTemp = null) {
     const resultdata = {
         hasError: hasErrorTemp,
@@ -101,11 +86,12 @@ function prepareResult(hasErrorTemp = true, affectedRowsTemp = 0, insertIdTemp =
     }
     return resultdata;
 }
+
 module.exports = {
     getAllUsers,
     getUserById,
     addUser,
+    findUserByUsername,
     updateUser,
-    deleteUser,
-    getUserDetails
-};
+    deleteUser
+}

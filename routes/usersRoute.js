@@ -1,17 +1,15 @@
+
 const express = require('express');
-const usersRouter = express.Router();
+const router = express.Router();
 
 const userControllers = require('../controllers/usersController');
 
-router.use(express.json());
+usersRouter.get('/', userController.getAllUsers);
+usersRouter.get('/:id', userController.getUserById);
+usersRouter.post('/', userController.addUser);
+usersRouter.post('/login', userController.loginUser);
+usersRouter.post('/register', userController.addUser);
+usersRouter.put('/:userId', userController.updateUser);
+usersRouter.delete('/:userId', userController.deleteUser);
 
-router.get('/', userControllers.getAllUsers);
-router.get('/:userId', userControllers.getUserById);
-// router.get('/:userId/:typeInformetion', userControllers.getUserInformation);
-router.put('/:userId', userControllers.updateUser);
-router.delete('/:userId', userControllers.deleteUser);
-router.post('/', userControllers.addUser);
-router.post('/register', userControllers.registerUser);
-router.post('/login', userControllers.loginUser);
-
-module.exports = usersRouter;
+module.exports = router;
