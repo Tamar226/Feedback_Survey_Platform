@@ -1,9 +1,9 @@
-import cors from 'cors';
-import express from 'express';
+const cors = require('cors');
+const express = require('express');
 
-import managersRouter from './routes/managersRoute'
-import usersRouter from './routes/usersRoute'
-import suerveysRouter from './routes/surveysRoute'
+const usersRouter = require('./routes/usersRoute');
+const surveysRouter = require('./routes/surveysRoute');
+const managersRouter = require('./routes/managersRoute');
 
 const server = express();
 const host = 'localhost';
@@ -16,8 +16,7 @@ server.use(express.json());
 // Routes
 server.use('/managers', managersRouter);
 server.use('/users', usersRouter);
-server.use('/surveys', suerveysRouter)
-
+server.use('/surveys', surveysRouter);
 
 // Default Route
 server.get('/', (req, res) => {
@@ -28,5 +27,3 @@ server.get('/', (req, res) => {
 server.listen(port, host, () => {
     console.log(`Listening to requests at http://${host}:${port}`);
 });
-
-

@@ -1,15 +1,14 @@
-
 const express = require('express');
 const managersRouter = express.Router();
-const managerController = require('../controllers/managersController');
 
-managersRouter.get('/', managerController.getAllManagers);
-managersRouter.get('/:id', managerController.getManagerById);
-managersRouter.post('/', managerController.addManager);
-managersRouter.post('/login', managerController.loginManager);
-managersRouter.post('/register', managerController.addManager);
-managersRouter.put('/:managerId', managerController.updateManager);
-managersRouter.delete('/:managerId', managerController.deleteManager);
+const managersController = require('../controllers/managersController');
+
+managersRouter.get('/', managersController.getAllManagers);
+managersRouter.get('/:id', managersController.getManagerById);
+managersRouter.post('/', managersController.addManager);
+managersRouter.post('/login', managersController.loginManager);
+managersRouter.post('/register', managersController.addManager);
+managersRouter.put('/:managerId', managersController.updateManager);
+managersRouter.delete('/:managerId', managersController.deleteManager);
 
 module.exports = managersRouter;
-

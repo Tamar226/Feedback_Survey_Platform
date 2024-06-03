@@ -1,4 +1,4 @@
-import surveysRepository from '../repositories/surveysHandlerDB';
+const surveysRepository = require('../repositories/surveysHandlerDB');
 
 async function getAllSurveys() {
     const result = await surveysRepository.getAllSurveys();
