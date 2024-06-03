@@ -8,22 +8,34 @@ async function getAllSurveys() {
     return result.data;
 }
 
-async function getSurveyById(surveyId) {
-    const result = await surveysRepository.getSurveyById(surveyId);
+// async function getSurveyById (id){
+//     const result = await surveysRepository.getSurveyById(id);
+//     if (result.hasError) {
+//         throw new Error(`Survey with ID ${id} not found`);
+//     }
+//     return result.data;
+// }
+const getSurveyById = async (id) => {
+    const result = await surveysRepository.getSurveyById(id);
     if (result.hasError) {
-        throw new Error(`Survey with ID ${surveyId} not found`);
+        throw new Error(`Survey with ID ${id} not found`);
     }
     return result.data;
-}
+};
 
-async function addSurvey(newSurvey) {
+
+
+const addSurvey = async (newSurvey) => {
     const result = await surveysRepository.addSurvey(newSurvey);
     if (result.insertId > 0) {
         const insertSurvey = await surveysRepository.getSurveyById(result.insertId);
         return insertSurvey.data;
-    } else {
-        throw new Error('Error adding survey');
     }
+    // return result.data;
+
+    // } else {
+    //     throw new Error('Error adding survey');
+    // }
 }
 
 async function updateSurvey(surveyId, updatedSurveyData) {

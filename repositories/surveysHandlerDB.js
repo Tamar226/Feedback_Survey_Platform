@@ -1,10 +1,16 @@
 const mysql = require('mysql2');
 
 var pool = mysql.createPool({
-    host: process.env.MYSQL_HOST,
-    user: process.env.MYSQL_USER,
-    password: process.env.MYSQL_PASSWORD,
-    database: process.env.MYSQL_DATABASE,
+    // host: process.env.MYSQL_HOST,
+    // user: process.env.MYSQL_USER,
+    // password: process.env.MYSQL_PASSWORD,
+    // database: process.env.MYSQL_DATABASE,
+    host: 'localhost',
+            user: 'root',
+            // password: 'a1b2c3d4',
+            password: 'T50226',
+            database: 'SurveysDatabase',
+            port:'3306'
 }).promise();
 
 async function getAllSurveys() {
@@ -12,13 +18,13 @@ async function getAllSurveys() {
     return prepareResult(false, 0, 0, result);
 }
 
-async function getSurveyById(surveyId) {
+async function getSurveyById(SurveyId) {
     try {
-        const result = await pool.query('SELECT * FROM surveys WHERE id = ?', [surveyId]);
-        if (result[0].length === 0) {
-            throw new Error(`Survey with ID ${surveyId} not found`);
+        const result = await pool.query('SELECT * FROM Surveys WHERE id = ?', [SurveyId]);
+        if (result.length === 0) {
+            throw new Error(`Survey with ID ${SurveyId} not found`);
         }
-        return prepareResult(false, 0, 0, result[0][0]);
+        return prepareResult(false, 0, 0, result[0]);
     } catch (error) {
         throw error;
     }
@@ -26,7 +32,7 @@ async function getSurveyById(surveyId) {
 
 async function addSurvey(newSurvey) {
     try {
-        const result = await pool.query(`INSERT INTO surveys (userID, title, body) VALUES (?, ?, ?)`, [newSurvey.userId, newSurvey.title, newSurvey.body]);
+        const result = await pool.query(`INSERT INTO surveys (managerId, surveyName, active) VALUES ('${newSurvey.managerId}','${newSurvey.surveyName}','${newSurvey.active}')`);
         if (result[0].insertId > 0) {
             return prepareResult(false, 0, result[0].insertId);
         } else {
@@ -63,12 +69,12 @@ async function deleteSurvey(surveyId) {
     }
 }
 
-function prepareResult(hasErrorT = true, affectedRowsT = 0, insertIdT = -1, dataT = null) {
+function prepareResult(hasErrorTemp = true, affectedRowsTemp = 0, insertIdTemp = -1, dataTemp = null) {
     return {
-        hasError: hasErrorT,
-        affectedRows: affectedRowsT,
-        insertId: insertIdT,
-        data: dataT
+        hasError: hasErrorTemp,
+        affectedRows: affectedRowsTemp,
+        insertId: insertIdTemp,
+        data: dataTemp
     };
 }
 
