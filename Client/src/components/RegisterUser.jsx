@@ -10,10 +10,20 @@ import { Fieldset } from "primereact/fieldset";
 import { Message } from 'primereact/message';
 import { RadioButton } from 'primereact/radiobutton';
 import { SelectButton } from 'primereact/selectbutton';
+import { Password } from 'primereact/password';
 import { Link, useNavigate } from "react-router-dom";
 import { RegisterByPostRequest } from '../Requests';
-import { useUser } from './UserContext'; 
+import { useUser } from './UserContext';
 export default function Register() {
+    const ages = [
+        { name: ' 0 - 18', key: '0' },
+        { name: ' 18 - 24', key: '18' },
+        { name: ' 25 - 40', key: '25' },
+        { name: ' 41 - 70', key: '41' },
+        { name: ' 71 - 120', key: '71' },
+    ];
+    const [selectedAge, setSelectedAge] = useState(ages[0]);
+    const genders = ["male", "female"];
     const [message, setMessage] = useState("");
     const { setCurrentUser } = useUser();
     const { login } = useUser();
@@ -28,16 +38,6 @@ export default function Register() {
         gender: "",
         job: "",
     });
-    const ages = [
-        { name: ' 0 - 18', key: '0' },
-        { name: ' 18 - 24', key: '18' },
-        { name: ' 25 - 40', key: '25' },
-        { name: ' 41 - 70', key: '41' },
-        { name: ' 71 - 120', key: '71' },
-    ];
-    const [selectedAge, setSelectedAge] = useState(ages[0]);
-    const genders = ['male', 'female'];
-    const [gender, setGender] = useState(genders[0]);
 
     const handleInputRegisterChange = (e) => {
         const { name, value } = e.target;
@@ -45,7 +45,6 @@ export default function Register() {
             ...detailsRegister,
             [name]: value,
         });
-        e.target.classList.remove("notTouch");
     };
 
     const handleEmailBlur = (e) => {
@@ -131,12 +130,9 @@ export default function Register() {
                 </FloatLabel>
                 <br />
                 <FloatLabel>
-                    <InputText
-                        id="password"
-                        name="password"
-                        value={detailsRegister.password}
-                        onChange={handleInputRegisterChange}
-                    />
+                    <Password id="password" name="password"  
+                    value={detailsRegister.password} 
+                    onChange={handleInputRegisterChange} />
                     <label htmlFor="password">Password</label>
                 </FloatLabel>
                 <br />
@@ -151,20 +147,21 @@ export default function Register() {
                 </FloatLabel>
                 <br />
                 <p>Age:</p>
-                {ages.map((age) =>{
+                {ages.map((age) => {
                     return (
                         <div key={age.key} className="flexalign-items-center">
                             <RadioButton inputId={age.key} name="age" value={age}
-                            onChange={(e) => setSelectedAge(e.value)} 
-                            checked={selectedAge.key === age.key}/>
+                                onChange={(e) => setSelectedAge(e.value)}
+                                checked={selectedAge.key === age.key} />
                             <label htmlFor={age.key} className="ml-2">{age.name}</label>
                             <br /><br />
                         </div>
                     );
                 })}
-                <br />
-                <SelectButton value={gender} 
-                onChange={(e)=> setGender(e.value)} options={genders}/>
+                <p>Gender:</p>
+                <SelectButton 
+                    value={detailsRegister.gender}
+                    onChange={handleInputRegisterChange} options={genders} />
                 <br />
                 <FloatLabel>
                     <InputText
