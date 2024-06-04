@@ -10,6 +10,9 @@ export const drop = async () => {
     await pool.query('DROP DATABASE IF EXISTS SurveysDatabase');
 }
 
+//TODO: add a table of rolls that can be for users in the website
+//TODO: add a table of coencetion betaeen the users and the rolls
+//TODO: ?? to make a table for users that answered any question
 export const create = async () => {
     // Create the database
     await pool.query('CREATE DATABASE IF NOT EXISTS SurveysDatabase');
@@ -41,7 +44,7 @@ export const create = async () => {
         email varchar(255) NOT NULL,
         password varchar(255) NOT NULL,
         company varchar(255) NOT NULL
-    );`);
+    );`);// TODO: delete the company column
     //Create the surveys table
     await pool.query(`
     CREATE TABLE IF NOT EXISTS Surveys(
@@ -50,7 +53,7 @@ export const create = async () => {
         surveyName varchar(255),
         active bool NOT NULL,
         PRIMARY KEY (id)
-    );`);
+    );`);//FIXME: change the managerId to userId and make it forign key
     //Create the questions table
     await pool.query(`
     CREATE TABLE IF NOT EXISTS Questions(

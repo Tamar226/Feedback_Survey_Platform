@@ -6,13 +6,14 @@ import { useState } from "react";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import { FloatLabel } from "primereact/floatlabel";
-import { Fieldset } from "primereact/fieldset";
 import { Message } from 'primereact/message';
 import { RadioButton } from 'primereact/radiobutton';
 import { SelectButton } from 'primereact/selectbutton';
+import { Password } from 'primereact/password';
 import { Link, useNavigate } from "react-router-dom";
 import { RegisterByPostRequest } from '../Requests';
-import { useUser } from './UserContext'; 
+import { useUser } from './UserContext';
+
 export default function Register() {
     const [message, setMessage] = useState("");
     const { setCurrentUser } = useUser();
@@ -97,92 +98,87 @@ export default function Register() {
 
     return (
         <>
-            <Fieldset legend="Register Here">
-                <FloatLabel>
-                    <InputText
-                        id="name"
-                        name="name"
-                        value={detailsRegister.name}
-                        onChange={handleInputRegisterChange}
-                    />
-                    <label htmlFor="name">Name</label>
-                </FloatLabel>
-                <br />
-                <FloatLabel>
-                    <InputText
-                        id="username"
-                        name="username"
-                        value={detailsRegister.username}
-                        onChange={handleInputRegisterChange}
-                    />
-                    <label htmlFor="username">User-Name</label>
-                </FloatLabel>
-                <br />
-                <FloatLabel>
-                    <InputText
-                        id="email"
-                        name="email"
-                        value={detailsRegister.email}
-                        onChange={handleInputRegisterChange}
-                        onBlur={handleEmailBlur}
-                        required
-                    />
-                    <label htmlFor="email">Email</label>
-                </FloatLabel>
-                <br />
-                <FloatLabel>
-                    <InputText
-                        id="password"
-                        name="password"
-                        value={detailsRegister.password}
-                        onChange={handleInputRegisterChange}
-                    />
-                    <label htmlFor="password">Password</label>
-                </FloatLabel>
-                <br />
-                <FloatLabel>
-                    <InputText
-                        id="city"
-                        name="city"
-                        value={detailsRegister.city}
-                        onChange={handleInputRegisterChange}
-                    />
-                    <label htmlFor="city">City</label>
-                </FloatLabel>
-                <br />
-                <p>Age:</p>
-                {ages.map((age) =>{
-                    return (
-                        <div key={age.key} className="flexalign-items-center">
-                            <RadioButton inputId={age.key} name="age" value={age}
-                            onChange={(e) => setSelectedAge(e.value)} 
-                            checked={selectedAge.key === age.key}/>
-                            <label htmlFor={age.key} className="ml-2">{age.name}</label>
-                            <br /><br />
-                        </div>
-                    );
-                })}
-                <br />
-                <SelectButton value={gender} 
-                onChange={(e)=> setGender(e.value)} options={genders}/>
-                <br />
-                <FloatLabel>
-                    <InputText
-                        id="job"
-                        name="job"
-                        value={detailsRegister.job}
-                        onChange={handleInputRegisterChange}
-                    />
-                    <label htmlFor="job">Job</label>
-                </FloatLabel>
-                <br />
-                {message && (<Message severity="error" text={message} />)}<br /><br />
-                <Button onClick={checkAccessPossibility} label="Registering" />
-                <br /><br />
-                <Link to="/login" id="link">
-                    Already have an account?
-                </Link>
-            </Fieldset>
+            <FloatLabel>
+                <InputText
+                    id="name"
+                    name="name"
+                    value={detailsRegister.name}
+                    onChange={handleInputRegisterChange}
+                />
+                <label htmlFor="name">Name</label>
+            </FloatLabel>
+            <br />
+            <FloatLabel>
+                <InputText
+                    id="username"
+                    name="username"
+                    value={detailsRegister.username}
+                    onChange={handleInputRegisterChange}
+                />
+                <label htmlFor="username">User-Name</label>
+            </FloatLabel>
+            <br />
+            <FloatLabel>
+                <InputText
+                    id="email"
+                    name="email"
+                    value={detailsRegister.email}
+                    onChange={handleInputRegisterChange}
+                    onBlur={handleEmailBlur}
+                    required
+                />
+                <label htmlFor="email">Email</label>
+            </FloatLabel>
+            <br />
+            <FloatLabel>
+                <Password
+                    inputId="password" name="password"
+                    value={detailsRegister.password}
+                    onChange={handleInputRegisterChange} />
+                <label htmlFor="password">Password</label>
+            </FloatLabel>
+            <br />
+            <FloatLabel>
+                <InputText
+                    id="city"
+                    name="city"
+                    value={detailsRegister.city}
+                    onChange={handleInputRegisterChange}
+                />
+                <label htmlFor="city">City</label>
+            </FloatLabel>
+            <br />
+            <p>Age:</p>
+            {ages.map((age) => {
+                return (
+                    <div key={age.key} className="flexalign-items-center">
+                        <RadioButton inputId={age.key} name="age" value={age}
+                            onChange={(e) => setSelectedAge(e.value)}
+                            checked={selectedAge.key === age.key} />
+                        <label htmlFor={age.key} className="ml-2">{age.name}</label>
+                        <br /><br />
+                    </div>
+                );
+            })}
+            <br />
+            <SelectButton value={gender}
+                onChange={(e) => setGender(e.value)} options={genders} />
+            <br />
+            <FloatLabel>
+                <InputText
+                    id="job"
+                    name="job"
+                    value={detailsRegister.job}
+                    onChange={handleInputRegisterChange}
+                />
+                <label htmlFor="job">Job</label>
+            </FloatLabel>
+            {message && (<Message severity="error" text={message} />)}<br /><br />
+            <Button onClick={checkAccessPossibility} label="Registering" />
+            <br /><br />
+            <Link to="/login" id="link">
+                Already have an account?
+            </Link>
         </>
     );
 }
