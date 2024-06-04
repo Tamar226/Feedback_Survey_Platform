@@ -14,16 +14,12 @@ const getAllSurveys = async (req, res) => {
 };
 
 const getSurveyById = async (req, res) => {
-    const surveyId = req.params.surveyId;
+    const id = req.params.id;
     try {
-        const result = await surveyService.getSurveyById(surveyId);
-        if (result.hasError) {
-            res.status(404).send('Error');
-        } else {
-            res.status(200).send(result);
-        }
+        const Survey = await surveyService.getSurveyById(id);
+        res.status(200).send(Survey);
     } catch (error) {
-        res.status(500).send('Internal Server Error');
+        res.status(404).send(error.message);
     }
 };
 
