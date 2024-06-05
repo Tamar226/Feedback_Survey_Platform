@@ -9,9 +9,9 @@ async function getAllQuestions() {
 }
 
 const getQuestionById = async (questionId) => {
-    const result = await questionsRepository.getQuestionById(id);
+    const result = await questionsRepository.getQuestionById(questionId);
     if (result.hasError) {
-        throw new Error(`Question with ID ${questionId} not found`);
+        throw new Error(`Question with ID ${id} not found`);
     }
     return result.data;
 };

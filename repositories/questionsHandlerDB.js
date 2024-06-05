@@ -23,7 +23,7 @@ async function getAllQuestions() {
 
 async function getQuestionById(questionId) {
     try {
-        const result = await pool.query('SELECT * FROM questions WHERE userId = ?', [questionId]);
+        const result = await pool.query('SELECT * FROM questions WHERE Id = ?', [questionId]);
         if (result.length === 0) {
             throw new Error(`Question with ID ${questionId} not found`);
         }
@@ -41,7 +41,7 @@ async function addQuestion(newQuestion) {
         }
         else
             newQuestion.completed = 0;
-        const result = await pool.query(`INSERT INTO questions (question, surveyId) VALUES ('${newQuestion.question}', '${newQuestion.surveyId}')`);
+        const result = await pool.query(`INSERT INTO questions (question, surveyID) VALUES ('${newQuestion.question}', '${newQuestion.surveyID}')`);
         if (result[0].insertId > 0) {
             return prepareResult(false, 0, result[0].insertId)
         }
