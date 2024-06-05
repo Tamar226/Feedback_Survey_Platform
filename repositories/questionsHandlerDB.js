@@ -2,23 +2,30 @@ const mysql = require('mysql2');
 
 
 var pool = mysql.createPool({
-    host: process.env.MYSQL_HOST,
-    user: process.env.MYSQL_USER,
-    password: process.env.MYSQL_PASSWORD,
-    database: process.env.MYSQL_DATABASE,
+    // host: process.env.MYSQL_HOST,
+    // user: process.env.MYSQL_USER,
+    // password: process.env.MYSQL_PASSWORD,
+    // database: process.env.MYSQL_DATABASE,
+    host: 'localhost',
+    user: 'root',
+    // password: 'a1b2c3d4',
+    password: 'T50226',
+    // password: '1570',
+    database: 'SurveysDatabase',
+    port: '3306'
 }).promise();
 
 
-async function getAllTodos() {
-    const result = await pool.query('SELECT * FROM todos');
+async function getAllQuestions() {
+    const result = await pool.query('SELECT * FROM questions');
     return prepareResult(false, 0, 0, result);
 }
 
-async function getTodoById(userId) {
+async function getQuestionById(questionId) {
     try {
-        const result = await pool.query('SELECT * FROM todos WHERE userId = ?', [userId]);
+        const result = await pool.query('SELECT * FROM questions WHERE userId = ?', [questionId]);
         if (result.length === 0) {
-            throw new Error(`Todo with ID ${userId} not found`);
+            throw new Error(`Question with ID ${questionId} not found`);
         }
         return prepareResult(false, 0, 0, result[0]);
 
@@ -27,14 +34,14 @@ async function getTodoById(userId) {
     }
 }
 
-async function addTodo(newTodo) {
+async function addQuestion(newQuestion) {
     try {
-        if (newTodo.completed) {
-            newTodo.completed = 1;
+        if (newQuestion.completed) {
+            newQuestion.completed = 1;
         }
         else
-            newTodo.completed = 0;
-        const result = await pool.query(`INSERT INTO todos (userID, title,completed) VALUES ('${newTodo.userId}', '${newTodo.title}','${newTodo.completed}')`);
+            newQuestion.completed = 0;
+        const result = await pool.query(`INSERT INTO questions (question, surveyId) VALUES ('${newQuestion.question}', '${newQuestion.surveyId}')`);
         if (result[0].insertId > 0) {
             return prepareResult(false, 0, result[0].insertId)
         }
@@ -46,9 +53,9 @@ async function addTodo(newTodo) {
     }
 }
 
-async function updateTodo(todoId, updatedTodoData) {
+async function updateQuestion(questionId, updatedQuestionData) {
     try {
-        const result = await pool.query('UPDATE todos SET ? WHERE id = ?', [updatedTodoData, todoId]);
+        const result = await pool.query('UPDATE questions SET ? WHERE id = ?', [updatedQuestionData, questionId]);
         if (result[0].affectedRows > 0) {
             return prepareResult(false, result[0].affectedRows, 0)
         }
@@ -61,9 +68,9 @@ async function updateTodo(todoId, updatedTodoData) {
     }
 }
 
-async function deleteTodo(todoId) {
+async function deleteQuestion(questionId) {
     try {
-        const result = await pool.query('DELETE FROM todos WHERE id = ?', todoId);
+        const result = await pool.query('DELETE FROM questions WHERE id = ?', [questionId]);
         if (result[0].affectedRows > 0) {
             return prepareResult(false, result[0].affectedRows, 0)
 
@@ -74,19 +81,19 @@ async function deleteTodo(todoId) {
         throw error;
     }
 }
-function prepareResult(hasErrorT = true, affectedRowsT = 0, insertIdT = -1, dataT = null) {
+function prepareResult(hasErrorTemp = true, affectedRowsTemp = 0, insertIdTemp = -1, dataTemp = null) {
     const resultdata = {
-        hasError: hasErrorT,
-        affectedRows: affectedRowsT,
-        insertId: insertIdT,
-        data: dataT
+        hasError: hasErrorTemp,
+        affectedRows: affectedRowsTemp,
+        insertId: insertIdTemp,
+        data: dataTemp
     }
     return resultdata;
 }
 module.exports = {
-    getAllTodos,
-    getTodoById,
-    addTodo,
-    updateTodo,
-    deleteTodo
+    getAllQuestions,
+    getQuestionById,
+    addQuestion,
+    updateQuestion,
+    deleteQuestion
 };

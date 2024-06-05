@@ -27,7 +27,6 @@ export async function getUserDetails(username, password, setworngRequest) {
         return { code: 100, message: error, params: null };
     }
 }
-
 export async function loginByPostRequest(username, password) {
     try {
         const response = await fetch(`http://localhost:3000/managers/login`, {
@@ -104,3 +103,27 @@ export const addSurvey = async (survey) => {
         throw error;
     }
 };
+
+export const fetchSurveyQuestions = async (surveyId) => {
+    const response = await fetch(`${API_BASE_URL}/surveys/${surveyId}/questions`);
+    if (!response.ok) {
+        throw new Error('Failed to fetch survey questions');
+    }
+    return response.json();
+};
+
+export const submitSurveyAnswers = async (surveyId, answers) => {
+    const response = await fetch(`'http://localhost:3000/surveys/${surveyId}/answers`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ answers }),
+    });
+    if (!response.ok) {
+        throw new Error('Failed to submit survey answers');
+    }
+    return response.json();
+};
+
+

@@ -73,9 +73,9 @@ async function updateManager(ManagerId, updatedManagerData) {
     }
 }
 
-async function deleteManager(ManagerId) {
+async function deleteManager(managerId) {
     try {
-        const result = await pool.query('DELETE FROM Managers WHERE id = ?', ManagerId);
+        const result = await pool.query('DELETE FROM Managers WHERE id = ?', managerId);
         if (result[0].affectedRows > 0) {
             return prepareResult(false, result[0].affectedRows, 0)
 
