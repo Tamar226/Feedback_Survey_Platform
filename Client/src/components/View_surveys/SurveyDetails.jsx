@@ -1,8 +1,8 @@
 // src/components/SurveyDetail.jsx
 import React, { useState, useEffect } from 'react';
-import Question from './Question';
+import Question from '../Adding_surveys/Question';
 import { Button } from 'primereact/button';
-import { fetchSurveyQuestions, submitSurveyAnswers } from '../Requests';
+import { fetchSurveyQuestions, submitSurveyAnswers } from '../../Requests';
 
 const SurveyDetail = ({ survey, onClose }) => {
     const [questions, setQuestions] = useState([]);
@@ -10,13 +10,21 @@ const SurveyDetail = ({ survey, onClose }) => {
 
     useEffect(() => {
         const getQuestions = async () => {
-            const data = await fetchSurveyQuestions(survey.id);
-            setQuestions(data);
-        };
+            try {
+                const result = await fetchSurveyQuestions(survey.id);
+                if (result.status === 200 && result.data) {
+                    setQuestions(result.data);
+                } else {
+                    console.error("Failed to fetch surveys");
+                }
+            } catch (error) {
+                console.error('Error fetching questions:', error);
+            }
 
+        };
         getQuestions();
     }, [survey.id]);
-
+console.log(questions)
     const handleAnswerChange = (questionId, answer) => {
         setAnswers((prevAnswers) => ({
             ...prevAnswers,

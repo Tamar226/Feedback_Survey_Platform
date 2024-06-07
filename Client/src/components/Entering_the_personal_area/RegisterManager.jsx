@@ -8,7 +8,7 @@ import { InputText } from "primereact/inputtext";
 import { FloatLabel } from "primereact/floatlabel";
 import { Message } from 'primereact/message';
 import { Link, useNavigate } from "react-router-dom";
-import { RegisterByPostRequest } from '../Requests';
+import { RegisterByPostRequest } from '../../Requests';
 import { useUser } from './UserContext';  //
 export default function Register() {
     const [message, setMessage] = useState("");

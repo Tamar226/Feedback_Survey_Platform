@@ -3,35 +3,28 @@ import React, { useState, useEffect } from 'react';
 import 'primeicons/primeicons.css';
 import { PrimeIcons } from 'primereact/api';
 import SurveyQuestion from './Question';
-import { fetchSurveys, addSurvey } from '../Requests';
+import { fetchSurveys, fetchSurveyQuestions } from '../../Requests';
 import { Divider } from 'primereact/divider';
 import { Button } from 'primereact/button';
-import '../components/Styles/AddQuestion.css';
+import './AddQuestion.css';
 
 const Survey = ({ onClose }) => {
     const [questions, setQuestions] = useState([]);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const data = await fetchSurveys();
-                setQuestions(data);
-            } catch (error) {
-                console.error('Error fetching surveys:', error);
-            }
-        };
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         try {
+    //             const data = await fetchSurveys();
+    //             setQuestions(data);
+    //         } catch (error) {
+    //             console.error('Error fetching surveys:', error);
+    //         }
+    //     };
 
-        fetchData();
-    }, []);
+    //     fetchData();
+    // }, []);
 
-    const handleAddQuestion = async (question) => {
-        try {
-            const newQuestion = await addSurvey(question);
-            setQuestions([...questions, newQuestion]);
-        } catch (error) {
-            console.error('Error adding question:', error);
-        }
-    };
+    
 
     return (
         <div className="survey-container">
@@ -40,7 +33,7 @@ const Survey = ({ onClose }) => {
                     <h3>Survey Questions</h3>
                     <Button icon="pi pi-times-circle"  onClick={onClose} />
                 </div>
-                <SurveyQuestion onAddQuestion={handleAddQuestion} />
+                <Question getQuestions={handleFetchQuestions} />
                 {questions.map((q, index) => (
                     <div key={index} className="survey-question">
                         <h4>{q.question}</h4>

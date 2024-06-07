@@ -16,6 +16,14 @@ const getQuestionById = async (questionId) => {
     return result.data;
 };
 
+const getQuestionsBySurveyId = async (surveyId) => {
+    const result = await questionsRepository.getQuestionsBySurveyId(surveyId);
+    if (result.hasError) {
+        throw new Error(`Question with survet id ${id} not found`);
+    }
+    return result.data;
+};
+
 const addQuestion = async (newQuestion) => {
     const result = await questionsRepository.addQuestion(newQuestion);
     if (result.insertId > 0) {
@@ -45,6 +53,7 @@ async function deleteQuestion(questionId) {
 module.exports = {
     getAllQuestions,
     getQuestionById,
+    getQuestionsBySurveyId,
     addQuestion,
     updateQuestion,
     deleteQuestion

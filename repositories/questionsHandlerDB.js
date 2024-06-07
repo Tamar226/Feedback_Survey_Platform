@@ -34,6 +34,18 @@ async function getQuestionById(questionId) {
     }
 }
 
+async function getQuestionsBySurveyId (surveyId) {
+    try {
+        const result = await pool.query('SELECT * FROM questions WHERE surveyID = ?', [surveyId]);
+        if (result.length === 0) {
+            throw new Error(`Question with ID ${questionId} not found`);
+        }
+        return prepareResult(false, 0, 0, result[0]);
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+};
 async function addQuestion(newQuestion) {
     try {
         if (newQuestion.completed) {
@@ -93,6 +105,7 @@ function prepareResult(hasErrorTemp = true, affectedRowsTemp = 0, insertIdTemp =
 module.exports = {
     getAllQuestions,
     getQuestionById,
+    getQuestionsBySurveyId,
     addQuestion,
     updateQuestion,
     deleteQuestion

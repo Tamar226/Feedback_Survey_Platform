@@ -23,6 +23,15 @@ const getQuestionById = async (req, res) => {
     }
 };
 
+const getQuestionsBySurveyId = async (req, res) => {
+    const id = req.params.surveyId;
+    try {
+        const Questions = await questionservice.getQuestionsBySurveyId(id);
+        res.status(200).send(Questions);
+    } catch (error) {
+        res.status(404).send(error.message);
+    }
+};
 const addQuestion = async (req, res) => {
     const newQuestion = req.body;
     try {
@@ -63,6 +72,7 @@ const deleteQuestion = async (req, res) => {
 module.exports = {
     getAllQuestions,
     getQuestionById,
+    getQuestionsBySurveyId,
     addQuestion,
     updateQuestion,
     deleteQuestion

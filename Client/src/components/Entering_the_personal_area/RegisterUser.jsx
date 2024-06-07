@@ -11,7 +11,7 @@ import { RadioButton } from 'primereact/radiobutton';
 import { SelectButton } from 'primereact/selectbutton';
 import { Password } from 'primereact/password';
 import { Link, useNavigate } from "react-router-dom";
-import { RegisterByPostRequest } from '../Requests';
+import { RegisterByPostRequest } from '../../Requests';
 import { useUser } from './UserContext';
 
 export default function Register() {

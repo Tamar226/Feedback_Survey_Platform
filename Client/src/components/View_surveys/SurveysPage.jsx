@@ -32,25 +32,33 @@
 
 // src/components/SurveysPage.jsx
 import React, { useState, useEffect } from 'react';
-import Survey from './Survey';
+import Survey from '../Adding_surveys/Survey';
 import SurveyCard from './SurveyCard';
-import SurveyDetail from './SurveyDetails';
+import SurveyDetails from './SurveyDetails';
 import { Button } from 'primereact/button';
-import { fetchSurveys } from '../Requests';
+import { fetchSurveys } from '../../Requests';
 
 export default function SurveysPage() {
     const [surveys, setSurveys] = useState([]);
     const [showSurvey, setShowSurvey] = useState(false);
     const [selectedSurvey, setSelectedSurvey] = useState(null);
-
     useEffect(() => {
         const getSurveys = async () => {
-            const data = await fetchSurveys();
-            setSurveys(data);
+            try {
+                const result = await fetchSurveys();
+                if (result.status === 200 && result.data) {
+                    setSurveys(result.data[1][0]);
+                } else {
+                    console.error("Failed to fetch surveys");
+                }
+            } catch (error) {
+                console.error("Error fetching surveys", error);
+            }
         };
-
         getSurveys();
+
     }, []);
+    console.log(surveys)
 
     const handleAddSurvey = () => {
         setShowSurvey(true);
@@ -73,7 +81,7 @@ export default function SurveysPage() {
             <h2>Active Surveys</h2>
             <div className="allSurveys">
                 {surveys.map((survey) => (
-                    <SurveyCard
+                    <SurveyDetails
                         key={survey.id}
                         survey={survey}
                         onSelect={() => handleSelectSurvey(survey)}
@@ -85,9 +93,9 @@ export default function SurveysPage() {
                     <Button label="Add New Survey" icon="pi pi-plus" onClick={handleAddSurvey} />
                 </div>
             </div>
-            {showSurvey && <Survey onClose={handleCloseSurvey} />}
+            {/* {showSurvey && <Survey onClose={handleCloseSurvey} />} */}
             {selectedSurvey && (
-                <SurveyDetail survey={selectedSurvey} onClose={handleCloseSurveyDetail} />
+                <SurveyDetails survey={selectedSurvey} onClose={handleCloseSurveyDetail} />
             )}
         </>
     );
