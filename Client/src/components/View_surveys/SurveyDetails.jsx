@@ -1,8 +1,8 @@
-// src/components/SurveyDetail.jsx
 import React, { useState, useEffect } from 'react';
 import Question from '../Adding_surveys/Question';
 import { Button } from 'primereact/button';
 import { fetchSurveyQuestions, submitSurveyAnswers } from '../../Requests';
+import QuestionCard from './QuestionCard';
 
 const SurveyDetail = ({ survey, onClose }) => {
     const [questions, setQuestions] = useState([]);
@@ -20,11 +20,13 @@ const SurveyDetail = ({ survey, onClose }) => {
             } catch (error) {
                 console.error('Error fetching questions:', error);
             }
-
         };
-        getQuestions();
-    }, [survey.id]);
-console.log(questions)
+        
+        if (survey) {
+            getQuestions();
+        }
+    }, [survey]);
+console.log(questions);
     const handleAnswerChange = (questionId, answer) => {
         setAnswers((prevAnswers) => ({
             ...prevAnswers,
@@ -45,9 +47,10 @@ console.log(questions)
                     <Button icon="pi pi-times" className="p-button-rounded p-button-danger" onClick={onClose} />
                 </div>
                 {questions.map((q) => (
-                    <Question key={q.id} question={q} onAnswerChange={handleAnswerChange} />
+                    <QuestionCard key={q.id} question={q} onAnswerChange={handleAnswerChange} />
                 ))}
-                <Button label="Submit" icon="pi pi-check" onClick={handleSubmit} />
+                <Button label="Answer this survey" icon="pi pi-reply"  />
+                {/* <Button label="Submit" icon="pi pi-check" onClick={handleSubmit} /> */}
             </div>
         </div>
     );
