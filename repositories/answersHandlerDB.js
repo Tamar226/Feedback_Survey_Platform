@@ -1,24 +1,29 @@
 const mysql = require('mysql2');
 
-
 var pool = mysql.createPool({
-    host: process.env.MYSQL_HOST,
-    user: process.env.MYSQL_USER,
-    password: process.env.MYSQL_PASSWORD,
-    database: process.env.MYSQL_DATABASE,
+    // host: process.env.MYSQL_HOST,
+    // user: process.env.MYSQL_USER,
+    // password: process.env.MYSQL_PASSWORD,
+    // database: process.env.MYSQL_DATABASE,
+    host: 'localhost',
+    user: 'root',
+    // password: 'a1b2c3d4',
+    password: 'T50226',
+    // password: '1570',
+    database: 'SurveysDatabase',
+    port: '3306'
 }).promise();
-
 
 async function getAllAnswers() {
     const result = await pool.query('SELECT * FROM answers');
     return prepareResult(false, 0, 0, result);
 }
 
-async function getAnswerById(userId) {
+async function getAnswerById(answerId) {
     try {
-        const result = await pool.query('SELECT * FROM answers WHERE userId = ?', [userId]);
+        const result = await pool.query('SELECT * FROM answers WHERE Id = ?', [answerId]);
         if (result.length === 0) {
-            throw new Error(`Answer with ID ${userId} not found`);
+            throw new Error(`Answer with ID ${answerId} not found`);
         }
         return prepareResult(false, 0, 0, result[0]);
 
@@ -27,6 +32,18 @@ async function getAnswerById(userId) {
     }
 }
 
+async function getAnswersByQuestionId (surveyId) {
+    try {
+        const result = await pool.query('SELECT * FROM answers WHERE questionId = ?', [questionId]);
+        if (result.length === 0) {
+            throw new Error(`Answer with ID ${answerId} not found`);
+        }
+        return prepareResult(false, 0, 0, result[0]);
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+};
 async function addAnswer(newAnswer) {
     try {
         if (newAnswer.completed) {
@@ -34,7 +51,7 @@ async function addAnswer(newAnswer) {
         }
         else
             newAnswer.completed = 0;
-        const result = await pool.query(`INSERT INTO answers (userID, title,completed) VALUES ('${newAnswer.userId}', '${newAnswer.title}','${newAnswer.completed}')`);
+        const result = await pool.query(`INSERT INTO answers (answer, questionId,answerId) VALUES ('${newAnswer.answer}', '${newAnswer.questionId}','${newAnswer.answerId}')`);
         if (result[0].insertId > 0) {
             return prepareResult(false, 0, result[0].insertId)
         }
@@ -63,7 +80,7 @@ async function updateAnswer(answerId, updatedAnswerData) {
 
 async function deleteAnswer(answerId) {
     try {
-        const result = await pool.query('DELETE FROM answers WHERE id = ?', answerId);
+        const result = await pool.query('DELETE FROM answers WHERE id = ?', [answerId]);
         if (result[0].affectedRows > 0) {
             return prepareResult(false, result[0].affectedRows, 0)
 
@@ -74,18 +91,19 @@ async function deleteAnswer(answerId) {
         throw error;
     }
 }
-function prepareResult(hasErrorT = true, affectedRowsT = 0, insertIdT = -1, dataT = null) {
+function prepareResult(hasErrorTemp = true, affectedRowsTemp = 0, insertIdTemp = -1, dataTemp = null) {
     const resultdata = {
-        hasError: hasErrorT,
-        affectedRows: affectedRowsT,
-        insertId: insertIdT,
-        data: dataT
+        hasError: hasErrorTemp,
+        affectedRows: affectedRowsTemp,
+        insertId: insertIdTemp,
+        data: dataTemp
     }
     return resultdata;
 }
 module.exports = {
     getAllAnswers,
     getAnswerById,
+    getAnswersByQuestionId,
     addAnswer,
     updateAnswer,
     deleteAnswer
