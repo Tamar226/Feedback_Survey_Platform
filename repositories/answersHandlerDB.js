@@ -32,11 +32,11 @@ async function getAnswerById(answerId) {
     }
 }
 
-async function getAnswersByQuestionId (surveyId) {
+async function getAnswersByQuestionId (questionId) {
     try {
         const result = await pool.query('SELECT * FROM answers WHERE questionId = ?', [questionId]);
         if (result.length === 0) {
-            throw new Error(`Answer with ID ${answerId} not found`);
+            throw new Error(`Answer with question ID ${questionId} not found`);
         }
         return prepareResult(false, 0, 0, result[0]);
     } catch (error) {

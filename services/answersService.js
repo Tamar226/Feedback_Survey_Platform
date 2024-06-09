@@ -16,10 +16,10 @@ const getAnswerById = async (answerId) => {
     return result.data;
 };
 
-const getAnswersByQuestionId = async (answerId) => {
-    const result = await answersRepository.getAnswersByQuestionId(answerId);
+const getAnswersByQuestionId = async (questionId) => {
+    const result = await answersRepository.getAnswersByQuestionId(questionId);
     if (result.hasError) {
-        throw new Error(`Answer with survet id ${id} not found`);
+        throw new Error(`Answer with question id ${questionId} not found`);
     }
     return result.data;
 };

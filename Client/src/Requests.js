@@ -115,6 +115,27 @@ export async function fetchSurveyQuestions(surveyId){
         return { status: null, data: null };
     }
 }
+export async function fetchSurveyAnswers(questionId) {
+    try {
+        const response = await fetch(`http://localhost:3000/answers/questions/${questionId}`,
+            {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+        const status = response.status;
+        const data = await response.json();
+        if (response.ok) {
+            return { status, data };
+        }
+        else {
+            return { status, data: null };
+        }
+    } catch (error) {
+        return { status: null, data: null };
+    }
+}
 export async function postData(data, setLoading, typeData) {
     try {
         console.log('hii');
