@@ -10,8 +10,6 @@ export const drop = async () => {
     await pool.query('DROP DATABASE IF EXISTS SurveysDatabase');
 }
 
-//TODO: add a table of rolls that can be for users in the website
-//TODO: add a table of coencetion betaeen the users and the rolls
 //TODO: ?? to make a table for users that answered any question
 export const create = async () => {
     // Create the database
@@ -31,9 +29,26 @@ export const create = async () => {
         city VARCHAR(255) NOT NULL,
         age INT NOT NULL, 
         gender VARCHAR(255) NOT NULL,
-        job VARCHAR(255) NOT NULL
+        job VARCHAR(255) NOT NULL,
+        company varchar(255) NOT NULL
     );`
     );
+    //Create the roles table
+    await pool.query(`
+        CREATE TABLE IF NOT EXISTS Roles(
+        id int AUTO_INCREMENT PRIMARY KEY,
+        name varchar(255) NOT NULL
+    );`);
+
+    //Create the roleRelation table
+    await pool.query(`
+    CREATE TABLE IF NOT EXISTS RoleRelation(
+        id int AUTO_INCREMENT PRIMARY KEY,
+        roleId int NOT NULL,
+        userId int NOT NULL,
+        FOREIGN KEY (roleId) REFERENCES Roles(id),
+        FOREIGN KEY (userId) REFERENCES Users(id)
+    );`);
 
     //Create the managers table
     await pool.query(`
@@ -42,9 +57,8 @@ export const create = async () => {
         name varchar(255) NOT NULL,
         username varchar(255) NOT NULL UNIQUE,
         email varchar(255) NOT NULL,
-        password varchar(255) NOT NULL,
-        company varchar(255) NOT NULL
-    );`);// TODO: delete the company column
+        password varchar(255) NOT NULL
+    );`);
     //Create the surveys table
     await pool.query(`
     CREATE TABLE IF NOT EXISTS Surveys(

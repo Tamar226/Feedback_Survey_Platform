@@ -20,7 +20,6 @@ export default function Register() {
         username: "",
         email: "",
         password: "",
-        company: "",
     });
 
     const handleInputRegisterChange = (e) => {
@@ -53,7 +52,7 @@ export default function Register() {
             setMessage("please check your email address");//???
             return;
         }
-        const res = await RegisterByPostRequest(detailsRegister.name, detailsRegister.username, detailsRegister.email, detailsRegister.password, detailsRegister.company);
+        const res = await RegisterByPostRequest(detailsRegister.name, detailsRegister.username, detailsRegister.email, detailsRegister.password);
         console.log(res);
         if (res.status == 200) {
             setCurrentUser(res.data[0]);
@@ -71,7 +70,6 @@ export default function Register() {
                 username: "",
                 email: "",
                 password: "",
-                company: "",
             });
         }
     }
@@ -118,16 +116,6 @@ export default function Register() {
                         onChange={handleInputRegisterChange}
                     />
                     <label htmlFor="password">Password</label>
-                </FloatLabel>
-                <br />
-                <FloatLabel>
-                    <InputText
-                        id="company"
-                        name="company"
-                        value={detailsRegister.company}
-                        onChange={handleInputRegisterChange}
-                    />
-                    <label htmlFor="company">Company</label>
                 </FloatLabel>
                 <br />
                 {message && (<Message severity="error" text={message} />)}<br /><br />

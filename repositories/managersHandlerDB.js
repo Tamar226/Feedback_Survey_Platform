@@ -12,8 +12,8 @@ var pool = mysql.createPool({
     host: 'localhost',
     user: 'root',
     // password: 'a1b2c3d4',
-    password: 'T50226',
-    // password: '1570',
+    // password: 'T50226',
+    password: '1570',
     database: 'SurveysDatabase',
     port: '3306'
 }).promise();
@@ -37,7 +37,7 @@ async function getManagerById(ManagerId) {
 
 async function addManager(newManager) {
     try {
-        const result = await pool.query(`INSERT INTO Managers (name,username,email,password,company) VALUES ('${newManager.name}','${newManager.username}','${newManager.email}','${newManager.password}','${newManager.company}')`);
+        const result = await pool.query(`INSERT INTO Managers (name,username,email,password) VALUES ('${newManager.name}','${newManager.username}','${newManager.email}','${newManager.password}')`);
         if (result[0].insertId > 0) {
             return prepareResult(false, 0, result[0].insertId)
         }

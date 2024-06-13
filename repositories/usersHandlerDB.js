@@ -3,10 +3,17 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 var pool = mysql.createPool({
-    host: process.env.MYSQL_HOST,
-    user: process.env.MYSQL_USER,
-    password: process.env.MYSQL_PASSWORD,
-    database: process.env.MYSQL_DATABASE
+    // host: process.env.MYSQL_HOST,
+    // user: process.env.MYSQL_USER,
+    // password: process.env.MYSQL_PASSWORD,
+    // database: process.env.MYSQL_DATABASE,
+    host: 'localhost',
+    user: 'root',
+    // password: 'a1b2c3d4',
+    // password: 'T50226',
+    password: '1570',
+    database: 'SurveysDatabase',
+    port: '3306'
 }).promise();
 
 async function getAllUsers() {
@@ -28,7 +35,7 @@ async function getUserById(UserId) {
 
 async function addUser(newUser) {
     try {
-        const result = await pool.query(`INSERT INTO Users (name,username,email,password,city, age, gender, job) VALUES ('${newUser.name}','${newUser.username}','${newUser.email}','${newUser.password}','${newUser.city}','${newUser.age}','${newUser.gender}','${newUser.job}')`);
+        const result = await pool.query(`INSERT INTO Users (name,username,email,password,city, age, gender, job, company) VALUES ('${newUser.name}','${newUser.username}','${newUser.email}','${newUser.password}','${newUser.city}','${newUser.age}','${newUser.gender}','${newUser.job}','${newUser.company}')`);
         if (result[0].insertId > 0) {
             return prepareResult(false, 0, result[0].insertId)
         }

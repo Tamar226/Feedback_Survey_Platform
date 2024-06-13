@@ -24,9 +24,9 @@ export default function LoginUser() {
                 const res = await loginByPostRequest(username, password);
                 console.log(res);
                 if (res.status == 200) {
-                    setCurrentUser(res.data.user);
-                    console.log(res.data.user.id);
-                    navigate(`/user/${res.data.user.id}`);
+                    setCurrentUser(res.data[0]);
+                    // console.log(res.data.user.id);
+                    navigate(`/user/${res.data[0].id}`);
                 } else {
                     setMessage("Invalid username or password");
                 }

@@ -14,7 +14,10 @@ export default function ProfilePage() {
       <p><strong>Name:</strong> {currentUser.name}</p>
       <p><strong>Username:</strong> {currentUser.userName}</p>
       <p><strong>Email:</strong> {currentUser.email}</p>
-      <p><strong>Company:</strong> {currentUser.company}</p>
+      <p><strong>City:</strong> {currentUser.city}</p>
+      <p><strong>Age:</strong> {currentUser.age}</p>
+      <p><strong>Gender:</strong> {currentUser.gender}</p>
+      <p><strong>Job:</strong> {currentUser.job}</p>
     </div>
   );
 }
