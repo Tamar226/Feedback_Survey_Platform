@@ -73,7 +73,7 @@ export const create = async () => {
     CREATE TABLE IF NOT EXISTS Questions(
         id int AUTO_INCREMENT,
         question varchar(255),
-        surveyID int,
+        surveyID int NOT NULL,
         PRIMARY KEY (id),
         FOREIGN KEY (surveyID) REFERENCES Surveys(id)
     );`);
@@ -82,7 +82,8 @@ export const create = async () => {
     CREATE TABLE IF NOT EXISTS Answers(
         id int AUTO_INCREMENT,
         answer varchar(255),
-        questionID int,
+        questionId int NOT NULL,
+        answerId int NOT NULL,
         PRIMARY KEY (id),
         FOREIGN KEY (questionID) REFERENCES Questions(id)
     );`);

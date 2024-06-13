@@ -1,5 +1,4 @@
-
-const managerDataBase = require('../repositories/managersHandlerDB');
+const managersRepository = require('../repositories/managersHandlerDB');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
@@ -8,7 +7,7 @@ dotenv.config();
 const JWT_SECRET = /*process.env.JWT_SECRET*/'546442' || 'your_jwt_secret'; // יש לשמור בסוד את ה-secret
 
 const getAllManagers = async () => {
-    const result = await managerDataBase.getAllManagers();
+    const result = await managersRepository.getAllManagers();
     if (result.hasError) {
         throw new Error('Error fetching managers');
     }
@@ -16,7 +15,7 @@ const getAllManagers = async () => {
 };
 
 const getManagerById = async (id) => {
-    const result = await managerDataBase.getManagerById(id);
+    const result = await managersRepository.getManagerById(id);
     if (result.hasError) {
         throw new Error(`Manager with ID ${id} not found`);
     }
@@ -24,9 +23,9 @@ const getManagerById = async (id) => {
 };
 
 const addManager = async (newManager) => {
-    const result = await managerDataBase.addManager(newManager);
+    const result = await managersRepository.addManager(newManager);
     if (result.insertId > 0) {
-        const insertManager = await managerDataBase.getManagerById(result.insertId);
+        const insertManager = await managersRepository.getManagerById(result.insertId);
         return insertManager.data;
     } else {
         throw new Error('Error adding manager');
@@ -35,7 +34,7 @@ const addManager = async (newManager) => {
 
 async function getManagerDetails(userName, password) {
     try {
-        const rows = await managerDataBase.findManagerByUsername(userName);
+        const rows = await managersRepository.findManagerByUsername(userName);
         if (rows.length === 0) {
             throw new Error('Manager not found');
         }
@@ -64,7 +63,7 @@ async function getManagerDetails(userName, password) {
 
 
 const updateManager = async (managerId, updatedManagerData) => {
-    const result = await managerDataBase.updateManager(managerId, updatedManagerData);
+    const result = await managersRepository.updateManager(managerId, updatedManagerData);
     if (result.affectedRows > 0) {
         return `Manager with ID ${managerId} updated successfully`;
     } else {
@@ -73,7 +72,7 @@ const updateManager = async (managerId, updatedManagerData) => {
 };
 
 const deleteManager = async (managerId) => {
-    const result = await managerDataBase.deleteManager(managerId);
+    const result = await managersRepository.deleteManager(managerId);
     if (result.affectedRows > 0) {
         return `Manager with ID ${managerId} deleted successfully`;
     } else {

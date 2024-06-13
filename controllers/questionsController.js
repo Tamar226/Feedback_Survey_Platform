@@ -1,91 +1,79 @@
-const mysql = require('mysql2');
+const questionservice = require('../services/questionService');
 
-
-var con = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "T50226",
-    database: "SurveysDatabase"
-});
-
-async function getAllTodos() {
-    const result = await con.promise().query('SELECT * FROM todos');
-    return prepareResults(false, 0, 0, result);
-}
-
-async function getTodoById(userId) {
+const getAllQuestions = async (req, res) => {
     try {
-        const result = await con.promise().query('SELECT * FROM todos WHERE userId = ?', [userId]);
-        if (result.length === 0) {
-            throw new Error(`Todo with ID ${userId} not found`);
-        }
-        return prepareResult(false, 0, 0, result[0]);
-
-    } catch (error) {
-        throw error;
-    }
-}
-
-async function addTodo(newTodo) {
-    try {
-        if (newTodo.completed) {
-            newTodo.completed = 1;
-        }
-        else
-            newTodo.completed = 0;
-        const result = await con.promise().query(`INSERT INTO todos (userID, title,completed) VALUES ('${newTodo.userId}', '${newTodo.title}','${newTodo.completed}')`);
-        if (result[0].insertId > 0) {
-            return prepareResult(false, 0, result[0].insertId)
-        }
-        else {
-            return prepareResult(true, 0, 0);
-        }
-    } catch (error) {
-        throw error;
-    }
-}
-
-async function updateTodo(todoId, updatedTodoData) {
-    try {
-        const result = await con.promise().query('UPDATE todos SET ? WHERE id = ?', [updatedTodoData, todoId]);
-        if (result[0].affectedRows > 0) {
-            return prepareResult(false, result[0].affectedRows, 0)
-        }
-        else {
-            return prepareResult(true, 0, 0);
-        }
-
-    } catch (error) {
-        throw error;
-    }
-}
-
-async function deleteTodo(todoId) {
-    try {
-        const result = await con.promise().query('DELETE FROM todos WHERE id = ?', todoId);
-        if (result[0].affectedRows > 0) {
-            return prepareResult(false, result[0].affectedRows, 0)
-
+        const result = await questionservice.getAllQuestions();
+        if (result.hasError) {
+            res.status(404).send('Error');
         } else {
-            return prepareResult(true, 0, 0);
+            res.status(200).send(['success get all questions', result]);
         }
     } catch (error) {
-        throw error;
+        res.status(500).send('Internal Server Error');
     }
-}
-function prepareResult(hasErrorT = true, affectedRowsT = 0, insertIdT = -1, dataT = null) {
-    const resultdata = {
-        hasError: hasErrorT,
-        affectedRows: affectedRowsT,
-        insertId: insertIdT,
-        data: dataT
+};
+
+const getQuestionById = async (req, res) => {
+    const id = req.params.questionId;
+    try {
+        const Question = await questionservice.getQuestionById(id);
+        res.status(200).send(Question);
+    } catch (error) {
+        res.status(404).send(error.message);
     }
-    return resultdata;
-}
+};
+
+const getQuestionsBySurveyId = async (req, res) => {
+    const id = req.params.surveyId;
+    try {
+        const Questions = await questionservice.getQuestionsBySurveyId(id);
+        res.status(200).send(Questions);
+    } catch (error) {
+        res.status(404).send(error.message);
+    }
+};
+const addQuestion = async (req, res) => {
+    const newQuestion = req.body;
+    try {
+        const result = await questionservice.addQuestion(newQuestion);
+        if (result.length > 0 && result[0].id > 0) {
+            const insertQuestion = await questionservice.getQuestionById(result[0].id);
+            res.status(200).send(insertQuestion);
+        } else {
+            res.status(404).json('Error adding question');
+        }
+    } catch (error) {
+        console.error('Error adding question:', error);
+        res.status(500).send('Internal Server Error');
+    }
+};
+
+const updateQuestion = async (req, res) => {
+    const questionId = req.params.questionId;
+    const updatedQuestionData = req.body;
+    try {
+        const updateMessage = await questionservice.updateQuestion(questionId, updatedQuestionData);
+        res.status(200).send(updateMessage);
+    } catch (error) {
+        res.status(404).send(error.message);
+    }
+};
+
+const deleteQuestion = async (req, res) => {
+    const questionId = req.params.questionId;
+    try {
+        const deleteMessage = await questionservice.deleteQuestion(questionId);
+        res.status(200).send(deleteMessage);
+    } catch (error) {
+        res.status(404).send(error.message);
+    }
+};
+
 module.exports = {
-    getAllTodos,
-    getTodoById,
-    addTodo,
-    updateTodo,
-    deleteTodo
+    getAllQuestions,
+    getQuestionById,
+    getQuestionsBySurveyId,
+    addQuestion,
+    updateQuestion,
+    deleteQuestion
 };

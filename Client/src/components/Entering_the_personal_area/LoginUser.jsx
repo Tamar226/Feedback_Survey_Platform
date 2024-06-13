@@ -6,8 +6,8 @@ import { InputText } from "primereact/inputtext";
 import { FloatLabel } from "primereact/floatlabel";
 import { Message } from "primereact/message";
 import { Link } from "react-router-dom";
-import { loginByPostRequest } from "../Requests";
-import { useUser } from "./UserContext"; //
+import { loginByPostRequest } from "../../Requests";
+import { useUser } from "./UserContext"; 
 
 export default function LoginUser() {
     const navigate = useNavigate();

@@ -6,11 +6,11 @@ var pool = mysql.createPool({
     // password: process.env.MYSQL_PASSWORD,
     // database: process.env.MYSQL_DATABASE,
     host: 'localhost',
-            user: 'root',
-            // password: 'a1b2c3d4',
-            password: 'T50226',
-            database: 'SurveysDatabase',
-            port:'3306'
+    user: 'root',
+    // password: 'a1b2c3d4',
+    password: 'T50226',
+    database: 'SurveysDatabase',
+    port: '3306'
 }).promise();
 
 async function getAllSurveys() {
@@ -18,11 +18,13 @@ async function getAllSurveys() {
     return prepareResult(false, 0, 0, result);
 }
 
-async function getSurveyById(SurveyId) {
+async function getSurveyById(surveyId) {
     try {
-        const result = await pool.query('SELECT * FROM Surveys WHERE id = ?', [SurveyId]);
+        //surveyId = parseInt(surveyId);
+        const result = await pool.query('SELECT * FROM surveys WHERE id = ?', [surveyId]);
+
         if (result.length === 0) {
-            throw new Error(`Survey with ID ${SurveyId} not found`);
+            throw new Error(`Survey with ID ${surveyId} not found`);
         }
         return prepareResult(false, 0, 0, result[0]);
     } catch (error) {
@@ -32,7 +34,8 @@ async function getSurveyById(SurveyId) {
 
 async function addSurvey(newSurvey) {
     try {
-        const result = await pool.query(`INSERT INTO surveys (managerId, surveyName, active) VALUES ('${newSurvey.managerId}','${newSurvey.surveyName}','${newSurvey.active}')`);
+        console.log(newSurvey)
+        const result = await pool.query(`INSERT INTO Surveys (managerId, surveyName, active) VALUES ('${newSurvey.managerId}','${newSurvey.surveyName}','${newSurvey.active}')`);
         if (result[0].insertId > 0) {
             return prepareResult(false, 0, result[0].insertId);
         } else {

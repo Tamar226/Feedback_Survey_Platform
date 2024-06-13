@@ -12,7 +12,7 @@ import { Password } from 'primereact/password';
 import { InputNumber } from 'primereact/inputnumber';
 import 'primeicons/primeicons.css';
 import { Link, useNavigate } from "react-router-dom";
-import { RegisterByPostRequest } from '../Requests';
+import { RegisterByPostRequest } from '../../Requests';
 import { useUser } from './UserContext';
 
 export default function Register() {

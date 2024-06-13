@@ -1,5 +1,5 @@
 import React from 'react';
-import { useUser } from './UserContext';
+import { useUser } from '../Entering_the_personal_area/UserContext';
 
 export default function ProfilePage() {
   const { currentUser } = useUser();
