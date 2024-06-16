@@ -154,12 +154,12 @@ export async function postData(data, setLoading, typeData) {
             throw new Error("Network error executing the request");
         }
         
-        setLoading ?? setLoading(false);
+        // setLoading ?? setLoading(false);
         console.log('seccsess');
         return { code: status, message: "success post the data", params: promiseData };
     }
     catch (error) {
-        setLoading ?? setLoading(false);
+        // setLoading ?? setLoading(false);
         return { code: 100, message: error, params: null };
     }
 }
@@ -208,18 +208,32 @@ export const addSurvey = async (survey) => {
 //     return response.json();
 // };
 
-export const submitSurveyAnswers = async (questionID, answers) => {
-    const response = await fetch(`'http://localhost:3000/surveys/${questionID}/answers`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ answers }),
-    });
-    if (!response.ok) {
-        throw new Error('Failed to submit survey answers');
+export const submitSurveyResults = async (surveyId, answers, userId) => {
+    try {
+        const response = await fetch(`/surveys/${surveyId}/results`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                userId,
+                answers,
+            }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to submit survey results');
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error('Error submitting survey results:', error);
+        throw error;
     }
-    return response.json();
 };
+
+
+
+
 
 

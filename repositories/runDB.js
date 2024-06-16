@@ -17,6 +17,7 @@ export const pool = mysql.createPool({
             // password: 'a1b2c3d4',
             password: 'T50226',
             // database: 'SurveysDatabase',
+
             port:'3306'
 }).promise();
 
@@ -27,4 +28,4 @@ export const pool = mysql.createPool({
     } catch (error) {
         console.error("error in DB", error);
     }
-})();
+})

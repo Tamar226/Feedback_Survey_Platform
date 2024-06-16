@@ -4,6 +4,7 @@ export const drop = async () => {
     await pool.query('USE SurveysDatabase');
     await pool.query('DROP TABLE IF EXISTS Users');
     await pool.query('DROP TABLE IF EXISTS Manager');
+    await pool.query('DROP TABLE IF EXISTS Responses');
     await pool.query('DROP TABLE IF EXISTS answers');
     await pool.query('DROP TABLE IF EXISTS Questions');
     await pool.query('DROP TABLE IF EXISTS Surveys');
@@ -73,16 +74,16 @@ export const create = async () => {
         PRIMARY KEY (id),
         FOREIGN KEY (questionID) REFERENCES Questions(id)
     );`);
-    // //Create the responses table
-    // await pool.query(`
-    // CREATE TABLE IF NOT EXISTS Responses(
-    //     id int AUTO_INCREMENT,
-    //     answerID int,
-    //     userID int,
-    //     PRIMARY KEY (id),
-    //     FOREIGN KEY (answerID) REFERENCES Answers(id),
-    //     FOREIGN KEY (userID) REFERENCES Users(id)
-    // );`);
+    //Create the responses table
+    await pool.query(`
+    CREATE TABLE IF NOT EXISTS Results(
+        id int AUTO_INCREMENT,
+        answerId int,
+        userId int,
+        PRIMARY KEY (id),
+        FOREIGN KEY (answerID) REFERENCES Answers(id),
+        FOREIGN KEY (userID) REFERENCES Users(id)
+    );`);
     // //Create the comments table
     // await pool.query(`
     // CREATE TABLE IF NOT EXISTS Comments(

@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import Survey from '../Adding_surveys/Survey';
+import Survey from '../Adding_surveys/AddSurvey';
 import SurveyCard from './SurveyCard';
 import SurveyDetails from './SurveyDetails';
+import AddSurvey from '../Adding_surveys/AddSurvey';
 import { Button } from 'primereact/button';
 import { fetchSurveys } from '../../Requests';
 
 export default function SurveysPage() {
     const [surveys, setSurveys] = useState([]);
-    const [showSurvey, setShowSurvey] = useState(false);
+    const [showAddSurvey, setShowAddSurvey] = useState(false);
     const [selectedSurvey, setSelectedSurvey] = useState(null);
     useEffect(() => {
         const getSurveys = async () => {
@@ -25,21 +26,18 @@ export default function SurveysPage() {
         getSurveys();
 
     }, []);
-    console.log(surveys)
-
     const handleAddSurvey = () => {
-        setShowSurvey(true);
+        setShowAddSurvey(true);
     };
 
-    const handleCloseSurvey = () => {
-        setShowSurvey(false);
+    const handleCloseAddSurvey = () => {
+        setShowAddSurvey(false);
     };
+
 
     const handleSelectSurvey = (survey) => {
         setSelectedSurvey(survey);
     };
-
-    
 
     return (
         <>
@@ -52,14 +50,15 @@ export default function SurveysPage() {
                         onSelect={() => handleSelectSurvey(survey)}
                     />
                 ))}
+                <Button label="Add New Survey" icon="pi pi-plus" onClick={handleAddSurvey} className="p-mt-3" />
+                {showAddSurvey && (
+                    <div className="p-mt-4">
+                        <AddSurvey />
+                        <Button label="Close" icon="pi pi-times" onClick={handleCloseAddSurvey} className="p-ml-2" />
+                    </div>
+                )}
+
             </div>
-            {/* <div className="p-grid p-justify-center p-mt-5">
-                <div className="p-col-12 p-md-8 p-lg-6">
-                    <Button label="Add New Survey" icon="pi pi-plus" onClick={handleAddSurvey} />
-                </div>
-            </div> */}
-            {/* {showSurvey && <Survey onClose={handleCloseSurvey} />} */}
-           
         </>
     );
 }

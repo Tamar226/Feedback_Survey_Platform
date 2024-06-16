@@ -58,7 +58,7 @@ import Register from "./components/Entering_the_personal_area/Register";
 import Login from "./components/Entering_the_personal_area/Login";
 import Header from "./components/Home page/Header";
 import Footer from "./components/Home page/Footer";
-import Survey from "./components/Adding_surveys/Survey";
+import Survey from "./components/Adding_surveys/AddSurvey";
 import { UserProvider } from "./components/Entering_the_personal_area/UserContext"; 
 import SurveysPage from "./components/View_surveys/SurveysPage";
 

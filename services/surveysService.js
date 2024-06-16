@@ -42,10 +42,23 @@ async function deleteSurvey(surveyId) {
     }
 }
 
+const submitSurveyResults = async (surveyId, answers, userId) => {
+    try {
+        const promises = answers.map(answer => 
+            surveysRepository.saveAnswer(surveyId, answer.answerId, userId)
+        );
+        await Promise.all(promises);
+    } catch (error) {
+        console.error('Error in submitSurveyResults service:', error);
+        throw error;
+    }
+};
+
 module.exports = {
     getAllSurveys,
     getSurveyById,
     addSurvey,
     updateSurvey,
-    deleteSurvey
+    deleteSurvey,
+    submitSurveyResults
 };

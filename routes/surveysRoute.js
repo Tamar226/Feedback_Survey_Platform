@@ -7,5 +7,7 @@ surveysRouter.get('/:surveyId', surveysController.getSurveyById);
 surveysRouter.post('/', surveysController.addSurvey);
 surveysRouter.put('/:surveyId', surveysController.updateSurvey);
 surveysRouter.delete('/:surveyId', surveysController.deleteSurvey);
+surveysRouter.post('/:surveyId/results', surveysController.submitSurveyResults);
+
 
 module.exports = surveysRouter;

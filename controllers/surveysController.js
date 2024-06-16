@@ -60,10 +60,27 @@ const deleteSurvey = async (req, res) => {
     }
 };
 
+const submitSurveyResults = async (req, res) => {
+    try {
+        const { surveyId } = req.params;
+        const { answers, userId } = req.body;
+
+        if (!answers || !surveyId || !userId) {
+            return res.status(400).send('Missing data');
+        }
+
+        await surveyService.submitSurveyResults(surveyId, answers, userId);
+        res.status(201).send('Answers submitted successfully');
+    } catch (error) {
+        console.error('Error submitting survey answers:', error);
+        res.status(500).send('Internal server error');
+    }
+};
 module.exports = {
     getAllSurveys,
     getSurveyById,
     addSurvey,
     updateSurvey,
-    deleteSurvey
+    deleteSurvey,
+    submitSurveyResults
 };

@@ -24,5 +24,5 @@ const SurveyCard = ({ survey }) => {
         </Card>
     );
 };
-// onClick={onSelect}
+
 export default SurveyCard;

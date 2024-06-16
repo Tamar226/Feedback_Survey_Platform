@@ -72,6 +72,16 @@ async function deleteSurvey(surveyId) {
     }
 }
 
+const saveAnswer = async (surveyId, answerId, userId) => {
+    const query = 'INSERT INTO survey_results (surveyId, answerId, userId) VALUES (?, ?, ?)';
+    const values = [surveyId, answerId, userId];
+    try {
+        await db.execute(query, values);
+    } catch (error) {
+        console.error('Error in saveAnswer repository:', error);
+        throw error;
+    }
+};
 function prepareResult(hasErrorTemp = true, affectedRowsTemp = 0, insertIdTemp = -1, dataTemp = null) {
     return {
         hasError: hasErrorTemp,
@@ -86,5 +96,6 @@ module.exports = {
     getSurveyById,
     addSurvey,
     updateSurvey,
-    deleteSurvey
+    deleteSurvey,
+    saveAnswer
 };
