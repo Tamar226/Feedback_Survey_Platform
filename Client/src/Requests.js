@@ -16,7 +16,6 @@ export async function getUserDetails(username, password, setworngRequest) {
         console.log("client");
         console.log("promise data " + promiseData);
         let data = promiseData.data;
-        debugger;
         console.log("data " + data);
         if (data == null) {
             return { code: 304, message: "NotFound", params: null };
@@ -29,16 +28,16 @@ export async function getUserDetails(username, password, setworngRequest) {
 }
 export async function loginByPostRequest(username, password) {
     try {
-        const response = await fetch(`http://localhost:3000/managers/login`, {
+        const response = await fetch(`http://localhost:3000/users/login`, {
             method: "POST",
             body: JSON.stringify({ username, password }),
             headers: {
                 'Content-type': 'application/json'
             },
         });
-
         const status = response.status;
         const data = await response.json();
+        console.log(data);
 
         if (status === 200) {
             return { status, data };
@@ -50,12 +49,12 @@ export async function loginByPostRequest(username, password) {
     }
 }
 
-export async function RegisterByPostRequest(name, username, email, password, company) {
-    console.log(JSON.stringify({ "name": name, username: username, email: email, password: password, company: company }));
+export async function RegisterByPostRequest(reqBody) {
+    console.log(reqBody);
     try {
-        const response = await fetch(`http://localhost:3000/managers/register`, {
+        const response = await fetch(`http://localhost:3000/users/register`, {
             method: "POST",
-            body: JSON.stringify({ name: name, username: username, email: email, password: password, company: company }),
+            body: JSON.stringify(reqBody),
             headers: {
                 'Content-type': 'application/json'
             }

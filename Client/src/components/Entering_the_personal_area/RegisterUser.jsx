@@ -7,9 +7,10 @@ import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import { FloatLabel } from "primereact/floatlabel";
 import { Message } from 'primereact/message';
-import { RadioButton } from 'primereact/radiobutton';
 import { SelectButton } from 'primereact/selectbutton';
 import { Password } from 'primereact/password';
+import { InputNumber } from 'primereact/inputnumber';
+import 'primeicons/primeicons.css';
 import { Link, useNavigate } from "react-router-dom";
 import { RegisterByPostRequest } from '../../Requests';
 import { useUser } from './UserContext';
@@ -25,20 +26,12 @@ export default function Register() {
         email: "",
         password: "",
         city: "",
-        age: "",
-        gender: "",
+        age: "18",
+        gender: "male",
         job: "",
+        company: "",
     });
-    const ages = [
-        { name: ' 0 - 18', key: '0' },
-        { name: ' 18 - 24', key: '18' },
-        { name: ' 25 - 40', key: '25' },
-        { name: ' 41 - 70', key: '41' },
-        { name: ' 71 - 120', key: '71' },
-    ];
-    const [selectedAge, setSelectedAge] = useState(ages[0]);
     const genders = ['male', 'female'];
-    const [gender, setGender] = useState(genders[0]);
 
     const handleInputRegisterChange = (e) => {
         const { name, value } = e.target;
@@ -46,7 +39,7 @@ export default function Register() {
             ...detailsRegister,
             [name]: value,
         });
-        e.target.classList.remove("notTouch");
+        // e.target.classList.remove("notTouch");
     };
 
     const handleEmailBlur = (e) => {
@@ -70,7 +63,7 @@ export default function Register() {
             setMessage("please check your email address");//???
             return;
         }
-        const res = await RegisterByPostRequest(detailsRegister.name, detailsRegister.username, detailsRegister.email, detailsRegister.password, detailsRegister.city, detailsRegister.age, detailsRegister.gender, detailsRegister.job);
+        const res = await RegisterByPostRequest(detailsRegister);
         console.log(res);
         if (res.status == 200) {
             setCurrentUser(res.data[0]);
@@ -90,9 +83,31 @@ export default function Register() {
                 password: "",
                 city: "",
                 age: "",
-                gender: "",
+                gender: "male",
                 job: "",
+                company: "",
             });
+        }
+    }
+
+    async function tryRgister() {
+        const body = {
+            name: "r",
+            username: "r",
+            email: "r@g.com",
+            password: "r",
+            city: "r",
+            age: "18",
+            gender: "female",
+            job: "r",
+            company: "r",
+        };
+        const res = await RegisterByPostRequest(body);
+        console.log(res);
+        if (res.status == 200) {
+            setCurrentUser(res.data[0]);
+            login(res.data[0]);
+            navigate(`/users/${res.data[0].id}`);
         }
     }
 
@@ -149,20 +164,15 @@ export default function Register() {
             </FloatLabel>
             <br />
             <p>Age:</p>
-            {ages.map((age) => {
-                return (
-                    <div key={age.key} className="flexalign-items-center">
-                        <RadioButton inputId={age.key} name="age" value={age}
-                            onChange={(e) => setSelectedAge(e.value)}
-                            checked={selectedAge.key === age.key} />
-                        <label htmlFor={age.key} className="ml-2">{age.name}</label>
-                        <br /><br />
-                    </div>
-                );
-            })}
-            <br />
-            <SelectButton value={gender}
-                onChange={(e) => setGender(e.value)} options={genders} />
+            <InputNumber value={detailsRegister.age} 
+            onChange={handleInputRegisterChange} 
+            mode="decimal" showButtons min={0} max={120} />
+            <br /><br />
+            <SelectButton value={detailsRegister.gender}
+                onChange={(e) => setDetailsRegister({
+                    ...detailsRegister,
+                    gender: e.value
+                })} options={genders} />
             <br />
             <FloatLabel>
                 <InputText
@@ -173,8 +183,18 @@ export default function Register() {
                 />
                 <label htmlFor="job">Job</label>
             </FloatLabel>
+            <FloatLabel>
+                <InputText
+                    id="company"
+                    name="company"
+                    value={detailsRegister.company}
+                    onChange={handleInputRegisterChange}
+                />
+                <label htmlFor="company">Company</label>
+            </FloatLabel>
             {message && (<Message severity="error" text={message} />)}<br /><br />
             <Button onClick={checkAccessPossibility} label="Registering" />
+            <Button onClick={tryRgister} label="trying" />
             <br /><br />
             <Link to="/login" id="link">
                 Already have an account?

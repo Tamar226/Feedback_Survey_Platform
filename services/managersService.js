@@ -51,8 +51,7 @@ async function getManagerDetails(userName, password) {
             manager: {
                 id: manager.id,
                 username: manager.username,
-                email: manager.email,
-                company: manager.company
+                email: manager.email
             },
             token
         };

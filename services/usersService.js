@@ -17,10 +17,12 @@ const getAllUsers = async () => {
 
 const getUserById = async (id) => {
     const result = await userDataBase.getUserById(id);
+    let resultWithoutPassword = { ...result.data[0] }; // deep copy
+    delete resultWithoutPassword.password;
     if (result.hasError) {
         throw new Error(`User with ID ${id} not found`);
     }
-    return result.data;
+    return resultWithoutPassword;
 };
 
 const addUser = async (newUser) => {
@@ -53,7 +55,10 @@ async function getUserDetails(userName, password) {
                 id: user.id,
                 username: user.username,
                 email: user.email,
-                company: user.company
+                city: user.city,
+                age: user.age,
+                gender: user.gender,
+                job: user.job
             },
             token
         };
