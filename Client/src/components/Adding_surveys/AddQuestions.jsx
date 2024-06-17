@@ -1,75 +1,103 @@
-// // src/components/SurveyQuestion.js
 
 // import React, { useState } from 'react';
-// import { InputText } from 'primereact/inputtext';
 // import { Button } from 'primereact/button';
-// import { Divider } from 'primereact/divider';
-// import { Toast } from 'primereact/toast';
+// import { InputText } from 'primereact/inputtext';
+// import { postData } from '../../Requests';
+// import AddAnswers from './AddAnswers';
 
-// import 'primereact/resources/themes/saga-blue/theme.css';
-// import 'primereact/resources/primereact.min.css';
-// import 'primeicons/primeicons.css';
+// const AddQuestions = ({ surveyId, questions, setQuestions, setLoading }) => {
+//     const [newQuestion, setNewQuestion] = useState('');
 
-// const SurveyQuestion = ({ onAddQuestion }) => {
-//     const [question, setQuestion] = useState('');
-//     const [options, setOptions] = useState(['', '', '', '']);
-//     const toast = React.useRef(null);
-
-//     const handleAddQuestion = () => {
-//         if (!question || options.some(opt => !opt)) {
-//             toast.current.show({severity: 'error', summary: 'Error', detail: 'Please fill all fields', life: 3000});
+//     const handleAddQuestion = async () => {
+//         if (!surveyId) {
+//             console.error('Survey ID is not available.');
 //             return;
 //         }
 
-//         onAddQuestion({ question, options });
-//         setQuestion('');
-//         setOptions(['', '', '', '']);
-//     };
+//         const questionData = { question: newQuestion, surveyID: surveyId };
+//         const questionResult = await postData(questionData, setLoading, 'questions');
 
-//     const handleOptionChange = (index, value) => {
-//         const newOptions = [...options];
-//         newOptions[index] = value;
-//         setOptions(newOptions);
+//         if (questionResult.code === 200) {
+//             const questionId = questionResult.params.id;
+//             setQuestions([...questions, { id: questionId, question: newQuestion, answers: [] }]);
+//             setNewQuestion('');
+//         } else {
+//             console.error('Failed to add question:', questionResult.message);
+//         }
 //     };
 
 //     return (
-//         <div className="p-card p-shadow-3 p-p-3">
-//             <Toast ref={toast} />
-//             <h3>Add Survey Question</h3>
+//         <div>
 //             <div className="p-field">
-//                 <label htmlFor="question">Question</label>
-//                 <InputText id="question" value={question} onChange={(e) => setQuestion(e.target.value)} />
+//                 <label htmlFor="newQuestion">New Question</label>
+//                 <InputText id="newQuestion" value={newQuestion} onChange={(e) => setNewQuestion(e.target.value)} />
 //             </div>
-//             <Divider />
-//             {options.map((option, index) => (
-//                 <div className="p-field" key={index}>
-//                     <label htmlFor={`option${index}`}>Option {index + 1}</label>
-//                     <InputText id={`option${index}`} value={option} onChange={(e) => handleOptionChange(index, e.target.value)} />
+//             <Button label="Add Question" icon="pi pi-plus" onClick={handleAddQuestion} disabled={questions.length >= 10} />
+
+//             {questions.map((q, qIndex) => (
+//                 <div key={q.id} className="p-field p-mt-3">
+//                     <h4>Question {qIndex + 1}: {q.question}</h4>
+//                     <AddAnswers 
+//                         questionId={q.id} 
+//                         answers={q.answers} 
+//                         setQuestions={setQuestions} 
+//                         questionIndex={qIndex}
+//                         setLoading={setLoading} 
+//                     />
 //                 </div>
 //             ))}
-//             <Button label="Add Question" icon="pi pi-plus" className="p-mt-2" onClick={handleAddQuestion} />
 //         </div>
 //     );
 // };
 
-// export default SurveyQuestion;
+// export default AddQuestions;
 import React, { useState } from 'react';
-import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
+import { InputText } from 'primereact/inputtext';
+import { postData } from '../../Requests';
+import AddAnswers from './AddAnswers';
 
-const AddQuestions = ({ onAddQuestion }) => {
-    const [question, setQuestion] = useState('');
+const AddQuestions = ({ surveyId, questions, setQuestions, setLoading }) => {
+    const [newQuestion, setNewQuestion] = useState('');
 
-    const handleAddQuestion = () => {
-        onAddQuestion(question);
-        setQuestion('');
+    const handleAddQuestion = async () => {
+        if (!surveyId) {
+            console.error('Survey ID is not available.');
+            return;
+        }
+
+        const questionData = { question: newQuestion, surveyID: surveyId };
+        const questionResult = await postData(questionData, setLoading, 'questions');
+
+        if (questionResult.code === 200) {
+            const questionId = questionResult.params.id;
+            setQuestions([...questions, { id: questionId, question: newQuestion, answers: [] }]);
+            setNewQuestion('');
+        } else {
+            console.error('Failed to add question:', questionResult.message);
+        }
     };
 
     return (
-        <div className="p-field">
-            <label htmlFor="question">Question</label>
-            <InputText id="question" value={question} onChange={(e) => setQuestion(e.target.value)} />
-            <Button label="Add Question" icon="pi pi-plus" onClick={handleAddQuestion} className="p-ml-2" />
+        <div>
+            <div className="p-field">
+                <label htmlFor="newQuestion">New Question</label>
+                <InputText id="newQuestion" value={newQuestion} onChange={(e) => setNewQuestion(e.target.value)} />
+            </div>
+            <Button label="Add Question" icon="pi pi-plus" onClick={handleAddQuestion} disabled={questions.length >= 10} />
+
+            {questions.map((q, qIndex) => (
+                <div key={q.id} className="p-field p-mt-3">
+                    <h4>Question {qIndex + 1}: {q.question}</h4>
+                    <AddAnswers 
+                        questionId={q.id} 
+                        answers={q.answers} 
+                        setQuestions={setQuestions} 
+                        questionIndex={qIndex}
+                        setLoading={setLoading} 
+                    />
+                </div>
+            ))}
         </div>
     );
 };
