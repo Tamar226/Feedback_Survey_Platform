@@ -44,24 +44,37 @@ async function getAnswersByQuestionId (questionId) {
         throw error;
     }
 };
-async function addAnswer(newAnswer) {
+// async function addAnswer(newAnswer) {
+//     try {
+//         if (newAnswer.completed) {
+//             newAnswer.completed = 1;
+//         }
+//         else
+//             newAnswer.completed = 0;
+//         const result = await pool.query(`INSERT INTO answers (answer, questionId,answerId) VALUES ('${newAnswer.answer}', '${newAnswer.questionId}','${newAnswer.answerId}')`);
+//         if (result[0].insertId > 0) {
+//             return prepareResult(false, 0, result[0].insertId)
+//         }
+//         else {
+//             return prepareResult(true, 0, 0);
+//         }
+//     } catch (error) {
+//         throw error;
+//     }
+// }
+
+const addAnswer = async (newAnswer) => {
     try {
-        if (newAnswer.completed) {
-            newAnswer.completed = 1;
-        }
-        else
-            newAnswer.completed = 0;
-        const result = await pool.query(`INSERT INTO answers (answer, questionId,answerId) VALUES ('${newAnswer.answer}', '${newAnswer.questionId}','${newAnswer.answerId}')`);
+        const result = await pool.query(`INSERT INTO answers (answer, questionId, answerId) VALUES ('${newAnswer.answer}', '${newAnswer.questionId}', '${newAnswer.answerId}')`);
         if (result[0].insertId > 0) {
-            return prepareResult(false, 0, result[0].insertId)
-        }
-        else {
+            return prepareResult(false, 0, result[0].insertId);
+        } else {
             return prepareResult(true, 0, 0);
         }
     } catch (error) {
         throw error;
     }
-}
+};
 
 async function updateAnswer(answerId, updatedAnswerData) {
     try {

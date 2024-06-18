@@ -46,24 +46,36 @@ async function getQuestionsBySurveyId (surveyId) {
         throw error;
     }
 };
-async function addQuestion(newQuestion) {
+// async function addQuestion(newQuestion) {
+//     try {
+//         if (newQuestion.completed) {
+//             newQuestion.completed = 1;
+//         }
+//         else
+//             newQuestion.completed = 0;
+//         const result = await pool.query(`INSERT INTO questions (question, surveyID) VALUES ('${newQuestion.question}', '${newQuestion.surveyID}')`);
+//         if (result[0].insertId > 0) {
+//             return prepareResult(false, 0, result[0].insertId)
+//         }
+//         else {
+//             return prepareResult(true, 0, 0);
+//         }
+//     } catch (error) {
+//         throw error;
+//     }
+// }
+const addQuestion = async (newQuestion) => {
     try {
-        if (newQuestion.completed) {
-            newQuestion.completed = 1;
-        }
-        else
-            newQuestion.completed = 0;
         const result = await pool.query(`INSERT INTO questions (question, surveyID) VALUES ('${newQuestion.question}', '${newQuestion.surveyID}')`);
         if (result[0].insertId > 0) {
-            return prepareResult(false, 0, result[0].insertId)
-        }
-        else {
+            return prepareResult(false, 0, result[0].insertId);
+        } else {
             return prepareResult(true, 0, 0);
         }
     } catch (error) {
         throw error;
     }
-}
+};
 
 async function updateQuestion(questionId, updatedQuestionData) {
     try {

@@ -23,19 +23,51 @@ const getSurveyById = async (req, res) => {
     }
 };
 
+// const addSurvey = async (req, res) => {
+//     const newSurvey = req.body;
+//     try {
+//         const result = await surveyService.addSurvey(newSurvey);
+//         if (result.length > 0 && result[0].id > 0) {
+//             const insertSurvey = await surveyService.getSurveyById(result[0].id);
+//             res.status(200).send(insertSurvey);
+//         } else {
+//             res.status(404).json('Error adding survey');
+//         }
+//     } catch (error) {
+//         console.error('Error adding survey:', error);
+//         res.status(500).send('Internal Server Error');
+//     }
+// };
+const surveysService = require('../services/surveysService');
+
 const addSurvey = async (req, res) => {
-    const newSurvey = req.body;
+    const newSurvey = req.body; // קבלת האובייקט של הסקר מהבקשה
+
     try {
-        const result = await surveyService.addSurvey(newSurvey);
-        if (result.length > 0 && result[0].id > 0) {
-            const insertSurvey = await surveyService.getSurveyById(result[0].id);
-            res.status(200).send(insertSurvey);
-        } else {
-            res.status(404).json('Error adding survey');
+        // וידוא שהאובייקט מכיל את כל השדות הדרושים
+        if (!newSurvey.managerId || !newSurvey.surveyName || typeof newSurvey.active !== 'number' || !Array.isArray(newSurvey.questions)) {
+            return res.status(400).json({ error: 'Invalid survey data' });
         }
+
+        for (const question of newSurvey.questions) {
+            if (!question.question || !Array.isArray(question.answers)) {
+                return res.status(400).json({ error: 'Invalid question data' });
+            }
+
+            for (const answer of question.answers) {
+                if (!answer.answer || typeof answer.answerId !== 'number') {
+                    return res.status(400).json({ error: 'Invalid answer data' });
+                }
+            }
+        }
+
+        // קריאה לפונקציה בשכבת השירות להוספת הסקר
+        const insertedSurvey = await surveysService.addSurvey(newSurvey);
+
+        return res.status(201).json(insertedSurvey); // החזרת הסקר החדש שנוסף בתגובה
     } catch (error) {
         console.error('Error adding survey:', error);
-        res.status(500).send('Internal Server Error');
+        return res.status(500).send('Internal Server Error');
     }
 };
 

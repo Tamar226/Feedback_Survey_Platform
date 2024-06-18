@@ -1,4 +1,8 @@
 const surveysRepository = require('../repositories/surveysHandlerDB');
+const answersRepository = require('../repositories/answersHandlerDB');
+const questionsRepository = require('../repositories/questionsHandlerDB');
+const answersService = require('./answersService');
+const questionsService = require('./questionService');
 
 async function getAllSurveys() {
     const result = await surveysRepository.getAllSurveys();
@@ -16,13 +20,70 @@ const getSurveyById = async (surveyId) => {
     return result.data;
 };
 
+// const addSurvey = async (newSurvey) => {
+//     const result = await surveysRepository.addSurvey(newSurvey);
+//     if (result.insertId > 0) {
+//         const insertSurvey = await surveysRepository.getSurveyById(result.insertId);
+//         const surveyId = result.insertId;
+
+//         // הוספת שאלות לסקר
+//         for (const question of newSurvey.questions) {
+//             question.surveyID = surveyId;
+//             const questionResult = await questionsRepository.addQuestion(question);
+//             const questionId = questionResult.data.insertId;
+
+//             // הוספת תשובות לשאלה
+//             for (const answer of question.answers) {
+//                 answer.questionId = questionId;
+//                 await answersRepository.addAnswer(answer);
+//             }
+//         }
+
+//         return insertSurvey.data;
+//     }
+// };
 const addSurvey = async (newSurvey) => {
-    const result = await surveysRepository.addSurvey(newSurvey);
-    if (result.insertId > 0) {
-        const insertSurvey = await surveysRepository.getSurveyById(result.insertId);
+    try {
+        const result = await surveysRepository.addSurvey(newSurvey);
+
+        if (!result || !result.insertId) {
+            throw new Error('Failed to insert survey');
+        }
+
+        const surveyId = result.insertId;
+        const insertSurvey = await surveysRepository.getSurveyById(surveyId);
+        if (!insertSurvey) {
+            throw new Error('Failed to retrieve inserted survey');
+        }
+
+        // הוספת שאלות לסקר
+        for (const question of newSurvey.questions) {
+            question.surveyID = surveyId;
+            const insertedQuestion = await questionsService.addQuestion(question);
+            console.log(insertedQuestion);
+
+            if (!insertedQuestion || insertedQuestion.length === 0) {
+                throw new Error('Error adding question to survey');
+            }
+
+            const questionId = insertedQuestion[0].id;
+            console.log(questionId);
+            // הוספת תשובות לשאלה
+            for (const answer of question.answers) {
+                answer.questionId = questionId;
+                const insertedAnswer = await answersService.addAnswer(answer);
+                if (!insertedAnswer || !insertedAnswer.length===0) {
+                    throw new Error('Failed to insert answer');
+                }
+            }
+        }
+
         return insertSurvey.data;
+    } catch (error) {
+        console.error('Error adding survey:', error);
+        throw error;
     }
-}
+};
 
 async function updateSurvey(surveyId, updatedSurveyData) {
     const result = await surveysRepository.updateSurvey(surveyId, updatedSurveyData);
@@ -44,7 +105,7 @@ async function deleteSurvey(surveyId) {
 
 const submitSurveyResults = async (surveyId, answers, userId) => {
     try {
-        const promises = answers.map(answer => 
+        const promises = answers.map(answer =>
             surveysRepository.saveAnswer(surveyId, answer.answerId, userId)
         );
         await Promise.all(promises);
