@@ -46,17 +46,17 @@ const addSurvey = async (req, res) => {
     try {
         // וידוא שהאובייקט מכיל את כל השדות הדרושים
         if (!newSurvey.managerId || !newSurvey.surveyName || typeof newSurvey.active !== 'number' || !Array.isArray(newSurvey.questions)) {
-            return res.status(400).json({ error: 'Invalid survey data' });
+            return res.status(404).json({ error: 'Invalid survey data' });
         }
 
         for (const question of newSurvey.questions) {
             if (!question.question || !Array.isArray(question.answers)) {
-                return res.status(400).json({ error: 'Invalid question data' });
+                return res.status(404).json({ error: 'Invalid question data' });
             }
 
             for (const answer of question.answers) {
                 if (!answer.answer || typeof answer.answerId !== 'number') {
-                    return res.status(400).json({ error: 'Invalid answer data' });
+                    return res.status(404).json({ error: 'Invalid answer data' });
                 }
             }
         }
@@ -64,7 +64,7 @@ const addSurvey = async (req, res) => {
         // קריאה לפונקציה בשכבת השירות להוספת הסקר
         const insertedSurvey = await surveysService.addSurvey(newSurvey);
 
-        return res.status(201).json(insertedSurvey); // החזרת הסקר החדש שנוסף בתגובה
+        return res.status(200).json(insertedSurvey); // החזרת הסקר החדש שנוסף בתגובה
     } catch (error) {
         console.error('Error adding survey:', error);
         return res.status(500).send('Internal Server Error');

@@ -138,7 +138,7 @@ export async function fetchSurveyAnswers(questionId) {
 export async function postData(data, setLoading, typeData) {
     try {
         console.log('hii');
-        setLoading ?? setLoading(true);
+        // setLoading ?? setLoading(true);
         const response = await fetch(`http://localhost:3000/${typeData}`, {
             method: "POST",
             body: JSON.stringify(data),
