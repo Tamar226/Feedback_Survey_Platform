@@ -147,9 +147,12 @@ const SurveyDetails = ({ survey, onClose, userId }) => {
                         onClose={onClose}
                         onAnswerChange={handleAnswerChange}
                         selectedAnswers={selectedAnswers}
+                        handleSubmitAll={handleSubmitAll}
                     />
                 )}
+              
             </div>
+            
         </div>
     );
 };

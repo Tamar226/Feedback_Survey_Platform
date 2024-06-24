@@ -1,8 +1,10 @@
 import React from 'react';
 import './SurveyModal.css';
+import { Button } from 'primereact/button';
+
 import QuestionCard from './QuestionCard';
 
-const SurveyModal = ({ survey, questions, onClose, onAnswerChange, selectedAnswers }) => {
+const SurveyModal = ({ survey, questions, onClose, onAnswerChange, selectedAnswers,handleSubmitAll }) => {
     return (
         <div className="modal-overlay">
             <div className="modal-content">
@@ -18,8 +20,11 @@ const SurveyModal = ({ survey, questions, onClose, onAnswerChange, selectedAnswe
                         selectedAnswer={selectedAnswers[q.id]}
                     />
                 ))}
+                 <Button label="Submit All Answers" icon="pi pi-check" onClick={handleSubmitAll} />
             </div>
+           
         </div>
+        
     );
 };
 

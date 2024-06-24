@@ -15,7 +15,7 @@ import Register from "./components/personalArea/Register";
 import Login from "./components/personalArea/Login";
 import Header from "./components/Home page/Header";
 import Footer from "./components/Home page/Footer";
-import Survey from "./components/surveysAdding/AddSurvey";
+// import Survey from "./components/SurveysAdding/AddSurvey";
 import { UserProvider } from "./components/personalArea/UserContext"; 
 import SurveysPage from "./components/surveysView/SurveysPage";
 

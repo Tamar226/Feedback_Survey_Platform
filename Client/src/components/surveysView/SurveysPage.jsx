@@ -62,12 +62,11 @@
 // }
 import React, { useState, useEffect } from 'react';
 import SurveyCard from './SurveyCard';
-import AddSurvey from '../surveysAdding/AddSurvey';
+import AddSurvey from '../SurveysAdding/AddSurvey'
 import { Button } from 'primereact/button';
 import { fetchSurveys } from '../../Requests';
-import SurveyDetails from './SurveyDetails'; // ייבוא הקומפוננטה החדשה
-import './SurveysPage.css'; // ייבוא הקובץ CSS
-
+import SurveyDetails from './SurveyDetails'; 
+import './SurveysPage.css'; 
 export default function SurveysPage() {
     const [surveys, setSurveys] = useState([]);
     const [showAddSurvey, setShowAddSurvey] = useState(false);
@@ -105,6 +104,13 @@ export default function SurveysPage() {
     return (
         <>
             <h2>Active Surveys</h2>
+            <Button label="Add New Survey" icon="pi pi-plus" onClick={handleAddSurvey} className="p-mt-3" />
+            {showAddSurvey && (
+                <div className="p-mt-4">
+                    <AddSurvey onClose={handleCloseAddSurvey} onSurveyAdded={handleSurveyAdded} />
+                    {/* <Button label="Close" icon="pi pi-times" onClick={handleCloseAddSurvey} className="p-ml-2" /> */}
+                </div>
+            )}
             <div className="allSurveys">
                 {surveys.map((survey) => (
                     <div className="surveyItem" key={survey.id}>
@@ -115,18 +121,12 @@ export default function SurveysPage() {
                     </div>
                 ))}
             </div>
-            <Button label="Add New Survey" icon="pi pi-plus" onClick={handleAddSurvey} className="p-mt-3" />
-            {showAddSurvey && (
-                <div className="p-mt-4">
-                    <AddSurvey onClose={handleCloseAddSurvey} onSurveyAdded={handleSurveyAdded} />
-                    <Button label="Close" icon="pi pi-times" onClick={handleCloseAddSurvey} className="p-ml-2" />
-                </div>
-            )}
+            
             {selectedSurvey && (
                 <SurveyDetails 
                     survey={selectedSurvey} 
                     onClose={() => setSelectedSurvey(null)} 
-                    // userId={/* הוסף כאן את ה-userId */}
+                    // userId={/* userId */}
                 />
             )}
         </>
