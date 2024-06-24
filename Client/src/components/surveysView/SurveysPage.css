@@ -22,7 +22,10 @@
 .question {
     margin-bottom: 1rem;
 } */
-
+.p-inputgroup{
+    width: 70%;
+    margin: auto;
+}
 .allSurveys {
     display: flex;
     flex-wrap: wrap;

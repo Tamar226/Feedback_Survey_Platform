@@ -62,15 +62,18 @@
 // }
 import React, { useState, useEffect } from 'react';
 import SurveyCard from './SurveyCard';
-import AddSurvey from '../SurveysAdding/AddSurvey'
+import AddSurvey from '../SurveysAdding/AddSurvey';
 import { Button } from 'primereact/button';
+import { InputText } from 'primereact/inputtext'; // יבוא הקומפוננטה InputText מ-primereact
 import { fetchSurveys } from '../../Requests';
-import SurveyDetails from './SurveyDetails'; 
-import './SurveysPage.css'; 
+import SurveyDetails from './SurveyDetails';
+import './SurveysPage.css';
+
 export default function SurveysPage() {
     const [surveys, setSurveys] = useState([]);
     const [showAddSurvey, setShowAddSurvey] = useState(false);
     const [selectedSurvey, setSelectedSurvey] = useState(null);
+    const [searchText, setSearchText] = useState('');
 
     useEffect(() => {
         const getSurveys = async () => {
@@ -101,18 +104,35 @@ export default function SurveysPage() {
         setShowAddSurvey(false); // Close the AddSurvey component after adding the survey
     };
 
+    const handleSearchChange = (e) => {
+        setSearchText(e.target.value);
+    };
+
+    const filteredSurveys = surveys.filter(survey =>
+        survey.surveyName.toLowerCase().includes(searchText.toLowerCase()) ||
+       
+        (survey.active === 1 ? "active" : "inactive").includes(searchText.toLowerCase())
+    );
+    // survey.managerId.toLowerCase().includes(searchText.toLowerCase()) ||
     return (
         <>
             <h2>Active Surveys</h2>
+            <div className="p-inputgroup">
+                <InputText
+                    placeholder="Search by survey name, manager ID, or active status..."
+                    value={searchText}
+                    onChange={handleSearchChange}
+                />
+                <Button icon="pi pi-search" className="p-button-warning" />
+            </div>
             <Button label="Add New Survey" icon="pi pi-plus" onClick={handleAddSurvey} className="p-mt-3" />
             {showAddSurvey && (
                 <div className="p-mt-4">
                     <AddSurvey onClose={handleCloseAddSurvey} onSurveyAdded={handleSurveyAdded} />
-                    {/* <Button label="Close" icon="pi pi-times" onClick={handleCloseAddSurvey} className="p-ml-2" /> */}
                 </div>
             )}
             <div className="allSurveys">
-                {surveys.map((survey) => (
+                {filteredSurveys.map((survey) => (
                     <div className="surveyItem" key={survey.id}>
                         <SurveyCard
                             survey={survey}
@@ -121,11 +141,10 @@ export default function SurveysPage() {
                     </div>
                 ))}
             </div>
-            
             {selectedSurvey && (
-                <SurveyDetails 
-                    survey={selectedSurvey} 
-                    onClose={() => setSelectedSurvey(null)} 
+                <SurveyDetails
+                    survey={selectedSurvey}
+                    onClose={() => setSelectedSurvey(null)}
                     // userId={/* userId */}
                 />
             )}
