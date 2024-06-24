@@ -12,6 +12,48 @@ async function getAllSurveys() {
     return result.data;
 }
 
+// const getAllSurveys = async () => {
+//     const surveysResult = await surveysRepository.getAllSurveys();
+//     if (surveysResult.hasError || !surveysResult.data) {
+//         throw new Error('Error fetching surveys');
+//     }
+
+//     const questionsResult = await questionsService.getAllQuestions();
+//     if (questionsResult.hasError ) {
+//         throw new Error('Error fetching questions');
+//     }
+
+//     const answersResult = await answersService.getAllAnswers();
+//     if (answersResult.hasError ) {
+//         throw new Error('Error fetching answers');
+//     }
+
+//     console.log('Surveys:', surveysResult.data);
+//     console.log('Questions:', questionsResult.data);
+//     console.log('Answers:', answersResult.data);
+
+//     const surveys = surveysResult.data || [];
+//     const questions = questionsResult.data || [];
+//     const answers = answersResult.data || [];
+
+//     // Map answers to questions
+//     const questionsWithAnswers = questions.map(question => {
+//         question.answers = answers.filter(answer => answer.questionId === question.id);
+//         return question;
+//     });
+
+//     // Map questions to surveys
+//     const surveysWithQuestions = surveys.map(survey => {
+//         survey.questions = questionsWithAnswers.filter(question => question.surveyId === survey.id);
+//         return survey;
+//     });
+
+//     console.log('Surveys with Questions and Answers:', surveysWithQuestions);
+
+//     return surveysWithQuestions;
+// };
+
+
 const getSurveyById = async (surveyId) => {
     const result = await surveysRepository.getSurveyById(surveyId);
     if (result.hasError) {
@@ -20,28 +62,6 @@ const getSurveyById = async (surveyId) => {
     return result.data;
 };
 
-// const addSurvey = async (newSurvey) => {
-//     const result = await surveysRepository.addSurvey(newSurvey);
-//     if (result.insertId > 0) {
-//         const insertSurvey = await surveysRepository.getSurveyById(result.insertId);
-//         const surveyId = result.insertId;
-
-//         // הוספת שאלות לסקר
-//         for (const question of newSurvey.questions) {
-//             question.surveyID = surveyId;
-//             const questionResult = await questionsRepository.addQuestion(question);
-//             const questionId = questionResult.data.insertId;
-
-//             // הוספת תשובות לשאלה
-//             for (const answer of question.answers) {
-//                 answer.questionId = questionId;
-//                 await answersRepository.addAnswer(answer);
-//             }
-//         }
-
-//         return insertSurvey.data;
-//     }
-// };
 const addSurvey = async (newSurvey) => {
     try {
         const result = await surveysRepository.addSurvey(newSurvey);
@@ -77,7 +97,6 @@ const addSurvey = async (newSurvey) => {
                 }
             }
         }
-
         return insertSurvey.data;
     } catch (error) {
         console.error('Error adding survey:', error);

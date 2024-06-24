@@ -12,6 +12,15 @@ const getAllSurveys = async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 };
+// const getAllSurveys = async (req, res) => {
+//     try {
+//         const surveys = await surveyService.getAllSurveys();
+//         res.status(200).json(surveys);
+//     } catch (error) {
+//         console.error('Error fetching surveys:', error);
+//         res.status(500).send('Internal Server Error');
+//     }
+// };
 
 const getSurveyById = async (req, res) => {
     const id = req.params.surveyId;
@@ -22,23 +31,6 @@ const getSurveyById = async (req, res) => {
         res.status(404).send(error.message);
     }
 };
-
-// const addSurvey = async (req, res) => {
-//     const newSurvey = req.body;
-//     try {
-//         const result = await surveyService.addSurvey(newSurvey);
-//         if (result.length > 0 && result[0].id > 0) {
-//             const insertSurvey = await surveyService.getSurveyById(result[0].id);
-//             res.status(200).send(insertSurvey);
-//         } else {
-//             res.status(404).json('Error adding survey');
-//         }
-//     } catch (error) {
-//         console.error('Error adding survey:', error);
-//         res.status(500).send('Internal Server Error');
-//     }
-// };
-const surveysService = require('../services/surveysService');
 
 const addSurvey = async (req, res) => {
     const newSurvey = req.body; // קבלת האובייקט של הסקר מהבקשה
@@ -62,7 +54,7 @@ const addSurvey = async (req, res) => {
         }
 
         // קריאה לפונקציה בשכבת השירות להוספת הסקר
-        const insertedSurvey = await surveysService.addSurvey(newSurvey);
+        const insertedSurvey = await surveyService.addSurvey(newSurvey);
 
         return res.status(200).json(insertedSurvey); // החזרת הסקר החדש שנוסף בתגובה
     } catch (error) {

@@ -11,13 +11,13 @@ import {
 } from "react-router-dom";
 import "./App.css";
 
-import Register from "./components/Entering_the_personal_area/Register";
-import Login from "./components/Entering_the_personal_area/Login";
+import Register from "./components/personalArea/Register";
+import Login from "./components/personalArea/Login";
 import Header from "./components/Home page/Header";
 import Footer from "./components/Home page/Footer";
-import Survey from "./components/Adding_surveys/AddSurvey";
-import { UserProvider } from "./components/Entering_the_personal_area/UserContext"; 
-import SurveysPage from "./components/View_surveys/SurveysPage";
+import Survey from "./components/surveysAdding/AddSurvey";
+import { UserProvider } from "./components/personalArea/UserContext"; 
+import SurveysPage from "./components/surveysView/SurveysPage";
 
 export default function App() {
   return (
