@@ -1,63 +1,38 @@
-/* 
-.allSurveys {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    justify-content: center;
-}
-
-.survey-detail {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: rgba(255, 255, 255, 0.9);
-    padding: 2rem;
-    width: 40%;
-    height: 60%;
-    overflow-y: auto;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.question {
-    margin-bottom: 1rem;
-} */
 .p-inputgroup{
     width: 70%;
     margin: auto;
 }
+
 .allSurveys {
     display: flex;
     flex-wrap: wrap;
-    gap: 20px; /* רווח בין הריבועים */
-    justify-content: center; /* ליישור הסקרים במרכז */
-    margin: 0 20px; /* שוליים משני הצדדים */
+    gap: 20px; 
+    justify-content: center; 
+    margin: 0 20px;
 }
 
 .surveyItem {
-    flex: 0 1 300px; /* רוחב קבוע של 300 פיקסלים לכל ריבוע */
-    box-sizing: border-box; /* חשוב כדי שהרווח יחושב נכון */
-    display: flex; /* שימוש ב-Flexbox ליישור התוכן */
-    align-items: center; /* ליישור אנכי של התוכן */
-    justify-content: center; /* ליישור אופקי של התוכן */
-    padding: 20px; /* ריפוד פנימי */
-    border: 1px solid #ccc; /* מסגרת אופציונלית */
-    background-color: #f9f9f9; /* רקע אופציונלי */
-    text-align: center; /* מרכז את הטקסט */
-    height: auto; /* מאפשר לריבוע להתאים לגובה התוכן */
-    min-height: 150px; /* גובה מינימלי לריבוע */
+    flex: 0 1 300px; 
+    box-sizing: border-box; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+    padding: 20px; 
+    border: 1px solid #ccc; 
+    background-color: #f9f9f9; 
+    text-align: center; 
+    height: auto; 
+    min-height: 150px;
 }
-
-
 
 @media (max-width: 768px) {
     .surveyItem {
-        flex: 0 1 calc(50% - 20px); /* חצי מרוחב השורה במכשירים קטנים יותר */
+        flex: 0 1 calc(50% - 20px); 
     }
 }
 
 @media (max-width: 480px) {
     .surveyItem {
-        flex: 0 1 calc(100% - 20px); /* כל הרוחב במכשירים קטנים מאוד */
+        flex: 0 1 calc(100% - 20px); 
     }
 }

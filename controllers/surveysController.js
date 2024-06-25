@@ -56,7 +56,7 @@ const addSurvey = async (req, res) => {
         // קריאה לפונקציה בשכבת השירות להוספת הסקר
         const insertedSurvey = await surveyService.addSurvey(newSurvey);
 
-        return res.status(200).json(insertedSurvey); // החזרת הסקר החדש שנוסף בתגובה
+        return res.status(200).json(insertedSurvey);
     } catch (error) {
         console.error('Error adding survey:', error);
         return res.status(500).send('Internal Server Error');

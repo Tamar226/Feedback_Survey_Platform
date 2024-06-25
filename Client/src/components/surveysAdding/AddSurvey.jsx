@@ -72,10 +72,10 @@
 // export default AddSurvey;
 
 import React, { useState } from 'react';
-import AddQuestion from './AddQuestion';
+ import AddQuestion from './AddQuestion';
 import { postData } from '../../Requests';
 import { Button } from 'primereact/button';
-import './AddSurvey.css'; // ייבוא קובץ ה-CSS של SurveyModal
+import './AddSurvey.css'; 
 
 const AddSurvey = ({ onSurveyAdded, onClose }) => {
     const [surveyData, setSurveyData] = useState({
@@ -103,7 +103,7 @@ const AddSurvey = ({ onSurveyAdded, onClose }) => {
         try {
             const response = await postData(surveyData, null, 'surveys');
             if (response.code === 200) {
-                onSurveyAdded(response.params);
+                onSurveyAdded(response.params[0]);
             } else {
                 console.error("Error adding survey:", response.message);
             }

@@ -101,7 +101,7 @@ export default function SurveysPage() {
 
     const handleSurveyAdded = (newSurvey) => {
         setSurveys([...surveys, newSurvey]);
-        setShowAddSurvey(false); // Close the AddSurvey component after adding the survey
+        setShowAddSurvey(false); 
     };
 
     const handleSearchChange = (e) => {
@@ -109,10 +109,11 @@ export default function SurveysPage() {
     };
 
     const filteredSurveys = surveys.filter(survey =>
-        survey.surveyName.toLowerCase().includes(searchText.toLowerCase()) ||
+      
        
         (survey.active === 1 ? "active" : "inactive").includes(searchText.toLowerCase())
     );
+    // survey.surveyName.toLowerCase().includes(searchText.toLowerCase()) ||
     // survey.managerId.toLowerCase().includes(searchText.toLowerCase()) ||
     return (
         <>
