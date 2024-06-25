@@ -33,6 +33,27 @@ async function getSurveyById(surveyId) {
         throw error;
     }
 }
+async function getSurveysBySearch(searchText) {
+    try {
+        const query = `
+            SELECT *
+            FROM surveys
+            WHERE surveyName LIKE ?
+               OR managerId LIKE ?
+               OR active = ?
+        `;
+        const params = [`%${searchText}%`, `%${searchText}%`, searchText === 'active' ? 1 : 0];
+        const results = await pool.query(query, params);
+
+        if (results.length === 0) {
+            return prepareResult(true, 0, -1, null); 
+        } else {
+            return prepareResult(false, results.length, -1, results); 
+        }
+    } catch (error) {
+        throw error;
+    }
+}
 
 async function addSurvey(newSurvey) {
     try {
@@ -61,7 +82,7 @@ async function updateSurvey(surveyId, updatedSurveyData) {
     }
 }
 
-async function deleteSurvey(surveyId) {
+async function deleteSurveyById(surveyId) {
     try {
         const result = await pool.query('DELETE FROM surveys WHERE id = ?', [surveyId]);
         if (result[0].affectedRows > 0) {
@@ -75,10 +96,10 @@ async function deleteSurvey(surveyId) {
 }
 
 const saveAnswer = async (surveyId, answerId, userId) => {
-    const query = 'INSERT INTO survey_results (surveyId, answerId, userId) VALUES (?, ?, ?)';
+    const query = 'INSERT INTO results (surveyId, answerId, userId) VALUES (?, ?, ?)';
     const values = [surveyId, answerId, userId];
     try {
-        await db.execute(query, values);
+        await pool.execute(query, values);
     } catch (error) {
         console.error('Error in saveAnswer repository:', error);
         throw error;
@@ -96,8 +117,9 @@ function prepareResult(hasErrorTemp = true, affectedRowsTemp = 0, insertIdTemp =
 module.exports = {
     getAllSurveys,
     getSurveyById,
+    getSurveysBySearch,
     addSurvey,
     updateSurvey,
-    deleteSurvey,
+    deleteSurveyById,
     saveAnswer
 };

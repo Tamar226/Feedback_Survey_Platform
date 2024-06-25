@@ -64,8 +64,8 @@ import React, { useState, useEffect } from 'react';
 import SurveyCard from './SurveyCard';
 import AddSurvey from '../SurveysAdding/AddSurvey';
 import { Button } from 'primereact/button';
-import { InputText } from 'primereact/inputtext'; // יבוא הקומפוננטה InputText מ-primereact
-import { fetchSurveys } from '../../Requests';
+import { InputText } from 'primereact/inputtext'; 
+import { fetchSurveys, getSurveysBySearch } from '../../Requests';
 import SurveyDetails from './SurveyDetails';
 import './SurveysPage.css';
 
@@ -78,7 +78,7 @@ export default function SurveysPage() {
     useEffect(() => {
         const getSurveys = async () => {
             try {
-                const result = await fetchSurveys();
+                const result = await fetchSurveys(); // אם יש לך פונקציה כזו, כדאי לשנות את זה להיות getSurveys
                 if (result.status === 200 && result.data) {
                     setSurveys(result.data[1][0]);
                 } else {
@@ -101,30 +101,44 @@ export default function SurveysPage() {
 
     const handleSurveyAdded = (newSurvey) => {
         setSurveys([...surveys, newSurvey]);
-        setShowAddSurvey(false); 
+        setShowAddSurvey(false);
     };
 
     const handleSearchChange = (e) => {
         setSearchText(e.target.value);
     };
 
-    const filteredSurveys = surveys.filter(survey =>
-      
-       
-        (survey.active === 1 ? "active" : "inactive").includes(searchText.toLowerCase())
-    );
-    // survey.surveyName.toLowerCase().includes(searchText.toLowerCase()) ||
-    // survey.managerId.toLowerCase().includes(searchText.toLowerCase()) ||
+    const handleSearch = async () => {
+        try {
+            const result = await getSurveysBySearch(searchText);
+            if (result.status === 200 && result.data) {
+                setSurveys(result.data);
+            } else {
+                console.error("Failed to fetch surveys by search");
+            }
+        } catch (error) {
+            console.error("Error fetching surveys by search", error);
+        }
+    };
+
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            handleSearch();
+        }
+    };
+
     return (
-        <>
+        <div className="page-container">
             <h2>Active Surveys</h2>
             <div className="p-inputgroup">
                 <InputText
                     placeholder="Search by survey name, manager ID, or active status..."
                     value={searchText}
                     onChange={handleSearchChange}
+                    onKeyDown={handleKeyDown}
                 />
-                <Button icon="pi pi-search" className="p-button-warning" />
+                <Button icon="pi pi-search" className="p-button-warning" onClick={handleSearch} />
             </div>
             <Button label="Add New Survey" icon="pi pi-plus" onClick={handleAddSurvey} className="p-mt-3" />
             {showAddSurvey && (
@@ -133,7 +147,7 @@ export default function SurveysPage() {
                 </div>
             )}
             <div className="allSurveys">
-                {filteredSurveys.map((survey) => (
+                {surveys.map((survey) => (
                     <div className="surveyItem" key={survey.id}>
                         <SurveyCard
                             survey={survey}
@@ -146,9 +160,8 @@ export default function SurveysPage() {
                 <SurveyDetails
                     survey={selectedSurvey}
                     onClose={() => setSelectedSurvey(null)}
-                    // userId={/* userId */}
                 />
             )}
-        </>
+        </div>
     );
 }

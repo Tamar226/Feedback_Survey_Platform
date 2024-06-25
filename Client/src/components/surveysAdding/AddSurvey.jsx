@@ -102,7 +102,7 @@ const AddSurvey = ({ onSurveyAdded, onClose }) => {
         console.log(surveyData);
         try {
             const response = await postData(surveyData, null, 'surveys');
-            if (response.code === 200) {
+            if (response.code === 201) {
                 onSurveyAdded(response.params[0]);
             } else {
                 console.error("Error adding survey:", response.message);

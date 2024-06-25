@@ -44,24 +44,6 @@ async function getAnswersByQuestionId (questionId) {
         throw error;
     }
 };
-// async function addAnswer(newAnswer) {
-//     try {
-//         if (newAnswer.completed) {
-//             newAnswer.completed = 1;
-//         }
-//         else
-//             newAnswer.completed = 0;
-//         const result = await pool.query(`INSERT INTO answers (answer, questionId,answerId) VALUES ('${newAnswer.answer}', '${newAnswer.questionId}','${newAnswer.answerId}')`);
-//         if (result[0].insertId > 0) {
-//             return prepareResult(false, 0, result[0].insertId)
-//         }
-//         else {
-//             return prepareResult(true, 0, 0);
-//         }
-//     } catch (error) {
-//         throw error;
-//     }
-// }
 
 const addAnswer = async (newAnswer) => {
     try {
@@ -104,6 +86,19 @@ async function deleteAnswer(answerId) {
         throw error;
     }
 }
+const deleteAnswersByQuestionId = async (questionId) => {
+    try {
+        const result = await pool.query('DELETE FROM answers WHERE questionId = ?', [questionId]);
+        if (result[0].affectedRows > 0) {
+            return prepareResult(false, result[0].affectedRows, 0);
+        } else {
+            return prepareResult(true, 0, 0);
+        }
+    } catch (error) {
+        throw error;
+    }
+};
+
 function prepareResult(hasErrorTemp = true, affectedRowsTemp = 0, insertIdTemp = -1, dataTemp = null) {
     const resultdata = {
         hasError: hasErrorTemp,
@@ -119,5 +114,6 @@ module.exports = {
     getAnswersByQuestionId,
     addAnswer,
     updateAnswer,
-    deleteAnswer
+    deleteAnswer,
+    deleteAnswersByQuestionId
 };

@@ -4,6 +4,7 @@ const surveysController = require('../controllers/surveysController');
 
 surveysRouter.get('/', surveysController.getAllSurveys);
 surveysRouter.get('/:surveyId', surveysController.getSurveyById);
+surveysRouter.get('/:search', surveysController.getSurveysBySearch);
 surveysRouter.post('/', surveysController.addSurvey);
 surveysRouter.put('/:surveyId', surveysController.updateSurvey);
 surveysRouter.delete('/:surveyId', surveysController.deleteSurvey);

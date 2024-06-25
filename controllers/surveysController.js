@@ -32,6 +32,21 @@ const getSurveyById = async (req, res) => {
     }
 };
 
+const getSurveysBySearch = async (req, res) => {
+    const searchText = req.query.searchText;
+    try {
+        const surveys = await surveyService.getSurveysBySearch(searchText);
+        res.status(200).json(surveys);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+module.exports = {
+    getSurveysBySearch,
+};
+
+
 const addSurvey = async (req, res) => {
     const newSurvey = req.body; // קבלת האובייקט של הסקר מהבקשה
 
@@ -56,7 +71,7 @@ const addSurvey = async (req, res) => {
         // קריאה לפונקציה בשכבת השירות להוספת הסקר
         const insertedSurvey = await surveyService.addSurvey(newSurvey);
 
-        return res.status(200).json(insertedSurvey);
+        return res.status(201).json(insertedSurvey);
     } catch (error) {
         console.error('Error adding survey:', error);
         return res.status(500).send('Internal Server Error');
@@ -103,6 +118,7 @@ const submitSurveyResults = async (req, res) => {
 module.exports = {
     getAllSurveys,
     getSurveyById,
+    getSurveysBySearch,
     addSurvey,
     updateSurvey,
     deleteSurvey,

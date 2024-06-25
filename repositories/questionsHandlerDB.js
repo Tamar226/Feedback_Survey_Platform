@@ -106,6 +106,19 @@ async function deleteQuestion(questionId) {
         throw error;
     }
 }
+const deleteQuestionsBySurveyId = async (surveyId) => {
+    try {
+        const result = await pool.query('DELETE FROM questions WHERE surveyId = ?', [surveyId]);
+        if (result[0].affectedRows > 0) {
+            return prepareResult(false, result[0].affectedRows, 0);
+        } else {
+            return prepareResult(true, 0, 0);
+        }
+    } catch (error) {
+        throw error;
+    }
+};
+
 function prepareResult(hasErrorTemp = true, affectedRowsTemp = 0, insertIdTemp = -1, dataTemp = null) {
     const resultdata = {
         hasError: hasErrorTemp,
@@ -121,5 +134,6 @@ module.exports = {
     getQuestionsBySurveyId,
     addQuestion,
     updateQuestion,
-    deleteQuestion
+    deleteQuestion,
+    deleteQuestionsBySurveyId
 };

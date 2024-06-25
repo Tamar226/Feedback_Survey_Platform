@@ -199,13 +199,24 @@ export const addSurvey = async (survey) => {
     }
 };
 
-// export const fetchSurveyQuestions = async (surveyId) => {
-//     const response = await fetch(`http://localhost:3000/surveys/${surveyId}/questions`);
-//     if (!response.ok) {
-//         throw new Error('Failed to fetch survey questions');
-//     }
-//     return response.json();
-// };
+export const getSurveysBySearch = async (searchText) => {
+    try {
+        const response = await fetch(`/surveys/search?query=${encodeURIComponent(searchText)}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        if (!response.ok) {
+            throw new Error('Failed to get surveys');
+        }
+        return response.json();
+    } catch (error) {
+        console.error('Error getting surveys:', error);
+        throw error;
+    }
+};
+
 
 export const submitSurveyResults = async (surveyId, answers, userId) => {
     try {

@@ -62,6 +62,20 @@ const getSurveyById = async (surveyId) => {
     return result.data;
 };
 
+async function getSurveysBySearch(searchText) {
+    try {
+        const result = await surveysRepository.getSurveysBySearch(searchText);
+
+        if (result.hasError) {
+            throw new Error(`Failed to fetch surveys by search: ${result.data}`);
+        }
+        return result.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
+
 const addSurvey = async (newSurvey) => {
     try {
         const result = await surveysRepository.addSurvey(newSurvey);
@@ -113,14 +127,32 @@ async function updateSurvey(surveyId, updatedSurveyData) {
     }
 }
 
-async function deleteSurvey(surveyId) {
-    const result = await surveysRepository.deleteSurvey(surveyId);
-    if (result.affectedRows > 0) {
-        return `Survey with ID ${surveyId} deleted successfully`;
-    } else {
-        throw new Error(`Survey with ID ${surveyId} not found`);
+const deleteSurvey = async (surveyId) => {
+    try {
+        // Fetch all questions related to the survey
+        const questionsResult = await questionsRepository.getQuestionsBySurveyId(surveyId);
+        const questions = questionsResult.data;
+
+        // Delete all answers related to the questions
+        for (let question of questions) {
+            await answersRepository.deleteAnswersByQuestionId(question.id);
+        }
+
+        // Delete all questions related to the survey
+        await questionsRepository.deleteQuestionsBySurveyId(surveyId);
+
+        // Delete the survey itself
+        const surveyDeleteResult = await surveysRepository.deleteSurveyById(surveyId);
+        if (surveyDeleteResult.hasError) {
+            throw new Error(`Error deleting survey with id ${surveyId}`);
+        }
+
+        return `Survey with id ${surveyId} and all related questions and answers were deleted successfully.`;
+    } catch (error) {
+        throw new Error(`Error deleting survey with id ${surveyId}: ${error.message}`);
     }
-}
+};
+
 
 const submitSurveyResults = async (surveyId, answers, userId) => {
     try {
@@ -137,6 +169,7 @@ const submitSurveyResults = async (surveyId, answers, userId) => {
 module.exports = {
     getAllSurveys,
     getSurveyById,
+    getSurveysBySearch,
     addSurvey,
     updateSurvey,
     deleteSurvey,
