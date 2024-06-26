@@ -23,7 +23,7 @@ const HomePage = () => {
         <div className="popup-container">
           <div className="popup-overlay">
             <div className="popup-content">
-              <button className="close-button" onClick={() => setShowPopup(false)}>X</button>
+              <button className="close-button1" onClick={() => setShowPopup(false)}>X</button>
               <h1>Welcome to Our Survey Platform!</h1>
               <p>Join our community to participate in surveys and create your own.</p>
             </div>

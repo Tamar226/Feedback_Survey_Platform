@@ -220,7 +220,7 @@ export const getSurveysBySearch = async (searchText) => {
 
 export const submitSurveyResults = async (surveyId, answers, userId) => {
     try {
-        const response = await fetch(`http://localhost:3000/surveys/${surveyId}/results`, {
+        const response = await fetch(`http://localhost:3000/surveys/${surveyId}/submitResults`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -264,6 +264,26 @@ export const fetchSurveyDetails = async (surveyId) => {
         throw error;
     }
 };
+// Requests.js
+export const fetchSurveyResults = async (surveyId) => {
+    try {
+        const response = await fetch(`http://localhost:3000/surveys/${surveyId}/results`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        if (!response.ok) {
+            throw new Error(`Failed to fetch survey results for survey ID ${surveyId}`);
+        }
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error("Error fetching survey results:", error);
+        throw error;
+    }
+};
+
 
 
 

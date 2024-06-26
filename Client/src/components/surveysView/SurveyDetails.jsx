@@ -91,8 +91,9 @@ const SurveyDetails = ({ survey, onClose, userId }) => {
         const getQuestions = async () => {
             try {
                 const result = await fetchSurveyQuestions(survey.id);
+                console.log(result);
                 if (result.status === 200 && result.data) {
-                    setQuestions(result.data);
+                    setQuestions(result.data[0]);
                 } else {
                     console.error("Failed to fetch surveys");
                 }

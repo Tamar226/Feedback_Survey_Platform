@@ -168,14 +168,14 @@ export default function SurveysPage() {
                     onChange={handleSearchChange}
                 />
                 <Button icon="pi pi-search" className="p-button-warning" />
-            </div>
-            <Button label="Add New Survey" icon="pi pi-plus" onClick={handleAddSurvey} className="p-mt-3" />
+            </div><br/>
+            <Button label="Add New Survey" icon="pi pi-plus" onClick={handleAddSurvey} className="p-mt-3" />   
             {showAddSurvey && (
                 <div className="p-mt-4">
                     <AddSurvey onClose={handleCloseAddSurvey} onSurveyAdded={handleSurveyAdded} />
                 </div>
             )}
-            <div className="allSurveys">
+            <div className="allSurveys"> 
                 {filteredSurveys.map((survey) => (
                     <div className="surveyItem" key={survey.id}>
                         <SurveyCard

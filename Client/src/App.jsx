@@ -29,22 +29,22 @@ export default function App() {
         <Header />
         <br />
         <Routes>
-             <Route path="" element={<HomePage />}/>
-            <Route path="/AboutUs" element={<AboutUs />} />
-            <Route path="/ContactUs" element={<ContactUsPage />}/>
-         
-            {/* <Route path="login" element={<Login />}>
+          <Route path="" element={<HomePage />} />
+          <Route path="/AboutUs" element={<AboutUs />} />
+          <Route path="/ContactUs" element={<ContactUsPage />} />
+
+          {/* <Route path="login" element={<Login />}>
               <Route path="manager/:id" element={<Login />} />
               <Route path="user" element={<Login />} /> */}
-            {/* </Route> */}
+          {/* </Route> */}
 
-            <Route path="register" element={<Register />}>
-              <Route path="manager" element={<Register />} />
-              <Route path="user" element={<Register />} />
-            </Route>
-            <Route path="surveys" element={<SurveysPage />}>
-              {/* <Route path="/:surveyId/results" element={<SurveyResults />} /> */}
-            </Route>
+          <Route path="register" element={<Register />}>
+            <Route path="manager" element={<Register />} />
+            <Route path="user" element={<Register />} />
+          </Route>
+          <Route path="surveys" element={<SurveysPage />} />
+          <Route path="surveys/:surveyId/results" element={<SurveyResults />} />
+
         </Routes>
         <Footer />
       </PrimeReactProvider>

@@ -104,6 +104,24 @@ const saveAnswer = async (surveyId, answerId, userId) => {
         throw error;
     }
 };
+const getSurveyResults = async (surveyId) => {
+    const query = `
+        SELECT a.questionId, a.answer, COUNT(r.answerId) as count
+        FROM results r
+        JOIN answers a ON r.answerId = a.id
+        WHERE r.surveyId = ?
+        GROUP BY a.questionId, a.answer
+    `;
+    
+    try {
+        const [results] = await pool.execute(query, [surveyId]);
+        return prepareResult(false, results.length, -1, results);
+    } catch (error) {
+        console.error('Error fetching survey results:', error);
+        return prepareResult(true, 0, -1, null);
+    }
+};
+
 function prepareResult(hasErrorTemp = true, affectedRowsTemp = 0, insertIdTemp = -1, dataTemp = null) {
     return {
         hasError: hasErrorTemp,
@@ -120,5 +138,6 @@ module.exports = {
     addSurvey,
     updateSurvey,
     deleteSurveyById,
-    saveAnswer
+    saveAnswer,
+    getSurveyResults
 };

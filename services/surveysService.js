@@ -198,6 +198,32 @@ const submitSurveyResults = async (surveyId, answers, userId) => {
     }
 };
 
+const getSurveyResults = async (surveyId) => {
+    const result = await surveysRepository.getSurveyResults(surveyId);
+
+    if (result.hasError) {
+        throw new Error('Error fetching survey results');
+    }
+
+    const formattedResults = {};
+
+    result.data.forEach(resultItem => {
+        if (!formattedResults[resultItem.questionId]) {
+            formattedResults[resultItem.questionId] = { labels: [], data: [] };
+        }
+        const index = formattedResults[resultItem.questionId].labels.indexOf(resultItem.answer);
+        if (index === -1) {
+            formattedResults[resultItem.questionId].labels.push(resultItem.answer);
+            formattedResults[resultItem.questionId].data.push(resultItem.count);
+        } else {
+            formattedResults[resultItem.questionId].data[index] += resultItem.count;
+        }
+    });
+
+    return formattedResults;
+};
+
+
 module.exports = {
     getAllSurveys,
     getSurveyById,
@@ -205,5 +231,6 @@ module.exports = {
     addSurvey,
     updateSurvey,
     deleteSurvey,
-    submitSurveyResults
+    submitSurveyResults,
+    getSurveyResults
 };

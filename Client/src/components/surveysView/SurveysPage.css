@@ -1,6 +1,9 @@
+.page-container{
+    min-height: 1000px;
+}
 .p-inputgroup{
-    width: 70%;
-    margin: auto;
+    width: 30%;
+    margin-left:2%;
 }
 
 .allSurveys {

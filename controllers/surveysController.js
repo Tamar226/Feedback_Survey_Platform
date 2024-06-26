@@ -115,6 +115,22 @@ const submitSurveyResults = async (req, res) => {
         res.status(500).send('Internal server error');
     }
 };
+const getSurveyResults = async (req, res) => {
+    try {
+        const { surveyId } = req.params;
+        const formattedResults = await surveyService.getSurveyResults(surveyId);
+
+        if (!formattedResults || Object.keys(formattedResults).length === 0) {
+            return res.status(404).json({ message: 'Survey not found' });
+        }
+
+        res.status(200).json(formattedResults);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+
 module.exports = {
     getAllSurveys,
     getSurveyById,
@@ -122,5 +138,6 @@ module.exports = {
     addSurvey,
     updateSurvey,
     deleteSurvey,
-    submitSurveyResults
+    submitSurveyResults,
+    getSurveyResults
 };
