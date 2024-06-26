@@ -104,7 +104,7 @@ const SurveyDetails = ({ survey, onClose, userId }) => {
             getQuestions();
         }
     }, [survey]);
-
+    console.log(questions);
     const handleAnswerChange = (questionId, answer) => {
         setSelectedAnswers(prevSelectedAnswers => ({
             ...prevSelectedAnswers,
@@ -141,18 +141,18 @@ const SurveyDetails = ({ survey, onClose, userId }) => {
                     <Button icon="pi pi-times" className="p-button-rounded p-button-danger" onClick={onClose} />
                 </div>
                 {questions.length > 0 && (
-                    <SurveyModal 
-                        survey={survey} 
-                        questions={questions} 
+                    <SurveyModal
+                        survey={survey}
+                        questions={questions}
                         onClose={onClose}
                         onAnswerChange={handleAnswerChange}
                         selectedAnswers={selectedAnswers}
                         handleSubmitAll={handleSubmitAll}
                     />
                 )}
-              
+
             </div>
-            
+
         </div>
     );
 };

@@ -16,32 +16,37 @@ import Login from "./components/personalArea/Login";
 import Header from "./components/Home page/Header";
 import Footer from "./components/Home page/Footer";
 // import Survey from "./components/SurveysAdding/AddSurvey";
-import { UserProvider } from "./components/personalArea/UserContext"; 
+import { UserProvider } from "./components/personalArea/UserContext";
 import SurveysPage from "./components/surveysView/SurveysPage";
-
+import SurveyResults from "./components/surveysView/Results/SurveyResults";
+import AboutUs from "./components/Home page/AboutUs";
+import HomePage from "./components/Home page/HomePage";
+import ContactUsPage from "./components/Information/ContactUsPage";
 export default function App() {
   return (
     <UserProvider>
       <PrimeReactProvider>
-          <Header />
-          <br />
-          <Routes>
-            <Route path="login" element={<Login />}>
+        <Header />
+        <br />
+        <Routes>
+             <Route path="" element={<HomePage />}/>
+            <Route path="/AboutUs" element={<AboutUs />} />
+            <Route path="/ContactUs" element={<ContactUsPage />}/>
+         
+            {/* <Route path="login" element={<Login />}>
               <Route path="manager/:id" element={<Login />} />
-              <Route path="user" element={<Login />} />
-            </Route>
+              <Route path="user" element={<Login />} /> */}
+            {/* </Route> */}
+
             <Route path="register" element={<Register />}>
               <Route path="manager" element={<Register />} />
               <Route path="user" element={<Register />} />
             </Route>
-            {/* <Route path="surveys" element={<SurveysPage/>}> */}
-            <Route path="surveys" element={<SurveysPage/>}>
-
-
+            <Route path="surveys" element={<SurveysPage />}>
+              {/* <Route path="/:surveyId/results" element={<SurveyResults />} /> */}
             </Route>
-            {/* <Route path="/" element={<Navigate to="/login" />} /> */}
-          </Routes>
-          <Footer />
+        </Routes>
+        <Footer />
       </PrimeReactProvider>
     </UserProvider>
   );

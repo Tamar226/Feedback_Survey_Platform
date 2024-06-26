@@ -34,19 +34,19 @@ async function getQuestionById(questionId) {
         throw error;
     }
 }
-
-async function getQuestionsBySurveyId (surveyId) {
+async function getQuestionsBySurveyId(surveyId) {
     try {
         const result = await pool.query('SELECT * FROM questions WHERE surveyID = ?', [surveyId]);
         if (result.length === 0) {
-            throw new Error(`Question with ID ${questionId} not found`);
+            throw new Error(`Questions for survey with ID ${surveyId} not found`);
         }
-        return prepareResult(false, 0, 0, result[0]);
+        return prepareResult(false, 0, 0, result);
     } catch (error) {
         console.error(error);
         throw error;
     }
-};
+}
+
 // async function addQuestion(newQuestion) {
 //     try {
 //         if (newQuestion.completed) {

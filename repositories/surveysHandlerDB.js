@@ -19,10 +19,8 @@ async function getAllSurveys() {
     const result = await pool.query('SELECT * FROM surveys');
     return prepareResult(false, 0, 0, result);
 }
-
 async function getSurveyById(surveyId) {
     try {
-        //surveyId = parseInt(surveyId);
         const result = await pool.query('SELECT * FROM surveys WHERE id = ?', [surveyId]);
 
         if (result.length === 0) {
@@ -33,6 +31,7 @@ async function getSurveyById(surveyId) {
         throw error;
     }
 }
+
 async function getSurveysBySearch(searchText) {
     try {
         const query = `

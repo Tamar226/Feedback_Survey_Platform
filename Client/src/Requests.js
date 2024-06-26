@@ -201,7 +201,7 @@ export const addSurvey = async (survey) => {
 
 export const getSurveysBySearch = async (searchText) => {
     try {
-        const response = await fetch(`/surveys/search?query=${encodeURIComponent(searchText)}`, {
+        const response = await fetch(`http://localhost:3000/surveys/search?query=${encodeURIComponent(searchText)}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
@@ -220,7 +220,7 @@ export const getSurveysBySearch = async (searchText) => {
 
 export const submitSurveyResults = async (surveyId, answers, userId) => {
     try {
-        const response = await fetch(`/surveys/${surveyId}/results`, {
+        const response = await fetch(`http://localhost:3000/surveys/${surveyId}/results`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -242,7 +242,28 @@ export const submitSurveyResults = async (surveyId, answers, userId) => {
     }
 };
 
+export const fetchSurveyDetails = async (surveyId) => {
+    try {
+        const response = await fetch(`http://localhost:3000/surveys/${surveyId}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        console.log('not json:',response);
+        // console.log('json:',await response.json());
 
+        if (!response.ok) {
+            throw new Error(`Failed to fetch survey details for survey ID ${surveyId}`);
+        }
+        
+        const data = await response.json();
+        return data; // Assuming your backend returns an object with survey and questions properties
+    } catch (error) {
+        console.error("Error fetching survey details:", error);
+        throw error;
+    }
+};
 
 
 

@@ -1,0 +1,35 @@
+/* ContactUs.css */
+/* .contact-us-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  } */
+  
+  .contact-us-container h1,
+  .contact-us-container h2,
+  .contact-us-container h3 {
+    color: #333;
+  }
+  
+  .contact-us-container p,
+  .contact-us-container ul,
+  .contact-us-container ol {
+    color: #555;
+    line-height: 1.6;
+  }
+  
+  .contact-us-container ul,
+  .contact-us-container ol {
+    padding-left: 20px;
+  }
+  
+  .contact-us-container a {
+    color: #0066cc;
+    text-decoration: none;
+  }
+  
+  .contact-us-container a:hover {
+    text-decoration: underline;
+  }
+  

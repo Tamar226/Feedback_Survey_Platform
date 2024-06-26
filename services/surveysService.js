@@ -54,14 +54,46 @@ async function getAllSurveys() {
 // };
 
 
-const getSurveyById = async (surveyId) => {
-    const result = await surveysRepository.getSurveyById(surveyId);
-    if (result.hasError) {
-        throw new Error(`Survey with ID ${id} not found`);
-    }
-    return result.data;
-};
+// const getSurveyById = async (surveyId) => {
+//     const result = await surveysRepository.getSurveyById(surveyId);
+//     if (result.hasError) {
+//         throw new Error(`Survey with ID ${id} not found`);
+//     }
+//     return result.data;
+// };
 
+// const getSurveyById = async (surveyId) => {
+//     const surveyResult = await surveysRepository.getSurveyById(surveyId);
+//     if (surveyResult.hasError) {
+//         throw new Error(`Survey with ID ${surveyId} not found`);
+//     }
+
+//     const questionsResult = await questionsRepository.getQuestionsBySurveyId(surveyId);
+//     if (questionsResult.hasError) {
+//         throw new Error(`Questions for survey with ID ${surveyId} not found`);
+//     }
+
+//     return {
+//         survey: surveyResult.data,
+//         questions: questionsResult.data,
+//     };
+// };
+const getSurveyById = async (surveyId) => {
+    const surveyResult = await surveysRepository.getSurveyById(surveyId);
+    if (surveyResult.hasError) {
+        throw new Error(`Survey with ID ${surveyId} not found`);
+    }
+
+    const questionsResult = await questionsRepository.getQuestionsBySurveyId(surveyId);
+    if (questionsResult.hasError) {
+        throw new Error(`Questions for survey with ID ${surveyId} not found`);
+    }
+
+    return {
+        ...surveyResult.data,
+        questions: questionsResult.data,
+    };
+};
 async function getSurveysBySearch(searchText) {
     try {
         const result = await surveysRepository.getSurveysBySearch(searchText);

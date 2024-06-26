@@ -5,6 +5,7 @@ import { Button } from 'primereact/button';
 import QuestionCard from './QuestionCard';
 
 const SurveyModal = ({ survey, questions, onClose, onAnswerChange, selectedAnswers,handleSubmitAll }) => {
+    console.log('modal:',questions)
     return (
         <div className="modal-overlay">
             <div className="modal-content">

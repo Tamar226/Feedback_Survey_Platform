@@ -1,5 +1,5 @@
 const surveyService = require('../services/surveysService');
-
+const questionsService = require('../services/questionService');
 const getAllSurveys = async (req, res) => {
     try {
         const result = await surveyService.getAllSurveys();
@@ -12,26 +12,26 @@ const getAllSurveys = async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 };
-// const getAllSurveys = async (req, res) => {
+
+// const getSurveyById = async (req, res) => {
+//     const id = req.params.surveyId;
 //     try {
-//         const surveys = await surveyService.getAllSurveys();
-//         res.status(200).json(surveys);
+//         const Survey = await surveyService.getSurveyById(id);
+//         res.status(200).send(Survey);
 //     } catch (error) {
-//         console.error('Error fetching surveys:', error);
-//         res.status(500).send('Internal Server Error');
+//         res.status(404).send(error.message);
 //     }
 // };
 
 const getSurveyById = async (req, res) => {
     const id = req.params.surveyId;
     try {
-        const Survey = await surveyService.getSurveyById(id);
-        res.status(200).send(Survey);
+        const surveyData = await surveyService.getSurveyById(id);
+        res.status(200).send(surveyData);
     } catch (error) {
-        res.status(404).send(error.message);
+        res.status(404).send({ error: error.message });
     }
 };
-
 const getSurveysBySearch = async (req, res) => {
     const searchText = req.query.searchText;
     try {
