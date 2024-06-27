@@ -1,9 +1,12 @@
 .homepage-background {
-    background-image: url('C:\Users\PC\.Full Stack\Survey_Project\client\src\components\Images\HomaPageBackgroundImage.png');
+    background: url('C:\Users\PC\.Full Stack\Survey_Project\client\src\Images\backgroundHomePage.gif');
     background-size: cover;
     background-position: center;
     height: 100vh;
     width: 100%;
+    @media (max-width: 450px) {
+        background-image: url('C:\Users\PC\.Full Stack\Survey_Project\client\src\Images\backgroundHomePageApplication.png'); /* תמונה למסכים קטנים יותר */
+    }
 }
 
 .contact-us-container {

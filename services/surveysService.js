@@ -209,19 +209,21 @@ const getSurveyResults = async (surveyId) => {
 
     result.data.forEach(resultItem => {
         if (!formattedResults[resultItem.questionId]) {
-            formattedResults[resultItem.questionId] = { labels: [], data: [] };
+            formattedResults[resultItem.questionId] = {
+                question: resultItem.question,
+                answers: []
+            };
         }
-        const index = formattedResults[resultItem.questionId].labels.indexOf(resultItem.answer);
-        if (index === -1) {
-            formattedResults[resultItem.questionId].labels.push(resultItem.answer);
-            formattedResults[resultItem.questionId].data.push(resultItem.count);
-        } else {
-            formattedResults[resultItem.questionId].data[index] += resultItem.count;
-        }
+        formattedResults[resultItem.questionId].answers.push({
+            answerId: resultItem.answerId,
+            answer: resultItem.answer,
+            count: resultItem.count
+        });
     });
 
     return formattedResults;
 };
+
 
 
 module.exports = {

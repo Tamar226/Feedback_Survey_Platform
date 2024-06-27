@@ -121,7 +121,7 @@ const getSurveyResults = async (req, res) => {
         const formattedResults = await surveyService.getSurveyResults(surveyId);
 
         if (!formattedResults || Object.keys(formattedResults).length === 0) {
-            return res.status(404).json({ message: 'Survey not found' });
+            return res.status(404).json({ message: 'No results found for this survey' });
         }
 
         res.status(200).json(formattedResults);
@@ -129,6 +129,7 @@ const getSurveyResults = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
 
 
 module.exports = {

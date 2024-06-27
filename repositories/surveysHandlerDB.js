@@ -106,11 +106,12 @@ const saveAnswer = async (surveyId, answerId, userId) => {
 };
 const getSurveyResults = async (surveyId) => {
     const query = `
-        SELECT a.questionId, a.answer, COUNT(r.answerId) as count
+        SELECT q.id as questionId, q.question, a.id as answerId, a.answer, COUNT(r.answerId) as count
         FROM results r
         JOIN answers a ON r.answerId = a.id
+        JOIN questions q ON a.questionId = q.id
         WHERE r.surveyId = ?
-        GROUP BY a.questionId, a.answer
+        GROUP BY q.id, a.id
     `;
     
     try {
