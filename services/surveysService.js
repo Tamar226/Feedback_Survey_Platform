@@ -206,7 +206,6 @@ const getSurveyResults = async (surveyId) => {
     }
 
     const formattedResults = {};
-
     result.data.forEach(resultItem => {
         if (!formattedResults[resultItem.questionId]) {
             formattedResults[resultItem.questionId] = {
@@ -221,8 +220,12 @@ const getSurveyResults = async (surveyId) => {
         });
     });
 
-    return formattedResults;
+    return {
+        surveyName: result.data[0].surveyName,
+        questions: formattedResults,
+    };
 };
+
 
 
 

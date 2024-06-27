@@ -115,16 +115,17 @@ const submitSurveyResults = async (req, res) => {
         res.status(500).send('Internal server error');
     }
 };
+
 const getSurveyResults = async (req, res) => {
     try {
         const { surveyId } = req.params;
-        const formattedResults = await surveyService.getSurveyResults(surveyId);
+        const surveyResults = await surveyService.getSurveyResults(surveyId);
 
-        if (!formattedResults || Object.keys(formattedResults).length === 0) {
+        if (!surveyResults || !surveyResults.questions || Object.keys(surveyResults.questions).length === 0) {
             return res.status(404).json({ message: 'No results found for this survey' });
         }
 
-        res.status(200).json(formattedResults);
+        res.status(200).json(surveyResults);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
