@@ -24,14 +24,22 @@ const getQuestionsBySurveyId = async (surveyId) => {
     return result.data;
 };
 
+// const addQuestion = async (newQuestion) => {
+//     const result = await questionsRepository.addQuestion(newQuestion);
+//     if (result.insertId > 0) {
+//         const insertQuestion = await questionsRepository.getQuestionById(result.insertId);
+//         return insertQuestion.data;
+//     }
+// }
 const addQuestion = async (newQuestion) => {
     const result = await questionsRepository.addQuestion(newQuestion);
     if (result.insertId > 0) {
         const insertQuestion = await questionsRepository.getQuestionById(result.insertId);
-        return insertQuestion.data;
+        return insertQuestion.data; // כאן אנחנו מחזירים את הנתונים של השאלה שנוצרה
+    } else {
+        throw new Error('Error inserting question');
     }
 }
-
 async function updateQuestion(questionId, updatedQuestionData) {
     const result = await questionsRepository.updateQuestion(questionId, updatedQuestionData);
     if (result.affectedRows > 0) {

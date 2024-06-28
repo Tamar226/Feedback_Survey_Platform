@@ -1,19 +1,19 @@
-import { pool } from './runDB.js';
 
-export const drop = async () => {
+const drop = async (pool) => {
     await pool.query('USE SurveysDatabase');
     await pool.query('DROP TABLE IF EXISTS Users');
-    await pool.query('DROP TABLE IF EXISTS Managers');
+    await pool.query('DROP TABLE IF EXISTS Manager');
+    await pool.query('DROP TABLE IF EXISTS Responses');
     await pool.query('DROP TABLE IF EXISTS answers');
     await pool.query('DROP TABLE IF EXISTS Questions');
     await pool.query('DROP TABLE IF EXISTS Surveys');
+    await pool.query('DROP TABLE IF EXISTS results');
     await pool.query('DROP TABLE IF EXISTS RoleRelation');
     await pool.query('DROP TABLE IF EXISTS Roles');
     await pool.query('DROP DATABASE IF EXISTS SurveysDatabase');
-}
+};
 
-//TODO: ?? to make a table for users that answered any question
-export const create = async () => {
+const create = async (pool) => {
     // Create the database
     await pool.query('CREATE DATABASE IF NOT EXISTS SurveysDatabase');
 
@@ -73,41 +73,37 @@ export const create = async () => {
     );`);
     //Create the questions table
     await pool.query(`
-    CREATE TABLE IF NOT EXISTS Questions(
-        id int AUTO_INCREMENT,
-        question varchar(255),
-        surveyID int NOT NULL,
-        PRIMARY KEY (id),
-        FOREIGN KEY (surveyID) REFERENCES Surveys(id)
-    );`);
+        CREATE TABLE IF NOT EXISTS Questions(
+            id int AUTO_INCREMENT,
+            question varchar(255),
+            surveyID int NOT NULL,
+            PRIMARY KEY (id),
+            FOREIGN KEY (surveyID) REFERENCES Surveys(id)
+        );
+    `);
+
     //Create the answers table
     await pool.query(`
-    CREATE TABLE IF NOT EXISTS Answers(
-        id int AUTO_INCREMENT,
-        answer varchar(255),
-        questionId int NOT NULL,
-        answerId int NOT NULL,
-        PRIMARY KEY (id),
-        FOREIGN KEY (questionID) REFERENCES Questions(id)
-    );`);
-    // //Create the responses table
-    // await pool.query(`
-    // CREATE TABLE IF NOT EXISTS Responses(
-    //     id int AUTO_INCREMENT,
-    //     answerID int,
-    //     userID int,
-    //     PRIMARY KEY (id),
-    //     FOREIGN KEY (answerID) REFERENCES Answers(id),
-    //     FOREIGN KEY (userID) REFERENCES Users(id)
-    // );`);
-    // //Create the comments table
-    // await pool.query(`
-    // CREATE TABLE IF NOT EXISTS Comments(
-    //     id int AUTO_INCREMENT,
-    //     comment varchar(255),
-    //     responseID int,
-    //     PRIMARY KEY (id),
-    //     FOREIGN KEY (responseID) REFERENCES Responses(id)
-    // );`);
+        CREATE TABLE IF NOT EXISTS Answers(
+            id int AUTO_INCREMENT,
+            answer varchar(255),
+            questionId int NOT NULL,
+            answerId int NOT NULL,
+            PRIMARY KEY (id),
+            FOREIGN KEY (questionID) REFERENCES Questions(id)
+        );
+    `);
 
+    //Create the responses table
+    await pool.query(`
+        CREATE TABLE IF NOT EXISTS results (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            surveyId INT NOT NULL,
+            answerId INT NOT NULL,
+            userId INT NOT NULL,
+            createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );
+    `);
 };
+
+module.exports = { drop, create };

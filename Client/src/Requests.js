@@ -138,7 +138,7 @@ export async function fetchSurveyAnswers(questionId) {
 export async function postData(data, setLoading, typeData) {
     try {
         console.log('hii');
-        setLoading ?? setLoading(true);
+        // setLoading ?? setLoading(true);
         const response = await fetch(`http://localhost:3000/${typeData}`, {
             method: "POST",
             body: JSON.stringify(data),
@@ -153,12 +153,12 @@ export async function postData(data, setLoading, typeData) {
             throw new Error("Network error executing the request");
         }
         
-        setLoading ?? setLoading(false);
+        // setLoading ?? setLoading(false);
         console.log('seccsess');
         return { code: status, message: "success post the data", params: promiseData };
     }
     catch (error) {
-        setLoading ?? setLoading(false);
+        // setLoading ?? setLoading(false);
         return { code: 100, message: error, params: null };
     }
 }
@@ -199,27 +199,93 @@ export const addSurvey = async (survey) => {
     }
 };
 
-// export const fetchSurveyQuestions = async (surveyId) => {
-//     const response = await fetch(`http://localhost:3000/surveys/${surveyId}/questions`);
-//     if (!response.ok) {
-//         throw new Error('Failed to fetch survey questions');
-//     }
-//     return response.json();
-// };
-
-export const submitSurveyAnswers = async (questionID, answers) => {
-    const response = await fetch(`'http://localhost:3000/surveys/${questionID}/answers`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ answers }),
-    });
-    if (!response.ok) {
-        throw new Error('Failed to submit survey answers');
+export const getSurveysBySearch = async (searchText) => {
+    try {
+        const response = await fetch(`http://localhost:3000/surveys/search?query=${encodeURIComponent(searchText)}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        if (!response.ok) {
+            throw new Error('Failed to get surveys');
+        }
+        return response.json();
+    } catch (error) {
+        console.error('Error getting surveys:', error);
+        throw error;
     }
-    return response.json();
 };
+
+
+export const submitSurveyResults = async (surveyId, answers, userId) => {
+    try {
+        const response = await fetch(`http://localhost:3000/surveys/${surveyId}/submitResults`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                userId,
+                answers,
+            }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to submit survey results');
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error('Error submitting survey results:', error);
+        throw error;
+    }
+};
+
+export const fetchSurveyDetails = async (surveyId) => {
+    try {
+        const response = await fetch(`http://localhost:3000/surveys/${surveyId}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        console.log('not json:',response);
+        // console.log('json:',await response.json());
+
+        if (!response.ok) {
+            throw new Error(`Failed to fetch survey details for survey ID ${surveyId}`);
+        }
+        
+        const data = await response.json();
+        return data; // Assuming your backend returns an object with survey and questions properties
+    } catch (error) {
+        console.error("Error fetching survey details:", error);
+        throw error;
+    }
+};
+// Requests.js
+export const fetchSurveyResults = async (surveyId) => {
+    try {
+        const response = await fetch(`http://localhost:3000/surveys/${surveyId}/results`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        if (!response.ok) {
+            throw new Error(`Failed to fetch survey results for survey ID ${surveyId}`);
+        }
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error("Error fetching survey results:", error);
+        throw error;
+    }
+};
+
+
+
 
 export const getAllUsers = async ()=>{
     try {

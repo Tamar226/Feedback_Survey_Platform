@@ -11,15 +11,18 @@ import {
 } from "react-router-dom";
 import "./App.css";
 
-import RegisterUser from "./components/Entering_the_personal_area/RegisterUser";
-import LoginUser from "./components/Entering_the_personal_area/LoginUser";
+import RegisterUser from "./components/personalArea/RegisterUser";
+import LoginUser from "./components/personalArea/LoginUser";
 import Header from "./components/Home page/Header";
 import Footer from "./components/Home page/Footer";
-import Survey from "./components/Adding_surveys/Survey";
-import { UserProvider } from "./components/Entering_the_personal_area/UserContext";
-import SurveysPage from "./components/View_surveys/SurveysPage";
+// import Survey from "./components/SurveysAdding/AddSurvey";
+import { UserProvider } from "./components/personalArea/UserContext";
+import SurveysPage from "./components/surveysView/SurveysPage";
+import SurveyResults from "./components/surveysView/Results/SurveyResults";
+import AboutUs from "./components/Home page/AboutUs";
+import HomePage from "./components/Home page/HomePage";
+import ContactUsPage from "./components/Information/ContactUsPage";
 import ManagerPage from "./components/Home page/ManagerPage";
-
 export default function App() {
   return (
     <UserProvider>
@@ -27,16 +30,21 @@ export default function App() {
         <Header />
         <br />
         <Routes>
+          <Route path="" element={<HomePage />} />
+          <Route path="/AboutUs" element={<AboutUs />} />
+          <Route path="/ContactUs" element={<ContactUsPage />} />
+
           <Route path="login" element={<LoginUser />}>
             {/* <Route path="manager/:id" element={<Login />} />
               <Route path="user" element={<Login />} /> */}
           </Route>
+
           <Route path="register" element={<RegisterUser />}>
-          </Route>
-          <Route path="surveys" element={<SurveysPage />}>
-          </Route>
-          {/* <Route path="/" element={<Navigate to="/login" />} /> */}
-          <Route path="manager/:id" element={<ManagerPage />} />
+
+          <Route path="surveys" element={<SurveysPage />} />
+          <Route path="surveys/:surveyId/results" element={<SurveyResults />} />
+
+          <Route path="manager" element={<ManagerPage />}></Route>
         </Routes>
         <Footer />
       </PrimeReactProvider>

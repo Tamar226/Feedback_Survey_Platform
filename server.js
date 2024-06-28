@@ -1,5 +1,6 @@
 const cors = require('cors');
 const express = require('express');
+const bodyParser = require('body-parser'); 
 
 const usersRouter = require('./routes/usersRoute');
 const surveysRouter = require('./routes/surveysRoute');
@@ -17,6 +18,9 @@ const port = '3000';
 server.use(cors({ origin: '*' }));  
 server.use(express.json());  
 
+
+server.use(bodyParser.json());
+server.use(bodyParser.urlencoded({ extended: true }));
 // Routes
 server.use('/managers', managersRouter);
 server.use('/users', usersRouter);

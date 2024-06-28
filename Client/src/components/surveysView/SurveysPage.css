@@ -1,0 +1,41 @@
+.page-container{
+    min-height: 1000px;
+}
+.p-inputgroup{
+    width: 30%;
+    margin-left:2%;
+}
+
+.allSurveys {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px; 
+    justify-content: center; 
+    margin: 0 20px;
+}
+
+.surveyItem {
+    flex: 0 1 300px; 
+    box-sizing: border-box; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+    padding: 20px; 
+    border: 1px solid #ccc; 
+    background-color: #f9f9f9; 
+    text-align: center; 
+    height: auto; 
+    min-height: 150px;
+}
+
+@media (max-width: 768px) {
+    .surveyItem {
+        flex: 0 1 calc(50% - 20px); 
+    }
+}
+
+@media (max-width: 480px) {
+    .surveyItem {
+        flex: 0 1 calc(100% - 20px); 
+    }
+}

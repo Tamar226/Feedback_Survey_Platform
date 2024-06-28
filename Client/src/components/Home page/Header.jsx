@@ -8,12 +8,12 @@ import React from 'react';
 import { TabMenu } from 'primereact/tabmenu';
 import { NavLink } from "react-router-dom"
 // import { ColorPicker } from 'primereact/colorpicker';
-import { useUser } from '../Entering_the_personal_area/UserContext';
+import { useUser } from '../personalArea/UserContext';
 export default function Header() {
     const { currentUser, login, logout } = useUser();
     console.log(currentUser);
     const items = [
-        { label: 'About Us', icon: PrimeIcons.SLACK, url: '/AboutUs' },
+        { label: 'Home Page', icon: PrimeIcons.SLACK, url: '/' },
         { label: 'Contact Us', icon: PrimeIcons.PHONE, url: '/ContactUs' },
         { label: 'Surveys', icon: PrimeIcons.WAVE_PULSE, url: '/Surveys' },
         { label: currentUser ? `Hello, ${currentUser.username}` : 'Login', icon: currentUser ? PrimeIcons.USER : PrimeIcons.USERS, url: currentUser ? '/profile' : '/login', onClick: currentUser ? null : login },
