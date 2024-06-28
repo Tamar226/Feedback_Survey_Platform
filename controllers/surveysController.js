@@ -51,8 +51,8 @@ const addSurvey = async (req, res) => {
     const newSurvey = req.body; // קבלת האובייקט של הסקר מהבקשה
 
     try {
-        // וידוא שהאובייקט מכיל את כל השדות הדרושים
-        if (!newSurvey.managerId || !newSurvey.surveyName || typeof newSurvey.active !== 'number' || !Array.isArray(newSurvey.questions)) {
+        // וידוא שהאובייקט מכיל את כל השדות הדרושים והספציפיים
+        if (!newSurvey.userId || !newSurvey.surveyName || typeof newSurvey.active !== 'number' || !Array.isArray(newSurvey.questions) || !newSurvey.category) {
             return res.status(404).json({ error: 'Invalid survey data' });
         }
 
@@ -77,6 +77,7 @@ const addSurvey = async (req, res) => {
         return res.status(500).send('Internal Server Error');
     }
 };
+
 
 const updateSurvey = async (req, res) => {
     const surveyId = req.params.surveyId;

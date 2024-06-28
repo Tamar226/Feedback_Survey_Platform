@@ -31,7 +31,7 @@ const addUser = async (req, res) => {
         const addedUser = await userService.addUser(newUser);
         let addedUserHash = addedUser[0];
         delete addedUserHash.password;
-        res.status(200).send([addedUserHash]);
+        res.status(201).send([addedUserHash]);
     } catch (error) {
         console.error('Error adding user in controllers:', error);
         res.status(500).send('Internal Server Error');

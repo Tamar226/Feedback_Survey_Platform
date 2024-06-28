@@ -1,19 +1,20 @@
 const mysql = require('mysql2/promise');
 const dotenv = require('dotenv');
+dotenv.config({path:'../.env'});
 dotenv.config();
 
 var pool = mysql.createPool({
     // host: process.env.MYSQL_HOST,
-    // user: process.env.MYSQL_USER,
+    user: process.env.MYSQL_USER,
     // password: process.env.MYSQL_PASSWORD,
-    // database: process.env.MYSQL_DATABASE,
+    database: process.env.MYSQL_DATABASE,
     host: 'localhost',
-    user: 'root',
-    // password: 'a1b2c3d4',
-    // password: 'T50226',
-    password: '1570',
-    database: 'SurveysDatabase',
-    port: '3306'
+    // user: 'root',
+    // // password: 'a1b2c3d4',
+    password: 'T50226',
+    // password: '1570',
+    // database: 'SurveysDatabase',
+    // port: '3306'
 });
 
 async function getAllRoleRelations() {
@@ -35,7 +36,7 @@ async function getRelationByUsername(relationUsername) {
 async function addRelation(newRelation) {
     try {
         const result = await pool.query(`INSERT INTO RoleRelation (username, roleName) VALUES ('${newRelation.username}', '${newRelation.roleName}')`);
-        if (result[0].insertId >= 0) {
+        if (result[0].insertId > 0) {
             return prepareResult(false, 0, result[0].insertId);
         }
         else {

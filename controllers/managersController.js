@@ -59,7 +59,7 @@ const addCorrentManagers = async (req, res) =>{
 
         res.status(200).json({addedTamarManager, addedHadasManager});
     } catch (err) {
-        console.error('Error adding specific managers:', error);
+        console.error('Error adding specific managers:');
         res.status(500).send('Internal Server Error');
     }
 }

@@ -2,6 +2,10 @@
 /* eslint-disable no-unused-vars */
 import "primereact/resources/themes/lara-light-cyan/theme.css";
 import 'primeicons/primeicons.css';
+// import 'primereact/resources/themes/saga-blue/theme.css';  // עיצוב נושא
+import 'primereact/resources/primereact.min.css';          // עיצוב בסיסי של PrimeReact
+import 'primeflex/primeflex.css';                          // Flex utilities של PrimeFlex
+
 import { PrimeReactProvider } from "primereact/api";
 import {
   BrowserRouter as Router,

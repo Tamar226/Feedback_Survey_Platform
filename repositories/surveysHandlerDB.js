@@ -56,8 +56,12 @@ async function getSurveysBySearch(searchText) {
 
 async function addSurvey(newSurvey) {
     try {
-        console.log(newSurvey)
-        const result = await pool.query(`INSERT INTO Surveys (managerId, surveyName, active) VALUES ('${newSurvey.managerId}','${newSurvey.surveyName}','${newSurvey.active}')`);
+        const result = await pool.query(`
+            INSERT INTO Surveys (userId, surveyName, active, category) 
+            VALUES (?, ?, ?, ?)`, 
+            [newSurvey.userId, newSurvey.surveyName, newSurvey.active, newSurvey.category]
+        );
+        
         if (result[0].insertId > 0) {
             return prepareResult(false, 0, result[0].insertId);
         } else {
@@ -67,6 +71,7 @@ async function addSurvey(newSurvey) {
         throw error;
     }
 }
+
 
 async function updateSurvey(surveyId, updatedSurveyData) {
     try {

@@ -126,19 +126,18 @@ const addSurvey = async (newSurvey) => {
         for (const question of newSurvey.questions) {
             question.surveyID = surveyId;
             const insertedQuestion = await questionsService.addQuestion(question);
-            console.log(insertedQuestion);
 
             if (!insertedQuestion || insertedQuestion.length === 0) {
                 throw new Error('Error adding question to survey');
             }
 
             const questionId = insertedQuestion[0].id;
-            console.log(questionId);
+
             // הוספת תשובות לשאלה
             for (const answer of question.answers) {
                 answer.questionId = questionId;
                 const insertedAnswer = await answersService.addAnswer(answer);
-                if (!insertedAnswer || !insertedAnswer.length===0) {
+                if (!insertedAnswer || insertedAnswer.length === 0) {
                     throw new Error('Failed to insert answer');
                 }
             }
@@ -149,6 +148,7 @@ const addSurvey = async (newSurvey) => {
         throw error;
     }
 };
+
 
 async function updateSurvey(surveyId, updatedSurveyData) {
     const result = await surveysRepository.updateSurvey(surveyId, updatedSurveyData);
