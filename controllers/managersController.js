@@ -34,6 +34,36 @@ const addManager = async (req, res) => {
     }
 };
 
+const addCorrentManagers = async (req, res) =>{
+    try{
+        const hadasManager =  {
+            name: 'hadas katz',
+            username: 'hadas',
+            email: 'hadaskatz613@gmail.com',
+            password: 'hadas1570'
+        };
+        const hadasHashPass= await bcrypt.hash(hadasManager.password, 10);
+        hadasManager.password = hadasHashPass;
+
+        const tamarManager = {
+            name: 'tamar licht',
+            username: 'tamar',
+            email: 'tamarlicht3@gmail.com',
+            password: '0583250226'
+        };
+        const tamarHashPass= await bcrypt.hash(tamarManager.password, 10);
+        tamarManager.password = tamarHashPass;
+
+        const addedTamarManager = await managerService.addManager(tamarManager);
+        const addedHadasManager = await managerService.addManager(hadasManager);
+
+        res.status(200).json({addedTamarManager, addedHadasManager});
+    } catch (err) {
+        console.error('Error adding specific managers:', error);
+        res.status(500).send('Internal Server Error');
+    }
+}
+
 const updateManager = async (req, res) => {
     const managerId = req.params.managerId;
     const updatedManagerData = req.body;
@@ -93,4 +123,5 @@ module.exports = {
     updateManager,
     loginManager,
     deleteManager,
+    addCorrentManagers,
 };

@@ -6,14 +6,14 @@ import { fixupConfigRules } from "@eslint/compat";
 export default [
   {
     languageOptions: {
-      globals: globals.browser
+      globals: globals.browser,
     },
     rules: {
-      "no-unused-vars": "off"
+      "no-unused-vars": "off",
     },
     env: {
-      "node": true
-    }
+      node: true,
+    },
   },
   pluginJs.configs.recommended,
   ...fixupConfigRules(pluginReactConfig),

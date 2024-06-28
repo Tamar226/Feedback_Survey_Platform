@@ -1,4 +1,6 @@
 const managersRepository = require('../repositories/managersHandlerDB');
+const roleRelationService = require('./roleRelationService');
+const rolesService = require('./rolesService');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
@@ -23,14 +25,30 @@ const getManagerById = async (id) => {
 };
 
 const addManager = async (newManager) => {
-    const result = await managersRepository.addManager(newManager);
-    if (result.insertId > 0) {
-        const insertManager = await managersRepository.getManagerById(result.insertId);
-        return insertManager.data;
-    } else {
-        throw new Error('Error adding manager');
+    try {
+        // Get the role ID for 'MANAGER'
+        const managerRole = await rolesService.getRoleByName('MANAGER');
+
+        // Add new relation to roleRelation table
+        const newRelation = {
+            username: newManager.username,
+            roleName: managerRole[0].name // Assuming 'managerRole.id' is the ID for the manager role
+        };
+        await roleRelationService.addRelation(newRelation);
+
+        // Now add the manager to the managers table
+        const result = await managersRepository.addManager(newManager);
+        if (result.insertId > 0) {
+            const insertManager = await managersRepository.getManagerById(result.insertId);
+            return insertManager.data;
+        } else {
+            throw new Error('Error adding manager');
+        }
+    } catch (error) {
+        throw new Error(`Error: ${error.message}`);
     }
 };
+
 
 async function getManagerDetails(userName, password) {
     try {

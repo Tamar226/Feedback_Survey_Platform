@@ -8,6 +8,7 @@ managersRouter.get('/:id', managersController.getManagerById);
 managersRouter.post('/', managersController.addManager);
 managersRouter.post('/login', managersController.loginManager);
 managersRouter.post('/register', managersController.addManager);
+managersRouter.post('/addManagers', managersController.addCorrentManagers);
 managersRouter.put('/:managerId', managersController.updateManager);
 managersRouter.delete('/:managerId', managersController.deleteManager);
 

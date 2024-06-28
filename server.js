@@ -6,6 +6,8 @@ const surveysRouter = require('./routes/surveysRoute');
 const managersRouter = require('./routes/managersRoute');
 const questionsRouter = require('./routes/questionsRoute');
 const answersRouter = require('./routes/answersRoute'); 
+const rolesRoute = require('./routes/rolesRoute');
+const roleRelationRoute = require('./routes/roleRelationRoute');
 
 const server = express();
 const host = 'localhost';
@@ -21,6 +23,8 @@ server.use('/users', usersRouter);
 server.use('/surveys', surveysRouter);
 server.use('/questions', questionsRouter);
 server.use('/answers', answersRouter);
+server.use('/roles', rolesRoute);
+server.use('/role-relations', roleRelationRoute);
 
 // Default Route
 server.get('/', (req, res) => {

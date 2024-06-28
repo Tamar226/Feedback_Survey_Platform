@@ -5,9 +5,10 @@ import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import { FloatLabel } from "primereact/floatlabel";
 import { Message } from "primereact/message";
+import { Card } from 'primereact/card';
 import { Link } from "react-router-dom";
 import { loginByPostRequest } from "../../Requests";
-import { useUser } from "./UserContext"; 
+import { useUser } from "./UserContext";
 
 export default function LoginUser() {
     const navigate = useNavigate();
@@ -26,7 +27,7 @@ export default function LoginUser() {
                 if (res.status == 200) {
                     setCurrentUser(res.data[0]);
                     // console.log(res.data.user.id);
-                    navigate(`/user/${res.data[0].id}`);
+                    navigate(`/${res.data[1]}/${res.data[0].id}`);
                 } else {
                     setMessage("Invalid username or password");
                 }
@@ -36,8 +37,60 @@ export default function LoginUser() {
         }
     }
 
+    
+    async function insertAllRoles(){
+        try {
+            const response = await fetch(`http://localhost:3000/roles/addAllRoles`, {
+                method: "POST",
+                body: JSON.stringify(),
+                headers: {
+                    'Content-type': 'application/json'
+                },
+            });
+            const status = response.status;
+            const data = await response.json();
+            console.log(data);
+    
+            if (status === 200) {
+                return { status, data };
+            } else {
+                return { status, data: null };
+            }
+        } catch (error) {
+            return { status: null, data: null };
+        }
+    }
+
+    async function insertAllManagers(){
+        try {
+            const response = await fetch(`http://localhost:3000/managers/addManagers`, {
+                method: "POST",
+                body: JSON.stringify(),
+                headers: {
+                    'Content-type': 'application/json'
+                },
+            });
+            const status = response.status;
+            const data = await response.json();
+            console.log(data);
+    
+            if (status === 200) {
+                return { status, data };
+            } else {
+                return { status, data: null };
+            }
+        } catch (error) {
+            return { status: null, data: null };
+        }
+    }
+
     return (
         <>
+        
+            <Button label="insert roles" onClick={insertAllRoles}/>
+            <Button label="insert managers" onClick={insertAllManagers}/>
+            <Card title="Login here"
+                style={{ width: '50%', margin: '0 auto', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 <br />
                 <FloatLabel>
                     <InputText
@@ -66,6 +119,7 @@ export default function LoginUser() {
                 </Link>
                 <br />
                 <br />
+            </Card>
         </>
     );
 }

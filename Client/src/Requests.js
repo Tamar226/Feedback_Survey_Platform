@@ -221,4 +221,47 @@ export const submitSurveyAnswers = async (questionID, answers) => {
     return response.json();
 };
 
+export const getAllUsers = async ()=>{
+    try {
+        const response = await fetch('http://localhost:3000/role-relations',
+            {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+        const status = response.status;
+        const data = await response.json();
+        if (response.ok) {
+            return { status, data };
+        }
+        else {
+            return { status, data: null };
+        }
+    }catch (error) {
+        return { status: null, data: null };
+    }
+};
 
+export const updateUserRole= async (username, role)=>{
+    try{
+        const response = await fetch(`http://localhost:3000/role-relations/${username}`,
+            {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({role})
+            });
+        const status = response.status;
+        const data = await response.json();
+        if (response.ok) {
+            return { status, data };
+        }
+        else {
+            return { status, data: null };
+        }
+    }catch (error) {
+        return { status: 500, data: null };
+    }
+}

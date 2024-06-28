@@ -3,10 +3,12 @@ import { pool } from './runDB.js';
 export const drop = async () => {
     await pool.query('USE SurveysDatabase');
     await pool.query('DROP TABLE IF EXISTS Users');
-    await pool.query('DROP TABLE IF EXISTS Manager');
+    await pool.query('DROP TABLE IF EXISTS Managers');
     await pool.query('DROP TABLE IF EXISTS answers');
     await pool.query('DROP TABLE IF EXISTS Questions');
     await pool.query('DROP TABLE IF EXISTS Surveys');
+    await pool.query('DROP TABLE IF EXISTS RoleRelation');
+    await pool.query('DROP TABLE IF EXISTS Roles');
     await pool.query('DROP DATABASE IF EXISTS SurveysDatabase');
 }
 
@@ -17,6 +19,20 @@ export const create = async () => {
 
     // Switch to the newly created database
     await pool.query('USE SurveysDatabase');
+
+    //Create the roles table
+    await pool.query(`
+        CREATE TABLE IF NOT EXISTS Roles(
+        name varchar(255) PRIMARY KEY
+    );`);
+
+    //Create the roleRelation table
+    await pool.query(`
+    CREATE TABLE IF NOT EXISTS RoleRelation(
+        username VARCHAR(255) PRIMARY KEY,
+        roleName VARCHAR(255) NOT NULL,
+        FOREIGN KEY (roleName) REFERENCES Roles(name)
+    );`);
 
     // Create the users table
     await pool.query(`
@@ -30,26 +46,11 @@ export const create = async () => {
         age INT NOT NULL, 
         gender VARCHAR(255) NOT NULL,
         job VARCHAR(255) NOT NULL,
-        company varchar(255) NOT NULL
+        company varchar(255),
+        FOREIGN KEY (username) REFERENCES RoleRelation(username)
     );`
     );
-    //Create the roles table
-    await pool.query(`
-        CREATE TABLE IF NOT EXISTS Roles(
-        id int AUTO_INCREMENT PRIMARY KEY,
-        name varchar(255) NOT NULL
-    );`);
-
-    //Create the roleRelation table
-    await pool.query(`
-    CREATE TABLE IF NOT EXISTS RoleRelation(
-        id int AUTO_INCREMENT PRIMARY KEY,
-        roleId int NOT NULL,
-        userId int NOT NULL,
-        FOREIGN KEY (roleId) REFERENCES Roles(id),
-        FOREIGN KEY (userId) REFERENCES Users(id)
-    );`);
-
+    
     //Create the managers table
     await pool.query(`
     CREATE TABLE IF NOT EXISTS Managers(
@@ -57,17 +58,19 @@ export const create = async () => {
         name varchar(255) NOT NULL,
         username varchar(255) NOT NULL UNIQUE,
         email varchar(255) NOT NULL,
-        password varchar(255) NOT NULL
+        password varchar(255) NOT NULL,
+        FOREIGN KEY (username) REFERENCES RoleRelation(username)
     );`);
     //Create the surveys table
     await pool.query(`
     CREATE TABLE IF NOT EXISTS Surveys(
         id int AUTO_INCREMENT,
-        managerId int NOT NULL,
+        userId int NOT NULL,
         surveyName varchar(255),
         active bool NOT NULL,
-        PRIMARY KEY (id)
-    );`);//FIXME: change the managerId to userId and make it forign key
+        PRIMARY KEY (id),
+        FOREIGN KEY (userId) REFERENCES users(id)
+    );`);
     //Create the questions table
     await pool.query(`
     CREATE TABLE IF NOT EXISTS Questions(

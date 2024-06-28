@@ -1,5 +1,7 @@
 
 const userDataBase = require('../repositories/usersHandlerDB');
+const roleRelationService = require('./roleRelationService');
+const rolesService = require('./rolesService');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
@@ -26,6 +28,16 @@ const getUserById = async (id) => {
 };
 
 const addUser = async (newUser) => {
+    // Get the role ID for 'user'
+    const userRole = await rolesService.getRoleByName('user');
+
+    // Add new relation to roleRelation table
+    const newRelation = {
+        username: newUser.username,
+        roleName: userRole[0].name 
+    };
+    await roleRelationService.addRelation(newRelation);
+
     const result = await userDataBase.addUser(newUser);
     if (result.insertId > 0) {
         const insertUser = await userDataBase.getUserById(result.insertId);

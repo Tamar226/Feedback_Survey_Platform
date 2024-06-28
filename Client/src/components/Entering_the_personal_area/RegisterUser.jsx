@@ -1,7 +1,3 @@
-/**FIXME:
- * לדאוג שיחזור אותו דבר בכניסה חדשה ובהתחברות של משתמש קיים
- */
-
 import { useState } from "react";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
@@ -10,6 +6,7 @@ import { Message } from 'primereact/message';
 import { SelectButton } from 'primereact/selectbutton';
 import { Password } from 'primereact/password';
 import { InputNumber } from 'primereact/inputnumber';
+import { Card } from 'primereact/card';
 import 'primeicons/primeicons.css';
 import { Link, useNavigate } from "react-router-dom";
 import { RegisterByPostRequest } from '../../Requests';
@@ -26,7 +23,7 @@ export default function Register() {
         email: "",
         password: "",
         city: "",
-        age: "18",
+        age: 18, // Change default to a number
         gender: "male",
         job: "",
         company: "",
@@ -35,11 +32,18 @@ export default function Register() {
 
     const handleInputRegisterChange = (e) => {
         const { name, value } = e.target;
-        setDetailsRegister({
-            ...detailsRegister,
+        setDetailsRegister((prevDetails) => ({
+            ...prevDetails,
             [name]: value,
-        });
-        // e.target.classList.remove("notTouch");
+        }));
+    };
+
+    const handleInputNumberChange = (e) => {
+        const { name, value } = e;
+        setDetailsRegister((prevDetails) => ({
+            ...prevDetails,
+            [name]: value,
+        }));
     };
 
     const handleEmailBlur = (e) => {
@@ -59,18 +63,17 @@ export default function Register() {
             setMessage("Please fill all the fields");
             return;
         }
-        if (message == "Invalid email address") {//??
-            setMessage("please check your email address");//???
+        if (message === "Invalid email address") {
+            setMessage("Please check your email address");
             return;
         }
         const res = await RegisterByPostRequest(detailsRegister);
         console.log(res);
-        if (res.status == 200) {
+        if (res.status === 200) {
             setCurrentUser(res.data[0]);
             login(res.data[0]);
             navigate(`/users/${res.data[0].id}`);
-        }
-        if (res.code !== 100) {
+        } else if (res.code !== 100) {
             if (res.code === 304) {
                 setMessage("User already exists");
             } else {
@@ -90,116 +93,105 @@ export default function Register() {
         }
     }
 
-    async function tryRgister() {
-        const body = {
-            name: "r",
-            username: "r",
-            email: "r@g.com",
-            password: "r",
-            city: "r",
-            age: "18",
-            gender: "female",
-            job: "r",
-            company: "r",
-        };
-        const res = await RegisterByPostRequest(body);
-        console.log(res);
-        if (res.status == 200) {
-            setCurrentUser(res.data[0]);
-            login(res.data[0]);
-            navigate(`/users/${res.data[0].id}`);
-        }
-    }
-
     return (
         <>
-            <FloatLabel>
-                <InputText
-                    id="name"
-                    name="name"
-                    value={detailsRegister.name}
-                    onChange={handleInputRegisterChange}
+            <Card title="Register here" 
+            style={{ width: '50%', margin: '0 auto', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <FloatLabel>
+                    <InputText
+                        id="name"
+                        name="name"
+                        value={detailsRegister.name}
+                        onChange={handleInputRegisterChange}
+                    />
+                    <label htmlFor="name">Name</label>
+                </FloatLabel>
+                <br />
+                <FloatLabel>
+                    <InputText
+                        id="username"
+                        name="username"
+                        value={detailsRegister.username}
+                        onChange={handleInputRegisterChange}
+                    />
+                    <label htmlFor="username">User-Name</label>
+                </FloatLabel>
+                <br />
+                <FloatLabel>
+                    <InputText
+                        id="email"
+                        name="email"
+                        value={detailsRegister.email}
+                        onChange={handleInputRegisterChange}
+                        onBlur={handleEmailBlur}
+                        required
+                    />
+                    <label htmlFor="email">Email</label>
+                </FloatLabel>
+                <br />
+                <FloatLabel>
+                    <Password
+                        inputId="password" name="password"
+                        value={detailsRegister.password}
+                        onChange={handleInputRegisterChange} />
+                    <label htmlFor="password">Password</label>
+                </FloatLabel>
+                <br />
+                <FloatLabel>
+                    <InputText
+                        id="city"
+                        name="city"
+                        value={detailsRegister.city}
+                        onChange={handleInputRegisterChange}
+                    />
+                    <label htmlFor="city">City</label>
+                </FloatLabel>
+                <p>Age:</p>
+                <InputNumber
+                    value={detailsRegister.age}
+                    name="age"
+                    onValueChange={handleInputNumberChange}
+                    mode="decimal"
+                    showButtons
+                    min={0}
+                    max={120}
                 />
-                <label htmlFor="name">Name</label>
-            </FloatLabel>
-            <br />
-            <FloatLabel>
-                <InputText
-                    id="username"
-                    name="username"
-                    value={detailsRegister.username}
-                    onChange={handleInputRegisterChange}
+                <br /><br />
+                <SelectButton
+                    value={detailsRegister.gender}
+                    onChange={(e) => setDetailsRegister({
+                        ...detailsRegister,
+                        gender: e.value
+                    })}
+                    options={genders}
                 />
-                <label htmlFor="username">User-Name</label>
-            </FloatLabel>
-            <br />
-            <FloatLabel>
-                <InputText
-                    id="email"
-                    name="email"
-                    value={detailsRegister.email}
-                    onChange={handleInputRegisterChange}
-                    onBlur={handleEmailBlur}
-                    required
-                />
-                <label htmlFor="email">Email</label>
-            </FloatLabel>
-            <br />
-            <FloatLabel>
-                <Password
-                    inputId="password" name="password"
-                    value={detailsRegister.password}
-                    onChange={handleInputRegisterChange} />
-                <label htmlFor="password">Password</label>
-            </FloatLabel>
-            <br />
-            <FloatLabel>
-                <InputText
-                    id="city"
-                    name="city"
-                    value={detailsRegister.city}
-                    onChange={handleInputRegisterChange}
-                />
-                <label htmlFor="city">City</label>
-            </FloatLabel>
-            <br />
-            <p>Age:</p>
-            <InputNumber value={detailsRegister.age} 
-            onChange={handleInputRegisterChange} 
-            mode="decimal" showButtons min={0} max={120} />
-            <br /><br />
-            <SelectButton value={detailsRegister.gender}
-                onChange={(e) => setDetailsRegister({
-                    ...detailsRegister,
-                    gender: e.value
-                })} options={genders} />
-            <br />
-            <FloatLabel>
-                <InputText
-                    id="job"
-                    name="job"
-                    value={detailsRegister.job}
-                    onChange={handleInputRegisterChange}
-                />
-                <label htmlFor="job">Job</label>
-            </FloatLabel>
-            <FloatLabel>
-                <InputText
-                    id="company"
-                    name="company"
-                    value={detailsRegister.company}
-                    onChange={handleInputRegisterChange}
-                />
-                <label htmlFor="company">Company</label>
-            </FloatLabel>
-            {message && (<Message severity="error" text={message} />)}<br /><br />
-            <Button onClick={checkAccessPossibility} label="Registering" />
-            <Button onClick={tryRgister} label="trying" />
-            <br /><br />
-            <Link to="/login" id="link">
-                Already have an account?
-            </Link>
+                <br />
+                <FloatLabel>
+                    <InputText
+                        id="job"
+                        name="job"
+                        value={detailsRegister.job}
+                        onChange={handleInputRegisterChange}
+                    />
+                    <label htmlFor="job">Job</label>
+                </FloatLabel>
+                <br />
+                <FloatLabel>
+                    <InputText
+                        id="company"
+                        name="company"
+                        value={detailsRegister.company}
+                        onChange={handleInputRegisterChange}
+                    />
+                    <label htmlFor="company">Company</label>
+                </FloatLabel>
+                {message && (<Message severity="error" text={message} />)}<br /><br />
+                <Button onClick={checkAccessPossibility} label="Register" />
+                <br /><br />
+                <Link to="/login" id="link">
+                    Already have an account?
+                </Link>
+            </Card>
         </>
     );
 }
-
