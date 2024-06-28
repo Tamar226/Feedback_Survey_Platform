@@ -157,7 +157,7 @@ export default function SurveysPage() {
         
         (survey.active === 1 ? "active" : "inactive").includes(searchText.toLowerCase())
     );
-    // survey.managerId.toLowerCase().includes(searchText.toLowerCase()) ||
+
     return (
         <div className="page-container">
             <h2>Active Surveys</h2>

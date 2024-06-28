@@ -1,30 +1,56 @@
-
 import 'primereact/resources/themes/saga-blue/theme.css';
 import 'primereact/resources/primereact.min.css';
-
 import 'primeicons/primeicons.css';
 import { PrimeIcons } from 'primereact/api';
-import React from 'react';
+import React, { useState } from 'react';
 import { TabMenu } from 'primereact/tabmenu';
-import { NavLink } from "react-router-dom"
-// import { ColorPicker } from 'primereact/colorpicker';
+import { NavLink } from "react-router-dom";
 import { useUser } from '../personalArea/UserContext';
+import { Sidebar } from 'primereact/sidebar';
+import { Button } from 'primereact/button';
+import './HomePageStyle.css';
+
 export default function Header() {
     const { currentUser, login, logout } = useUser();
-    console.log(currentUser);
+    const [activeItem, setActiveItem] = useState(null);
+    const [visible, setVisible] = useState(false);
+
     const items = [
         { label: 'Home Page', icon: PrimeIcons.SLACK, url: '/' },
         { label: 'Contact Us', icon: PrimeIcons.PHONE, url: '/ContactUs' },
         { label: 'Surveys', icon: PrimeIcons.WAVE_PULSE, url: '/Surveys' },
+    ];
+
+    const authItems = [
         { label: currentUser ? `Hello, ${currentUser.username}` : 'Login', icon: currentUser ? PrimeIcons.USER : PrimeIcons.USERS, url: currentUser ? '/profile' : '/login', onClick: currentUser ? null : login },
         { label: 'Logout', icon: 'pi pi-sign-out', url: '/logout', onClick: logout }
     ];
 
+    const handleTabChange = (e) => {
+        setActiveItem(e.value);
+        window.location.href = e.value.url;
+    };
+
     return (
-        <div className="card" >
-            <TabMenu model={items.map(item => ({ label: <NavLink style={{ height: "3rem" }} className="navLink" onClick={item.onClick}>{item.label}</NavLink>, icon: item.icon, command: () => window.location.href = item.url }))} />
+        <div>
+            <div className="header-container">
+                <div className="card tab-menu-left">
+                    <TabMenu model={items} activeItem={activeItem} onTabChange={handleTabChange} />
+                </div>
+                <div className="card tab-menu-right">
+                    <TabMenu model={authItems} activeItem={activeItem} onTabChange={handleTabChange} />
+                </div>
+                <Button icon="pi pi-bars" className="p-button-primary hamburger" onClick={() => setVisible(true)} />
+            </div>
 
+            <Sidebar visible={visible} onHide={() => setVisible(false)}>
+                {items.map((item, index) => (
+                    <Button key={index} label={item.label} icon={item.icon} className="p-button-text" onClick={() => window.location.href = item.url} />
+                ))}
+                {authItems.map((item, index) => (
+                    <Button key={index + items.length} label={item.label} icon={item.icon} className="p-button-text" onClick={item.onClick ? item.onClick : () => window.location.href = item.url} />
+                ))}
+            </Sidebar>
         </div>
-    )
+    );
 }
-

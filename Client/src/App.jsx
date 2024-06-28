@@ -5,7 +5,15 @@ import 'primeicons/primeicons.css';
 // import 'primereact/resources/themes/saga-blue/theme.css';  // עיצוב נושא
 import 'primereact/resources/primereact.min.css';          // עיצוב בסיסי של PrimeReact
 import 'primeflex/primeflex.css';                          // Flex utilities של PrimeFlex
+import styled, { createGlobalStyle } from 'styled-components';
 
+const GlobalStyle = createGlobalStyle`
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;700&display=swap');
+
+body {
+    font-family: 'Ubuntu', sans-serif;
+}
+`;
 import { PrimeReactProvider } from "primereact/api";
 import {
   BrowserRouter as Router,
@@ -30,6 +38,7 @@ import ManagerPage from "./components/Home page/ManagerPage";
 export default function App() {
   return (
     <UserProvider>
+      <GlobalStyle />
       <PrimeReactProvider>
         <Header />
         <br />
