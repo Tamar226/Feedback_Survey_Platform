@@ -2,7 +2,7 @@ const { create, drop } = require('./creation.js');
 
 const mysql = require('mysql2');
 const dotenv = require('dotenv');
-dotenv.config({ path: '../.env' });
+dotenv.config({ path: '../../.env' });
 
 const pool = mysql.createPool({
     host: process.env.MYSQL_HOST,
@@ -14,8 +14,8 @@ const pool = mysql.createPool({
 
 (async () => {
     try {
-        await drop();
-        await create();
+        // await drop(pool);
+        await create(pool);
     } catch (error) {
         console.error("error in DB", error);
     }

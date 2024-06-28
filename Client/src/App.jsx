@@ -39,7 +39,7 @@ export default function App() {
               <Route path="user" element={<Login />} /> */}
           </Route>
 
-          <Route path="register" element={<RegisterUser />}>
+          <Route path="register" element={<RegisterUser />}/>
 
           <Route path="surveys" element={<SurveysPage />} />
           <Route path="surveys/:surveyId/results" element={<SurveyResults />} />

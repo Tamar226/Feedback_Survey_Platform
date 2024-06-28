@@ -1,13 +1,12 @@
-
 const drop = async (pool) => {
     await pool.query('USE SurveysDatabase');
     await pool.query('DROP TABLE IF EXISTS Users');
-    await pool.query('DROP TABLE IF EXISTS Manager');
+    await pool.query('DROP TABLE IF EXISTS Managers');
     await pool.query('DROP TABLE IF EXISTS Responses');
-    await pool.query('DROP TABLE IF EXISTS answers');
+    await pool.query('DROP TABLE IF EXISTS Answers');
     await pool.query('DROP TABLE IF EXISTS Questions');
     await pool.query('DROP TABLE IF EXISTS Surveys');
-    await pool.query('DROP TABLE IF EXISTS results');
+    await pool.query('DROP TABLE IF EXISTS Results');
     await pool.query('DROP TABLE IF EXISTS RoleRelation');
     await pool.query('DROP TABLE IF EXISTS Roles');
     await pool.query('DROP DATABASE IF EXISTS SurveysDatabase');
@@ -48,9 +47,8 @@ const create = async (pool) => {
         job VARCHAR(255) NOT NULL,
         company varchar(255),
         FOREIGN KEY (username) REFERENCES RoleRelation(username)
-    );`
-    );
-    
+    );`);
+
     //Create the managers table
     await pool.query(`
     CREATE TABLE IF NOT EXISTS Managers(
@@ -61,6 +59,7 @@ const create = async (pool) => {
         password varchar(255) NOT NULL,
         FOREIGN KEY (username) REFERENCES RoleRelation(username)
     );`);
+
     //Create the surveys table
     await pool.query(`
     CREATE TABLE IF NOT EXISTS Surveys(
@@ -68,9 +67,12 @@ const create = async (pool) => {
         userId int NOT NULL,
         surveyName varchar(255),
         active bool NOT NULL,
+        category varchar(255),
+        createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         PRIMARY KEY (id),
-        FOREIGN KEY (userId) REFERENCES users(id)
+        FOREIGN KEY (userId) REFERENCES Users(id)
     );`);
+
     //Create the questions table
     await pool.query(`
         CREATE TABLE IF NOT EXISTS Questions(
@@ -90,7 +92,7 @@ const create = async (pool) => {
             questionId int NOT NULL,
             answerId int NOT NULL,
             PRIMARY KEY (id),
-            FOREIGN KEY (questionID) REFERENCES Questions(id)
+            FOREIGN KEY (questionId) REFERENCES Questions(id)
         );
     `);
 
