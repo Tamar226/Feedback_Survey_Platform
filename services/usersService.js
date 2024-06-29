@@ -39,7 +39,7 @@ const addUser = async (newUser) => {
     await roleRelationService.addRelation(newRelation);
 
     const result = await userDataBase.addUser(newUser);
-    if (result.insertId > 0) {
+    if (result.insertId >= 0) {
         const insertUser = await userDataBase.getUserById(result.insertId);
         return insertUser.data;
     } else {

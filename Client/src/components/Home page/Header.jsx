@@ -4,7 +4,6 @@ import 'primeicons/primeicons.css';
 import { PrimeIcons } from 'primereact/api';
 import React, { useState } from 'react';
 import { TabMenu } from 'primereact/tabmenu';
-import { NavLink } from "react-router-dom";
 import { useUser } from '../personalArea/UserContext';
 import { Sidebar } from 'primereact/sidebar';
 import { Button } from 'primereact/button';
@@ -40,16 +39,17 @@ export default function Header() {
                 <div className="card tab-menu-right">
                     <TabMenu model={authItems} activeItem={activeItem} onTabChange={handleTabChange} />
                 </div>
-                <Button icon="pi pi-bars" className="p-button-primary hamburger" onClick={() => setVisible(true)} />
             </div>
-
+            <Button icon="pi pi-bars" className="p-button-primary hamburger" onClick={() => setVisible(true)} />
             <Sidebar visible={visible} onHide={() => setVisible(false)}>
-                {items.map((item, index) => (
-                    <Button key={index} label={item.label} icon={item.icon} className="p-button-text" onClick={() => window.location.href = item.url} />
-                ))}
-                {authItems.map((item, index) => (
-                    <Button key={index + items.length} label={item.label} icon={item.icon} className="p-button-text" onClick={item.onClick ? item.onClick : () => window.location.href = item.url} />
-                ))}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                    {items.map((item, index) => (
+                        <Button key={index} label={item.label} icon={item.icon} className="p-button-text" onClick={() => window.location.href = item.url} />
+                    ))}
+                    {authItems.map((item, index) => (
+                        <Button key={index + items.length} label={item.label} icon={item.icon} className="p-button-text" onClick={item.onClick ? item.onClick : () => window.location.href = item.url} />
+                    ))}
+                </div>
             </Sidebar>
         </div>
     );
