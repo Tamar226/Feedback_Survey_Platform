@@ -2,32 +2,46 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: white; /* רקע לבן */
-    border-bottom: 1px solid lightgray; /* פס אפור דק בתחתית */
+    background-color: white;
+    border-bottom: 1px solid lightgray;
     padding: 0 10px;
+    height: 4.5rem;
 }
 
-.tab-menu-left, .tab-menu-right {
+.p-menuitem-link {
+    height: 4.5rem;
+}
+
+.tab-menu-left,
+.tab-menu-right {
     display: none;
 }
 
 .hamburger {
-    display: block;
-    position: fixed;
-    top: 15px;
-    right: 15px;
-    z-index: 1000;
+    display: none;
 }
 
-@media (min-width: 500px) {
-    .tab-menu-left, .tab-menu-right {
+
+@media (max-width: 560px) {
+
+    .tab-menu-left,
+    .tab-menu-right {
         display: flex;
     }
 
-    .hamburger {
+    .header-container {
         display: none;
     }
+
+    .hamburger {
+        display: block;
+        position: fixed;
+        top: 15px;
+        right: 15px;
+        z-index: 1000;
+    }
 }
+
 
 
 .card {
@@ -44,10 +58,13 @@
     background-position: center;
     height: 100vh;
     width: 100%;
+
     @media (max-width: 450px) {
-        background-image: url('C:\Users\PC\.Full Stack\Survey_Project\client\src\Images\backgroundHomePageApplication.png'); /* תמונה למסכים קטנים יותר */
+        background-image: url('C:\Users\PC\.Full Stack\Survey_Project\client\src\Images\backgroundHomePageApplication.png');
+        /* תמונה למסכים קטנים יותר */
     }
 }
+
 /* .company-logo1{
     background-image: url('client\src\Images\nvidia.png');
 } */
@@ -127,49 +144,49 @@
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     width: 99%;
-  }
-  
-  .about-us-container h2 {
+}
+
+.about-us-container h2 {
     font-size: 2rem;
     margin-bottom: 20px;
-  }
-  
-  .about-us-container p {
+}
+
+.about-us-container p {
     font-size: 1rem;
     line-height: 1.6;
     margin-bottom: 10px;
-  }
-  
-  .testimonials {
+}
+
+.testimonials {
     margin-top: 40px;
-  }
-  
-  .testimonial {
+}
+
+.testimonial {
     display: flex;
     align-items: center;
     margin-bottom: 20px;
     background-color: #f9f9f9;
     padding: 15px;
     border-radius: 8px;
-  }
-  
-  .company-logo {
+}
+
+.company-logo {
     width: 80px;
     height: 80px;
     margin-right: 20px;
-  }
-  
-  .testimonial-content h4 {
+}
+
+.testimonial-content h4 {
     margin: 0;
     font-size: 1.2rem;
     font-weight: 600;
-  }
-  
-  .testimonial-content p {
+}
+
+.testimonial-content p {
     margin: 5px 0 0 0;
     font-size: 1rem;
-  }
-  
+}
+
 .footer {
     background-color: #333;
     color: white;

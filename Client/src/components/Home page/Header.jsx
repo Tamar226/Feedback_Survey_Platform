@@ -39,9 +39,8 @@ export default function Header() {
                 <div className="card tab-menu-right">
                     <TabMenu model={authItems} activeItem={activeItem} onTabChange={handleTabChange} />
                 </div>
-                <Button icon="pi pi-bars" className="p-button-primary hamburger" onClick={() => setVisible(true)} />
             </div>
-
+            <Button icon="pi pi-bars" className="p-button-primary hamburger" onClick={() => setVisible(true)} />
             <Sidebar visible={visible} onHide={() => setVisible(false)}>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                     {items.map((item, index) => (
