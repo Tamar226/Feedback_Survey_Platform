@@ -1,11 +1,11 @@
 const drop = async (pool) => {
     await pool.query('USE SurveysDatabase');
-    await pool.query('DROP TABLE IF EXISTS Users');
     await pool.query('DROP TABLE IF EXISTS Managers');
     await pool.query('DROP TABLE IF EXISTS Responses');
     await pool.query('DROP TABLE IF EXISTS Answers');
     await pool.query('DROP TABLE IF EXISTS Questions');
     await pool.query('DROP TABLE IF EXISTS Surveys');
+    await pool.query('DROP TABLE IF EXISTS Users');
     await pool.query('DROP TABLE IF EXISTS Results');
     await pool.query('DROP TABLE IF EXISTS RoleRelation');
     await pool.query('DROP TABLE IF EXISTS Roles');

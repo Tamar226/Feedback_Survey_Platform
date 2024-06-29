@@ -39,10 +39,9 @@ export default function Register() {
     };
 
     const handleInputNumberChange = (e) => {
-        const { name, value } = e;
         setDetailsRegister((prevDetails) => ({
             ...prevDetails,
-            [name]: value,
+            age: e.value,
         }));
     };
 

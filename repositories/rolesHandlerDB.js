@@ -4,16 +4,16 @@ dotenv.config({path:'../.env'});
 
 var pool = mysql.createPool({
     // host: process.env.MYSQL_HOST,
-    user: process.env.MYSQL_USER,
+    // user: process.env.MYSQL_USER,
     // password: process.env.MYSQL_PASSWORD,
-    database: process.env.MYSQL_DATABASE,
+    // database: process.env.MYSQL_DATABASE,
     host: 'localhost',
-    // user: 'root',
+    user: 'root',
     // // password: 'a1b2c3d4',
-    password: 'T50226',
-    // // password: '1570',
-    // database: 'SurveysDatabase',
-    // port: '3306'
+    // password: 'T50226',
+    password: '1570',
+    database: 'SurveysDatabase',
+    port: '3306'
 }).promise();
 
 async function getAllRoles() {

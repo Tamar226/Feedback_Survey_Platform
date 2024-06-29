@@ -14,7 +14,7 @@ const pool = mysql.createPool({
 
 (async () => {
     try {
-        // await drop(pool);
+        await drop(pool);
         await create(pool);
     } catch (error) {
         console.error("error in DB", error);

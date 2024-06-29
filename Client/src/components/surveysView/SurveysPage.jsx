@@ -106,7 +106,7 @@
 // }
 import React, { useState, useEffect } from 'react';
 import SurveyCard from './SurveyCard';
-import AddSurvey from '../SurveysAdding/AddSurvey';
+import AddSurvey from '../surveysAdding/AddSurvey';
 import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext'; // יבוא הקומפוננטה InputText מ-primereact
 import { fetchSurveys } from '../../Requests';

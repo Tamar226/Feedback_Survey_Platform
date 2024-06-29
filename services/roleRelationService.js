@@ -21,7 +21,7 @@ const getRelationByUsername = async (relationUsername) => {
 const addRelation = async (newRelation) => {
     const result = await roleRelationRepository.addRelation(newRelation);
     if (result.insertId >= 0) {
-        const insertRelation = await roleRelationRepository.getRelationByUsername(result.insertId);
+        const insertRelation = await roleRelationRepository.getRelationByUsername(result.data.username);
         return insertRelation.data;
     } else {
         throw new Error('Error adding relation');

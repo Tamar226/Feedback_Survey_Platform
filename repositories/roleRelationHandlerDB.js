@@ -11,8 +11,8 @@ var pool = mysql.createPool({
     host: 'localhost',
     // user: 'root',
     // // password: 'a1b2c3d4',
-    password: 'T50226',
-    // password: '1570',
+    // password: 'T50226',
+    password: '1570',
     // database: 'SurveysDatabase',
     // port: '3306'
 });
@@ -36,8 +36,8 @@ async function getRelationByUsername(relationUsername) {
 async function addRelation(newRelation) {
     try {
         const result = await pool.query(`INSERT INTO RoleRelation (username, roleName) VALUES ('${newRelation.username}', '${newRelation.roleName}')`);
-        if (result[0].insertId > 0) {
-            return prepareResult(false, 0, result[0].insertId);
+        if (result[0].insertId >= 0) {
+            return prepareResult(false, 0, result[0].insertId, newRelation);
         }
         else {
             return prepareResult(true, 0, 0);
