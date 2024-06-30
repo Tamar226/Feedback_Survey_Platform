@@ -1,90 +1,3 @@
-// import React, { useState, useEffect } from 'react';
-// import { Button } from 'primereact/button';
-// import { fetchSurveyQuestions, submitSurveyResults } from '../../Requests';
-// import SurveyModal from './SurveyModal';
-
-// const SurveyDetails = ({ survey, onClose, userId }) => {
-//     const [questions, setQuestions] = useState([]);
-//     const [answers, setAnswers] = useState([]);
-//     const [selectedAnswers, setSelectedAnswers] = useState({});
-
-//     useEffect(() => {
-//         const getQuestions = async () => {
-//             try {
-//                 const result = await fetchSurveyQuestions(survey.id);
-//                 console.log(result);
-//                 if (result.status === 200 && result.data) {
-//                     setQuestions(result.data[0]);
-//                 } else {
-//                     console.error("Failed to fetch surveys");
-//                 }
-//             } catch (error) {
-//                 console.error('Error fetching questions:', error);
-//             }
-//         };
-//         if (survey) {
-//             getQuestions();
-//         }
-//     }, [survey]);
-
-//     const handleAnswerChange = (questionId, answer) => {
-//         setSelectedAnswers(prevSelectedAnswers => ({
-//             ...prevSelectedAnswers,
-//             [questionId]: answer,
-//         }));
-//     };
-
-//     const handleSubmitAll = async () => {
-//         try {
-//             // Prepare formatted answers
-//             console.log(selectedAnswers);
-//             const formattedAnswers = Object.entries(selectedAnswers).map(([questionId, answer]) => {
-//                 const answerObject = answers.find(a => a.answer === answer && a.questionId === parseInt(questionId, 10));
-//                 console.log(answerObject)
-//                 if (!answerObject) {
-//                     throw new Error(`Answer not found for questionId: ${questionId} and answer: ${answer}`);
-//                 }
-//                 return {
-//                     questionId: parseInt(questionId, 10),
-//                     answerId: answerObject.id,
-//                 };
-               
-//             });
-//             console.log(formattedAnswers)
-//             // Submit survey results
-//             await submitSurveyResults(survey.id, formattedAnswers, userId);
-//             console.log('Answers submitted successfully');
-//             onClose();
-//         } catch (error) {
-//             console.error('Error submitting answers:', error);
-//         }
-//     };
-
-//     return (
-//         <div className="survey-detail">
-//             <div className="p-card p-shadow-3 p-p-3 p-mt-5">
-//                 <div className="p-d-flex p-jc-between p-ai-center">
-//                     <h3>{survey.surveyName}</h3>
-//                     <Button icon="pi pi-times" className="p-button-rounded p-button-danger" onClick={onClose} />
-//                 </div>
-//                 {questions.length > 0 && (
-//                     <SurveyModal
-//                         survey={survey}
-//                         questions={questions}
-//                         onClose={onClose}
-//                         onAnswerChange={handleAnswerChange}
-//                         selectedAnswers={selectedAnswers}
-//                         handleSubmitAll={handleSubmitAll}
-//                     />
-//                 )}
-
-//             </div>
-
-//         </div>
-//     );
-// };
-
-// export default SurveyDetails;
 import React, { useState, useEffect } from 'react';
 import { Button } from 'primereact/button';
 import { fetchSurveyQuestions, fetchSurveyAnswers, submitSurveyResults } from '../../Requests';
@@ -92,7 +5,7 @@ import SurveyModal from './SurveyModal';
 
 const SurveyDetails = ({ survey, onClose, userId }) => {
     const [questions, setQuestions] = useState([]);
-    const [answers, setAnswers] = useState({});
+    const [answers, setAnswers] = useState([]);
     const [selectedAnswers, setSelectedAnswers] = useState({});
 
     useEffect(() => {
@@ -130,9 +43,10 @@ const SurveyDetails = ({ survey, onClose, userId }) => {
 
     const handleSubmitAll = async () => {
         try {
+            console.log(selectedAnswers);
             const formattedAnswers = Object.entries(selectedAnswers).map(([questionId, answer]) => {
-                const answerObject = answers[questionId].find(a => a.answer === answer);
-                console.log(answerObject)
+                const questionAnswers = answers[questionId];
+                const answerObject = questionAnswers.find(a => a.answer === answer);
                 if (!answerObject) {
                     throw new Error(`Answer not found for questionId: ${questionId} and answer: ${answer}`);
                 }
@@ -140,10 +54,14 @@ const SurveyDetails = ({ survey, onClose, userId }) => {
                     answerId: answerObject.id,
                 };
             });
-            console.log(formattedAnswers)
-            await submitSurveyResults(survey.id, formattedAnswers, 1);
-            console.log('Answers submitted successfully');
-            onClose();
+            console.log(formattedAnswers);
+            const result = await submitSurveyResults(survey.id, formattedAnswers, 1);
+            if (result.success) {
+                console.log(result.message);
+                onClose();
+            } else {
+                console.error(result.message);
+            }
         } catch (error) {
             console.error('Error submitting answers:', error);
         }

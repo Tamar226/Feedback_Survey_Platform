@@ -8,14 +8,15 @@
 //     const { surveyId } = useParams();
 //     const [results, setResults] = useState({});
 //     const [surveyName, setSurveyName] = useState('');
+//     const [chartType, setChartType] = useState('pie');
 
 //     useEffect(() => {
 //         const getResults = async () => {
 //             try {
 //                 const response = await fetchSurveyResults(surveyId);
-//                 console.log('res-client:',response)
-//                 setResults(response);
-//                 // setSurveyName(response.data.surveyName || 'Survey Results');
+//                 console.log(response)
+//                 setResults(response.questions);
+//                 setSurveyName(response.surveyName || 'Survey Results');
 //             } catch (error) {
 //                 console.error('Error fetching survey results:', error);
 //             }
@@ -47,16 +48,39 @@
 //             }]
 //         };
 
-//         return questionId % 2 === 0 ? (
-//             <Chart type="bar" data={barData} />
-//         ) : (
+//         return chartType === 'pie' ? (
 //             <Chart type="pie" data={pieData} />
+//         ) : (
+//             <Chart type="bar" data={barData} />
 //         );
 //     };
+
+//     const handleChartTypeChange = (type) => {
+//         setChartType(type);
+//     };
+
+//     const totalResponses = Object.keys(results).reduce((total, questionId) => {
+//         return total + results[questionId].answers.reduce((sum, answer) => sum + answer.count, 0);
+//     }, 0);
 
 //     return (
 //         <div className="survey-results-container">
 //             <h2>{surveyName}</h2>
+//             <p>{totalResponses} responses</p>
+//             <div className="chart-toggle">
+//                 <button
+//                     className={chartType === 'pie' ? 'active' : ''}
+//                     onClick={() => handleChartTypeChange('pie')}
+//                 >
+//                     Pie Chart
+//                 </button>
+//                 <button
+//                     className={chartType === 'bar' ? 'active' : ''}
+//                     onClick={() => handleChartTypeChange('bar')}
+//                 >
+//                     Bar Chart
+//                 </button>
+//             </div>
 //             {Object.keys(results).map(questionId => (
 //                 <div key={questionId} className="question-section">
 //                     <h3>{results[questionId].question}</h3>
@@ -84,7 +108,7 @@ const SurveyResults = () => {
         const getResults = async () => {
             try {
                 const response = await fetchSurveyResults(surveyId);
-                console.log(response)
+                console.log(response);
                 setResults(response.questions);
                 setSurveyName(response.surveyName || 'Survey Results');
             } catch (error) {
@@ -129,14 +153,18 @@ const SurveyResults = () => {
         setChartType(type);
     };
 
-    const totalResponses = Object.keys(results).reduce((total, questionId) => {
-        return total + results[questionId].answers.reduce((sum, answer) => sum + answer.count, 0);
+    // Calculate total number of responses and number of unique respondents
+    const totalResponses = Object.values(results).reduce((total, question) => {
+        return total + question.answers.reduce((sum, answer) => sum + answer.count, 0);
     }, 0);
+
+    const numberOfQuestions = Object.keys(results).length;
+    const totalRespondents = numberOfQuestions > 0 ? totalResponses / numberOfQuestions : 0;
 
     return (
         <div className="survey-results-container">
             <h2>{surveyName}</h2>
-            <p>{totalResponses} responses</p>
+            <p>{totalRespondents} respondents</p>
             <div className="chart-toggle">
                 <button
                     className={chartType === 'pie' ? 'active' : ''}
