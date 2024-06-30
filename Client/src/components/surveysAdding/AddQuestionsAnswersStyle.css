@@ -1,0 +1,115 @@
+/* 
+.survey-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+.survey-card {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 40%;
+    height: auto;
+    max-height: 80%;
+    overflow-y: auto;
+    position: relative;
+}
+
+.survey-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.survey-question {
+    margin-bottom: 20px;
+}
+
+.survey-close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+} */
+.add-question-container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 600px;
+    margin: auto;
+}
+
+.question-block {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.add-question-button {
+    background-color: #fab622;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: bold;
+}
+
+.add-question-button:hover {
+    background-color: #f5af1a;
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.add-answer-container {
+    margin-left: 20px;
+}
+
+.answer-block {
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.add-answer-button {
+    background-color: #008CBA;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: bold;
+}
+
+.add-answer-button:hover {
+    background-color: #007bb5;
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    margin: 3px 0 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}

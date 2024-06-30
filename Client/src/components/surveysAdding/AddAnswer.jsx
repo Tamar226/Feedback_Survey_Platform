@@ -45,6 +45,7 @@
 
 // export default AddAnswer;
 import React, { useState } from 'react';
+import './AddQuestionsAnswersStyle.css';
 
 const AddAnswer = ({ questionIndex, onAddAnswer }) => {
     const [answers, setAnswers] = useState([{ answer: '', answerId: 1 }]);
@@ -68,10 +69,10 @@ const AddAnswer = ({ questionIndex, onAddAnswer }) => {
     };
 
     return (
-        <div>
-            <h3>Add Answers</h3>
+        <div className="add-answer-container">
+            <h4>Add Answers</h4>
             {answers.map((answer, index) => (
-                <div key={index}>
+                <div key={index} className="answer-block">
                     <label htmlFor={`answer${index}`}>Answer {index + 1}:</label>
                     <input
                         type="text"
@@ -82,14 +83,11 @@ const AddAnswer = ({ questionIndex, onAddAnswer }) => {
                     />
                 </div>
             ))}
-            <button type="button" onClick={handleAddAnswer}>
-                Add Another Answer
+            <button type="button" onClick={handleAddAnswer} className="add-answer-button">
+                +Add Answer
             </button>
         </div>
     );
 };
 
 export default AddAnswer;
-
-
-

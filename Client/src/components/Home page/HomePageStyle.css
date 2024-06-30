@@ -5,11 +5,11 @@
     background-color: white;
     border-bottom: 1px solid lightgray;
     padding: 0 10px;
-    height: 4.5rem;
+    height: 5rem;
 }
 
 .p-menuitem-link {
-    height: 4.5rem;
+    height: 3.9rem;
 }
 
 .tab-menu-left,
@@ -71,7 +71,7 @@
 .last-surveys-container {
     margin: 20px;
     text-align: center;
-    min-height: 400px;
+    min-height: 350px;
 }
 
 .last-surveys {

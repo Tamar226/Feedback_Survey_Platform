@@ -1,11 +1,14 @@
 .page-container{
     min-height: 1000px;
+    margin: 20px;
 }
 .p-inputgroup{
     width: 30%;
     margin-left:2%;
 }
-
+h3{
+    text-align: center;
+}
 .allSurveys {
     display: flex;
     flex-wrap: wrap;
