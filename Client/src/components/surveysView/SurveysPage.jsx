@@ -106,9 +106,9 @@
 // }
 import React, { useState, useEffect } from 'react';
 import SurveyCard from './SurveyCard';
-import AddSurvey from '../surveysAdding/AddSurvey';
+import AddSurvey from '../SurveysAdding/AddSurvey.jsx';
 import { Button } from 'primereact/button';
-import { InputText } from 'primereact/inputtext'; // יבוא הקומפוננטה InputText מ-primereact
+import { InputText } from 'primereact/inputtext'; 
 import { fetchSurveys } from '../../Requests';
 import SurveyDetails from './SurveyDetails';
 import './SurveysPage.css';
@@ -189,7 +189,7 @@ export default function SurveysPage() {
                 <SurveyDetails
                     survey={selectedSurvey}
                     onClose={() => setSelectedSurvey(null)}
-                    // userId={/* userId */}
+                    userId={1}
                 />
             )}
         </div>

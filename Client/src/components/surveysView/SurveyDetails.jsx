@@ -1,8 +1,8 @@
 // import React, { useState, useEffect } from 'react';
 // import { Button } from 'primereact/button';
 // import { fetchSurveyQuestions, submitSurveyResults } from '../../Requests';
-// import QuestionCard from './QuestionCard';
-// import './surveyDetails.css';
+// import SurveyModal from './SurveyModal';
+
 // const SurveyDetails = ({ survey, onClose, userId }) => {
 //     const [questions, setQuestions] = useState([]);
 //     const [answers, setAnswers] = useState([]);
@@ -12,8 +12,9 @@
 //         const getQuestions = async () => {
 //             try {
 //                 const result = await fetchSurveyQuestions(survey.id);
+//                 console.log(result);
 //                 if (result.status === 200 && result.data) {
-//                     setQuestions(result.data);
+//                     setQuestions(result.data[0]);
 //                 } else {
 //                     console.error("Failed to fetch surveys");
 //                 }
@@ -35,8 +36,11 @@
 
 //     const handleSubmitAll = async () => {
 //         try {
+//             // Prepare formatted answers
+//             console.log(selectedAnswers);
 //             const formattedAnswers = Object.entries(selectedAnswers).map(([questionId, answer]) => {
 //                 const answerObject = answers.find(a => a.answer === answer && a.questionId === parseInt(questionId, 10));
+//                 console.log(answerObject)
 //                 if (!answerObject) {
 //                     throw new Error(`Answer not found for questionId: ${questionId} and answer: ${answer}`);
 //                 }
@@ -44,8 +48,10 @@
 //                     questionId: parseInt(questionId, 10),
 //                     answerId: answerObject.id,
 //                 };
+               
 //             });
-
+//             console.log(formattedAnswers)
+//             // Submit survey results
 //             await submitSurveyResults(survey.id, formattedAnswers, userId);
 //             console.log('Answers submitted successfully');
 //             onClose();
@@ -61,17 +67,19 @@
 //                     <h3>{survey.surveyName}</h3>
 //                     <Button icon="pi pi-times" className="p-button-rounded p-button-danger" onClick={onClose} />
 //                 </div>
-//                 {questions.map((q) => (
-//                     <div key={q.id}>
-//                         <QuestionCard 
-//                             question={q} 
-//                             onAnswerChange={handleAnswerChange} 
-//                             selectedAnswer={selectedAnswers[q.id]} 
-//                         />
-//                     </div>
-//                 ))}
-//                 <Button label="Submit All Answers" icon="pi pi-check" onClick={handleSubmitAll} />
+//                 {questions.length > 0 && (
+//                     <SurveyModal
+//                         survey={survey}
+//                         questions={questions}
+//                         onClose={onClose}
+//                         onAnswerChange={handleAnswerChange}
+//                         selectedAnswers={selectedAnswers}
+//                         handleSubmitAll={handleSubmitAll}
+//                     />
+//                 )}
+
 //             </div>
+
 //         </div>
 //     );
 // };
@@ -79,21 +87,28 @@
 // export default SurveyDetails;
 import React, { useState, useEffect } from 'react';
 import { Button } from 'primereact/button';
-import { fetchSurveyQuestions, submitSurveyResults } from '../../Requests';
+import { fetchSurveyQuestions, fetchSurveyAnswers, submitSurveyResults } from '../../Requests';
 import SurveyModal from './SurveyModal';
 
 const SurveyDetails = ({ survey, onClose, userId }) => {
     const [questions, setQuestions] = useState([]);
-    const [answers, setAnswers] = useState([]);
+    const [answers, setAnswers] = useState({});
     const [selectedAnswers, setSelectedAnswers] = useState({});
 
     useEffect(() => {
         const getQuestions = async () => {
             try {
                 const result = await fetchSurveyQuestions(survey.id);
-                console.log(result);
                 if (result.status === 200 && result.data) {
                     setQuestions(result.data[0]);
+                    const allAnswers = {};
+                    for (const question of result.data[0]) {
+                        const answerResult = await fetchSurveyAnswers(question.id);
+                        if (answerResult.status === 200 && answerResult.data) {
+                            allAnswers[question.id] = answerResult.data;
+                        }
+                    }
+                    setAnswers(allAnswers);
                 } else {
                     console.error("Failed to fetch surveys");
                 }
@@ -105,7 +120,7 @@ const SurveyDetails = ({ survey, onClose, userId }) => {
             getQuestions();
         }
     }, [survey]);
-    console.log(questions);
+
     const handleAnswerChange = (questionId, answer) => {
         setSelectedAnswers(prevSelectedAnswers => ({
             ...prevSelectedAnswers,
@@ -116,17 +131,17 @@ const SurveyDetails = ({ survey, onClose, userId }) => {
     const handleSubmitAll = async () => {
         try {
             const formattedAnswers = Object.entries(selectedAnswers).map(([questionId, answer]) => {
-                const answerObject = answers.find(a => a.answer === answer && a.questionId === parseInt(questionId, 10));
+                const answerObject = answers[questionId].find(a => a.answer === answer);
+                console.log(answerObject)
                 if (!answerObject) {
                     throw new Error(`Answer not found for questionId: ${questionId} and answer: ${answer}`);
                 }
                 return {
-                    questionId: parseInt(questionId, 10),
                     answerId: answerObject.id,
                 };
             });
-
-            await submitSurveyResults(survey.id, formattedAnswers, userId);
+            console.log(formattedAnswers)
+            await submitSurveyResults(survey.id, formattedAnswers, 1);
             console.log('Answers submitted successfully');
             onClose();
         } catch (error) {
@@ -151,12 +166,9 @@ const SurveyDetails = ({ survey, onClose, userId }) => {
                         handleSubmitAll={handleSubmitAll}
                     />
                 )}
-
             </div>
-
         </div>
     );
 };
 
 export default SurveyDetails;
-
