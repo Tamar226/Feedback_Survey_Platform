@@ -20,7 +20,7 @@ const SurveyModal = ({ survey, questions, onClose, onAnswerChange, selectedAnswe
                         selectedAnswer={selectedAnswers[q.id]}
                     />
                 ))}
-                 <Button label="Submit All Answers" icon="pi pi-check" onClick={handleSubmitAll} />
+                 <Button label="Submit All Answers" icon="pi pi-send" onClick={handleSubmitAll} />
             </div>
            
         </div>
