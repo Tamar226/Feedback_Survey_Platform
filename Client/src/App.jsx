@@ -28,7 +28,7 @@ import LoginUser from "./components/personalArea/LoginUser";
 import Header from "./components/Home page/Header";
 import Footer from "./components/Home page/Footer";
 // import Survey from "./components/SurveysAdding/AddSurvey";
-import { UserProvider } from "./components/personalArea/UserContext";
+import { UserProvider } from './components/personalArea/UserContext';
 import SurveysPage from "./components/surveysView/SurveysPage";
 import SurveyResults from "./components/surveysView/Results/SurveyResults";
 import AboutUs from "./components/Home page/AboutUs";
@@ -52,12 +52,13 @@ export default function App() {
               <Route path="user" element={<Login />} /> */}
           </Route>
 
-          <Route path="register" element={<RegisterUser />}/>
-
-          <Route path="surveys" element={<SurveysPage />} />
-          <Route path="surveys/:surveyId/results" element={<SurveyResults />} />
-
+          <Route path="register" element={<RegisterUser />} />
           <Route path="manager" element={<ManagerPage />}></Route>
+          <Route path="users/:id">
+            <Route path="surveys" element={<SurveysPage />} />
+            <Route path="surveys/:surveyId/results" element={<SurveyResults />} />
+          </Route>
+
         </Routes>
         <Footer />
       </PrimeReactProvider>

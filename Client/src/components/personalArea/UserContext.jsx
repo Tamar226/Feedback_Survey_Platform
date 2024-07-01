@@ -1,11 +1,11 @@
-import React, { createContext, useContext, useState } from 'react';
-
-const UserContext = createContext();
+import React, { createContext, useState, useContext } from 'react';
+export const UserContext = createContext();
 
 export function UserProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
 
   const login = (user) => {
+    console.log(user);
     setCurrentUser(user);
   };
 

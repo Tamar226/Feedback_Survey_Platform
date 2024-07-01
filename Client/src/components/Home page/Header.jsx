@@ -17,7 +17,7 @@ export default function Header() {
     const items = [
         { label: 'Home Page', icon: PrimeIcons.SLACK, url: '/' },
         { label: 'Contact Us', icon: PrimeIcons.PHONE, url: '/ContactUs' },
-        { label: 'Surveys', icon: PrimeIcons.WAVE_PULSE, url: '/Surveys' },
+        { label: 'Surveys', icon: PrimeIcons.WAVE_PULSE, url: currentUser ? `/users/${JSON.stringify(currentUser.id)}/surveys` : '#',},
     ];
 
     const authItems = [

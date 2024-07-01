@@ -3,6 +3,9 @@ const userService = require('../services/usersService');
 const managerService = require('../services/managersService');
 const roleRelationService = require('../services/roleRelationService');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+
+const JWT_SECRET = /*process.env.JWT_SECRET*/'546442' || 'your_jwt_secret'; // יש לשמור בסוד את ה-secret
 
 const getAllUsers = async (req, res) => {
     try {
@@ -31,7 +34,10 @@ const addUser = async (req, res) => {
         const addedUser = await userService.addUser(newUser);
         let addedUserHash = addedUser[0];
         delete addedUserHash.password;
-        res.status(201).send([addedUserHash]);
+        // Generate a JWT token for the new user
+        const token = jwt.sign({ id: addedUserHash.id, username: addedUserHash.username, role: 'user' }, JWT_SECRET, { expiresIn: '1h' });
+
+        res.status(200).send({ user: addedUserHash, token });
     } catch (error) {
         console.error('Error adding user in controllers:', error);
         res.status(500).send('Internal Server Error');
@@ -51,32 +57,34 @@ const updateUser = async (req, res) => {
 };
 
 const loginUser = async (req, res) => {
-
     try {
         const userName = req.body.username;
         const password = req.body.password;
         const userRelation = await roleRelationService.getRelationByUsername(userName);
+
         if (userRelation.length > 0) {
             const userRole = userRelation[0].roleName;
-            if (userRole=='manager'){
+
+            if (userRole == 'manager') {
                 const result = await managerService.getManagerDetails(userName, password);
                 if (result.hasError) {
                     res.status(401).send('Authentication failed');
                 } else {
-                    res.status(200).json([result.manager, 'manager']);
+                    const token = jwt.sign({ id: result.manager.id, username: result.manager.username, role: 'manager' }, JWT_SECRET, { expiresIn: '1h' });
+                    res.status(200).json({ user: result.manager, role: 'manager', token });
                 }
-            }
-            else{
+            } else {
                 const result = await userService.getUserDetails(userName, password);
                 if (result.hasError) {
                     res.status(401).send('Authentication failed');
                 } else {
-                    res.status(200).json([result.user, 'user']);
+                    const token = jwt.sign({ id: result.user.id, username: result.user.username, role: 'user' }, JWT_SECRET, { expiresIn: '1h' });
+                    res.status(200).json({ user: result.user, role: 'user', token });
                 }
             }
         }
     } catch (error) {
-        console.error('an error in userscontroller:' + error);
+        console.error('An error occurred in usersController:', error);
         res.status(500).send('Internal Server Error');
     }
 };

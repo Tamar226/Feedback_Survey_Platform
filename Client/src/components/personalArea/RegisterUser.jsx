@@ -69,9 +69,12 @@ export default function Register() {
         const res = await RegisterByPostRequest(detailsRegister);
         console.log(res);
         if (res.status === 200) {
-            setCurrentUser(res.data[0]);
-            login(res.data[0]);
-            navigate(`/users/${res.data[0].id}`);
+            const user = Object.values(res.data)[0];
+            const token = res.data.token;
+            localStorage.setItem('token', token);
+            setCurrentUser(user);
+            login(user);
+            navigate(`/users/${user.id}`);
         } else if (res.code !== 100) {
             if (res.code === 304) {
                 setMessage("User already exists");
@@ -84,7 +87,7 @@ export default function Register() {
                 email: "",
                 password: "",
                 city: "",
-                age: "",
+                age: 18,
                 gender: "male",
                 job: "",
                 company: "",

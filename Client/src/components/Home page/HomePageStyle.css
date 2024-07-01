@@ -53,14 +53,14 @@
 }
 
 .homepage-background {
-    background-image: url('C:\Users\PC\.Full Stack\Survey_Project\client\src\Images\backgroundHomePage.png');
+    background-image: url('../../Images/backgroundHomePage.png');
     background-size: cover;
     background-position: center;
     height: 100vh;
     width: 100%;
 
     @media (max-width: 450px) {
-        background-image: url('C:\Users\PC\.Full Stack\Survey_Project\client\src\Images\backgroundHomePageApplication.png');
+        background-image: url('../../Images/backgroundHomePageApplication.png');
         /* תמונה למסכים קטנים יותר */
     }
 }

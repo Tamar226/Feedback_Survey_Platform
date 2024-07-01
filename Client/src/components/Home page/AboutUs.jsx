@@ -11,7 +11,7 @@ const AboutUs = () => {
       <h3>Success Stories</h3>
       <div className="testimonials">
         <div className="testimonial">
-          <img src='client\src\Images\nvidia.png' alt="nvidia-Logo" className="company-logo1"/>
+          <img src='../../Images/nvidia.png' alt="nvidia-Logo" className="company-logo1"/>
           <div className="testimonial-content">
             <h4>NVIDIA</h4>
             <p>Since using Survey Platform, our customer satisfaction rates have soared. The insights we've gained through surveys have been invaluable in improving our product offerings. Our sales increased by 20% in just six months.</p>
