@@ -1,3 +1,7 @@
+h3{
+    text-decoration: underline;
+    margin-left:-1100px;
+}
 .header-container {
     display: flex;
     justify-content: space-between;
@@ -61,7 +65,6 @@
 
     @media (max-width: 450px) {
         background-image: url('C:\Users\PC\.Full Stack\Survey_Project\client\src\Images\backgroundHomePageApplication.png');
-        /* תמונה למסכים קטנים יותר */
     }
 }
 

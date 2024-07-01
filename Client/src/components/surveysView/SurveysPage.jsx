@@ -81,7 +81,7 @@ export default function SurveysPage() {
 
             {/* Render surveys by category */}
             {Object.keys(categories).map(category => (
-                <div key={category}>
+                <div key={category} className='surveys-category'>
                     <h3>{category}</h3>
                     <div className="allSurveys"> 
                         {categories[category].map(survey => (

@@ -187,12 +187,12 @@ const SurveyResults = () => {
 
         switch (selectedChartTypes[questionId]) {
             case 'bar':
-                return <Chart type="bar" data={barData} />;
+                return <Chart className='chartSize' type="bar" data={barData} />;
             case 'line':
-                return <Chart type="line" data={lineData} />;
+                return <Chart className='chartSize' type="line" data={lineData} />;
             case 'pie':
             default:
-                return <Chart type="pie" data={pieData} />;
+                return <Chart className='chartSize' type="pie" data={pieData} />;
         }
     };
 
