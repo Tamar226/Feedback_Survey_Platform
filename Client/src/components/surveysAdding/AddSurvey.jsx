@@ -238,7 +238,7 @@ const AddSurvey = ({ onSurveyAdded, onClose }) => {
                     <AddQuestion onAddQuestion={handleAddQuestion} />
 
                     <div className="button-group">
-                        <Button type="submit" label="Submit Survey" icon="pi pi-check" className="p-button-success" />
+                        <Button type="submit" label="Submit Survey" icon="pi pi-send" className="p-button-success" />
                     </div>
                 </form>
             </div>

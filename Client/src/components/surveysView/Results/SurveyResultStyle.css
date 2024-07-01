@@ -24,6 +24,10 @@
     margin-top: 20px;
 }
  */
+ .resultsTitle{
+    margin: auto;
+    font-size: 30px;
+ }
  .survey-results-container {
     display: flex;
     flex-direction: column;
@@ -44,8 +48,12 @@
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    
 }
-
+.buttonDownload{
+    width: 20%;
+    margin-left: 70%;
+}
 .download-button:hover {
     background-color: #0056b3;
 }
@@ -55,17 +63,30 @@
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    width: 100%;
+    width: 80%;
+    margin: auto;
+}
+.chart-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* width: 100%; */
+    max-width: 80vw;
+    max-height:80vh ;
 }
 
 .chart-type-select {
     margin-bottom: 20px;
+    margin-left: 42%;
 }
 
 .card {
+    
     padding: 20px;
     margin-top: 20px;
 }
 .chartSize{
-    width: 70%;
+    max-width: 80vw;
+    max-height:80vh ;
+   
 }
