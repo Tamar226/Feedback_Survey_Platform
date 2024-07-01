@@ -1,41 +1,71 @@
-.page-container{
+.page-container {
     min-height: 1000px;
+    margin: 20px;
 }
-.p-inputgroup{
+
+.p-inputgroup {
     width: 30%;
-    margin-left:2%;
+    margin-left: 2%;
+}
+
+h3 {
+    text-align: center;
+    margin-left: -70%;
+}
+
+.surveys-category {
+    padding: 15px;
+    background-color: #f9f9f9;
+    margin: 20px auto;
+    
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 99%;
 }
 
 .allSurveys {
     display: flex;
     flex-wrap: wrap;
-    gap: 20px; 
-    justify-content: center; 
+    gap: 20px;
+    justify-content: center;
     margin: 0 20px;
 }
 
 .surveyItem {
-    flex: 0 1 300px; 
-    box-sizing: border-box; 
-    display: flex; 
-    align-items: center; 
+    flex: 0 1 300px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
     justify-content: center;
-    padding: 20px; 
-    border: 1px solid #ccc; 
-    background-color: #f9f9f9; 
-    text-align: center; 
-    height: auto; 
+    padding: 15px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    text-align: center;
+    height: auto;
     min-height: 150px;
+}
+
+.surveyCard {
+    min-width: 15rem;
+    min-height: 10rem;
+}
+
+.p-button.p-button-info {
+    margin: 3px;
+}
+
+.viewSurveyResultsButton {
+    color: rgb(255, 153, 0);
 }
 
 @media (max-width: 768px) {
     .surveyItem {
-        flex: 0 1 calc(50% - 20px); 
+        flex: 0 1 calc(50% - 20px);
     }
 }
 
 @media (max-width: 480px) {
     .surveyItem {
-        flex: 0 1 calc(100% - 20px); 
+        flex: 0 1 calc(100% - 20px);
     }
 }

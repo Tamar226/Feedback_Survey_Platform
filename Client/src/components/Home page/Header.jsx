@@ -34,10 +34,10 @@ export default function Header() {
         <div>
             <div className="header-container">
                 <div className="card tab-menu-left">
-                    <TabMenu model={items} activeItem={activeItem} onTabChange={handleTabChange} />
+                    <TabMenu model={items} activeitem={activeItem} onTabChange={handleTabChange} />
                 </div>
                 <div className="card tab-menu-right">
-                    <TabMenu model={authItems} activeItem={activeItem} onTabChange={handleTabChange} />
+                    <TabMenu model={authItems} activeitem={activeItem} onTabChange={handleTabChange} />
                 </div>
             </div>
             <Button icon="pi pi-bars" className="p-button-primary hamburger" onClick={() => setVisible(true)} />

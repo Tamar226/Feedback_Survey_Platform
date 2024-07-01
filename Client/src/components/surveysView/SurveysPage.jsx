@@ -1,10 +1,9 @@
-
 // import React, { useState, useEffect } from 'react';
 // import SurveyCard from './SurveyCard';
-// import AddSurvey from '../SurveysAdding/AddSurvey';
+// import AddSurvey from '../SurveysAdding/AddSurvey.jsx';
 // import { Button } from 'primereact/button';
 // import { InputText } from 'primereact/inputtext'; 
-// import { fetchSurveys, getSurveysBySearch } from '../../Requests';
+// import { fetchSurveys } from '../../Requests';
 // import SurveyDetails from './SurveyDetails';
 // import './SurveysPage.css';
 
@@ -17,7 +16,7 @@
 //     useEffect(() => {
 //         const getSurveys = async () => {
 //             try {
-//                 const result = await fetchSurveys(); 
+//                 const result = await fetchSurveys();
 //                 if (result.status === 200 && result.data) {
 //                     setSurveys(result.data[1][0]);
 //                 } else {
@@ -40,65 +39,69 @@
 
 //     const handleSurveyAdded = (newSurvey) => {
 //         setSurveys([...surveys, newSurvey]);
-//         setShowAddSurvey(false);
+//         setShowAddSurvey(false); // Close the AddSurvey component after adding the survey
 //     };
 
 //     const handleSearchChange = (e) => {
 //         setSearchText(e.target.value);
 //     };
 
-//     const handleSearch = async () => {
-//         try {
-//             const result = await getSurveysBySearch(searchText);
-//             if (result.status === 200 && result.data) {
-//                 setSurveys(result.data);
-//             } else {
-//                 console.error("Failed to fetch surveys by search");
-//             }
-//         } catch (error) {
-//             console.error("Error fetching surveys by search", error);
-//         }
-//     };
+//     // Filter surveys based on search text and category
+//     const filteredSurveys = surveys.filter(survey =>
+//         survey.surveyName.toLowerCase().includes(searchText.toLowerCase()) ||
+//         survey.category.toLowerCase().includes(searchText.toLowerCase())
+//     );
 
-//     const handleKeyDown = (e) => {
-//         if (e.key === 'Enter') {
-//             e.preventDefault();
-//             handleSearch();
+//     // Group surveys by category
+//     const categories = {};
+//     filteredSurveys.forEach(survey => {
+//         if (!categories[survey.category]) {
+//             categories[survey.category] = [];
 //         }
-//     };
+//         categories[survey.category].push(survey);
+//     });
 
 //     return (
 //         <div className="page-container">
 //             <h2>Active Surveys</h2>
 //             <div className="p-inputgroup">
 //                 <InputText
-//                     placeholder="Search by survey name, manager ID, or active status..."
+//                     placeholder="Search by survey name, category, or active status..."
 //                     value={searchText}
 //                     onChange={handleSearchChange}
-//                     onKeyDown={handleKeyDown}
 //                 />
-//                 <Button icon="pi pi-search" className="p-button-warning" onClick={handleSearch} />
-//             </div>
-//             <Button label="Add New Survey" icon="pi pi-plus" onClick={handleAddSurvey} className="p-mt-3" />
+//                 <Button icon="pi pi-search" className="p-button-warning" />
+//             </div><br/>
+//             <Button label="Add New Survey" icon="pi pi-plus" onClick={handleAddSurvey} className="p-mt-3" />   
 //             {showAddSurvey && (
 //                 <div className="p-mt-4">
 //                     <AddSurvey onClose={handleCloseAddSurvey} onSurveyAdded={handleSurveyAdded} />
 //                 </div>
 //             )}
-//             <div className="allSurveys">
-//                 {surveys.map((survey) => (
-//                     <div className="surveyItem" key={survey.id}>
-//                         <SurveyCard
-//                             survey={survey}
-//                             onSelect={() => setSelectedSurvey(survey)}
-//                         />
+
+//             {/* Render surveys by category */}
+//             {Object.keys(categories).map(category => (
+//                 <div key={category} className='surveys-category'>
+//                     <h3>{category}</h3>
+//                     <div className="allSurveys"> 
+//                         {categories[category].map(survey => (
+//                             <div className="surveyItem" key={survey.id}>
+//                                 <SurveyCard
+//                                     survey={survey}
+//                                     onSelect={() => setSelectedSurvey(survey)}
+//                                 />
+//                             </div>
+//                         ))}
 //                     </div>
-//                 ))}
-//             </div>
+//                 </div>
+//             ))}
+
+//             {/* Display selected survey details */}
 //             {selectedSurvey && (
 //                 <SurveyDetails
 //                     survey={selectedSurvey}
 //                     onClose={() => setSelectedSurvey(null)}
+//                     userId={1}
 //                 />
 //             )}
 //         </div>
@@ -106,9 +109,10 @@
 // }
 import React, { useState, useEffect } from 'react';
 import SurveyCard from './SurveyCard';
-import AddSurvey from '../surveysAdding/AddSurvey';
+import AddSurvey from '../SurveysAdding/AddSurvey.jsx';
 import { Button } from 'primereact/button';
-import { InputText } from 'primereact/inputtext'; // יבוא הקומפוננטה InputText מ-primereact
+import { InputText } from 'primereact/inputtext';
+import { Carousel } from 'primereact/carousel';
 import { fetchSurveys } from '../../Requests';
 import SurveyDetails from './SurveyDetails';
 import './SurveysPage.css';
@@ -145,7 +149,7 @@ export default function SurveysPage() {
 
     const handleSurveyAdded = (newSurvey) => {
         setSurveys([...surveys, newSurvey]);
-        setShowAddSurvey(false); // Close the AddSurvey component after adding the survey
+        setShowAddSurvey(false);
     };
 
     const handleSearchChange = (e) => {
@@ -154,16 +158,57 @@ export default function SurveysPage() {
 
     const filteredSurveys = surveys.filter(survey =>
         survey.surveyName.toLowerCase().includes(searchText.toLowerCase()) ||
-        
-        (survey.active === 1 ? "active" : "inactive").includes(searchText.toLowerCase())
+        survey.category.toLowerCase().includes(searchText.toLowerCase())
     );
+
+    const categories = {};
+    filteredSurveys.forEach(survey => {
+        if (!categories[survey.category]) {
+            categories[survey.category] = [];
+        }
+        categories[survey.category].push(survey);
+    });
+
+    const responsiveOptions = [
+        {
+            breakpoint: '1400px',
+            numVisible: 3,
+            numScroll: 1
+        },
+        {
+            breakpoint: '1199px',
+            numVisible: 3,
+            numScroll: 1
+        },
+        {
+            breakpoint: '767px',
+            numVisible: 2,
+            numScroll: 1
+        },
+        {
+            breakpoint: '575px',
+            numVisible: 1,
+            numScroll: 1
+        }
+    ];
+
+    const surveyTemplate = (survey) => {
+        return (
+            <div className="surveyItem" key={survey.id}>
+                <SurveyCard
+                    survey={survey}
+                    onSelect={() => setSelectedSurvey(survey)}
+                />
+            </div>
+        );
+    };
 
     return (
         <div className="page-container">
             <h2>Active Surveys</h2>
             <div className="p-inputgroup">
                 <InputText
-                    placeholder="Search by survey name, manager ID, or active status..."
+                    placeholder="Search by survey name, category, or active status..."
                     value={searchText}
                     onChange={handleSearchChange}
                 />
@@ -175,23 +220,37 @@ export default function SurveysPage() {
                     <AddSurvey onClose={handleCloseAddSurvey} onSurveyAdded={handleSurveyAdded} />
                 </div>
             )}
-            <div className="allSurveys"> 
-                {filteredSurveys.map((survey) => (
-                    <div className="surveyItem" key={survey.id}>
-                        <SurveyCard
-                            survey={survey}
-                            onSelect={() => setSelectedSurvey(survey)}
+
+            {Object.keys(categories).map(category => (
+                <div key={category} className='surveys-category'>
+                    <h3>{category}</h3>
+                    {categories[category].length > 3 ? (
+                        <Carousel 
+                            value={categories[category]} 
+                            numVisible={3} 
+                            numScroll={1} 
+                            responsiveOptions={responsiveOptions} 
+                            className="custom-carousel" 
+                            circular 
+                            autoplayInterval={3000} 
+                            itemTemplate={(survey) => surveyTemplate(survey)} 
                         />
-                    </div>
-                ))}
-            </div>
+                    ) : (
+                        <div className="allSurveys">
+                            {categories[category].map(survey => surveyTemplate(survey))}
+                        </div>
+                    )}
+                </div>
+            ))}
+
             {selectedSurvey && (
                 <SurveyDetails
                     survey={selectedSurvey}
                     onClose={() => setSelectedSurvey(null)}
-                    // userId={/* userId */}
+                    userId={1}
                 />
             )}
         </div>
     );
 }
+

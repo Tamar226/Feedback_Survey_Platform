@@ -27,8 +27,8 @@ export default function LastSurveys() {
     }, []);
 
     return (
-        <div className="last-surveys-container">
-            <h2>Last Created Surveys</h2>
+        <div className="last-surveys-container"><br/>
+            <h1>Last Created Surveys</h1><br/>
             <div className="last-surveys">
                 {surveys.map((survey) => (
                     <div className="survey-item" key={survey.id}>

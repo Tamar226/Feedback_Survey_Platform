@@ -7,8 +7,8 @@ const AboutUs = () => {
       <p>Survey Platform is dedicated to providing a platform for individuals and businesses to create and participate in surveys.</p>
       <p>Our mission is to facilitate valuable insights through surveys and to foster community engagement.</p>
       <p>Founded in 2024, Survey Platform has grown to become a leading provider of survey solutions.</p>
-
-      <h3>Success Stories</h3>
+      <br />
+      <h3>Success Stories:</h3>
       <div className="testimonials">
         <div className="testimonial">
           <img src='../../Images/nvidia.png' alt="nvidia-Logo" className="company-logo1"/>
@@ -18,16 +18,16 @@ const AboutUs = () => {
           </div>
         </div>
         <div className="testimonial">
-          <img src="/path/to/company2-logo.png" alt="Company 2 Logo" className="company-logo2"/>
+          <img src="/path/to/company2-logo.png" alt="Company 2 Logo" className="company-logo2" />
           <div className="testimonial-content">
-            <h4>Company 2</h4>
+            <h4>IKEA</h4>
             <p>Survey Platform has revolutionized the way we gather feedback. The detailed analytics and easy-to-use interface have allowed us to make data-driven decisions that have enhanced our services. We've seen a 30% boost in customer retention.</p>
           </div>
         </div>
         <div className="testimonial">
-          <img src="/path/to/company3-logo.png" alt="Company 3 Logo" className="company-logo3"/>
+          <img src="C:\Users\PC\.Full Stack\Survey_Project\client\src\Images\ikea.png" alt="Company 3 Logo" className="company-logo3" />
           <div className="testimonial-content">
-            <h4>Company 3</h4>
+            <h4>VISA</h4>
             <p>Using Survey Platform, we've been able to connect with our audience more effectively. The platform's robust features have helped us understand our market better and tailor our strategies accordingly. Our market reach expanded by 25%.</p>
           </div>
         </div>

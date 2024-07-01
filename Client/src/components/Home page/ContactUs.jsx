@@ -3,7 +3,7 @@ import React from 'react';
 const ContactUs = () => {
   return (
     <div className="contact-us-container">
-      <h2>Contact Us</h2>
+      <h1>Contact Us</h1>
       <p>We're here to help! Reach out to us through any of the following methods:</p>
       <ul>
         <li>Email: <a href="mailto:support@surveyplatform.com">support@surveyplatform.com</a></li>

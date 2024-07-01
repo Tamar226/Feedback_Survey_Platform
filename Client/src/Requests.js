@@ -218,6 +218,29 @@ export const getSurveysBySearch = async (searchText) => {
 };
 
 
+// export const submitSurveyResults = async (surveyId, answers, userId) => {
+//     try {
+//         const response = await fetch(`http://localhost:3000/surveys/${surveyId}/submitResults`, {
+//             method: 'POST',
+//             headers: {
+//                 'Content-Type': 'application/json',
+//             },
+//             body: JSON.stringify({
+//                 userId,
+//                 answers,
+//             }),
+//         });
+
+//         if (!response.ok) {
+//             throw new Error('Failed to submit survey results');
+//         }
+
+//         return await response.json();
+//     } catch (error) {
+//         console.error('Error submitting survey results:', error);
+//         throw error;
+//     }
+// };
 export const submitSurveyResults = async (surveyId, answers, userId) => {
     try {
         const response = await fetch(`http://localhost:3000/surveys/${surveyId}/submitResults`, {
@@ -231,16 +254,20 @@ export const submitSurveyResults = async (surveyId, answers, userId) => {
             }),
         });
 
+        const textResponse = await response.text();
+        console.log('Submit response text:', textResponse);
+
         if (!response.ok) {
-            throw new Error('Failed to submit survey results');
+            return { success: false, message: 'Failed to submit survey results' };
         }
 
-        return await response.json();
+        return { success: true, message: 'Answers submitted successfully' };
     } catch (error) {
         console.error('Error submitting survey results:', error);
-        throw error;
+        return { success: false, message: 'Error submitting survey results' };
     }
 };
+
 
 export const fetchSurveyDetails = async (surveyId) => {
     try {
