@@ -109,7 +109,7 @@
 // }
 import React, { useState, useEffect } from 'react';
 import SurveyCard from './SurveyCard';
-import AddSurvey from '../SurveysAdding/AddSurvey.jsx';
+import AddSurvey from '../surveysAdding/AddSurvey';
 import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 import { Carousel } from 'primereact/carousel';

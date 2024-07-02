@@ -135,11 +135,6 @@ export default function Header() {
             }        }
     ];
 
-    const handleTabChange = (e) => {
-        setActiveItem(e.value);
-        window.location.href = e.value.url;
-    };
-
     return (
         <div>
             <div className="header-container">
