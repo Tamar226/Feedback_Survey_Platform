@@ -9,7 +9,7 @@ console.log('hello my profile page');
   }
 
   return (
-    <div className="profile-card">
+    <div>
       <h1>User Profile</h1>
       <p><strong>Name:</strong> {currentUser.name}</p>
       <p><strong>Username:</strong> {currentUser.userName}</p>

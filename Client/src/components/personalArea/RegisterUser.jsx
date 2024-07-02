@@ -268,7 +268,7 @@ export default function Register() {
             return;
         }
         setSelectedImage(file);
-    
+
     }
 
     const handleSubmit = async (e) => {
@@ -293,11 +293,12 @@ export default function Register() {
                 'Content-Type': 'multipart/form-data'
             }
         });
-        console.log('res:', res);
-        if (res.status === 201) {
+        console.log('resdata:', res.data);
+        if (res.status === 200) {
             console.log('succsses add user!!');
-            setCurrentUser(res.data[0]);
-            navigate(`/users/${res.data[0].id}`);
+            setCurrentUser(res.data.user);
+            // console.log(res.data.user.id);
+            navigate(`/users/${res.data.user.id}`);
         }
         else if (res.code !== 100) {
             if (res.code === 304) {
@@ -414,7 +415,7 @@ export default function Register() {
                 </FloatLabel>
                 <br />
                 {/* <input type="file" accept="image/jpeg, image/png, image/gif, image/jpg" onChange={(e) => handleFileChange(e)} onError={(e) => console.error('Error selecting file:', e)} /> */}
-                <input id="file-upload" type="file" accept="image/jpeg, image/png, image/gif"  onChange={handleFileChange} name="image"/>
+                <input id="file-upload" type="file" accept="image/jpeg, image/png, image/gif" onChange={handleFileChange} name="image" />
                 {message && (<Message severity="error" text={message} />)}<br /><br />
                 <Button onClick={handleSubmit} label="Register" />
                 <br /><br />

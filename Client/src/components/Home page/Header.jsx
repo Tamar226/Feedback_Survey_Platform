@@ -84,7 +84,15 @@ export default function Header() {
     }, [currentUser]);
 
     const getProfileImage = (username) => {
-        return `${profileImagesPath}userProfile_${username}.png`;
+        return `userProfile${username}.png`;
+    };
+    const handleImageClick = () => {
+        console.log('Image clicked, toggling showProfile');
+        setShowProfile(prevState => !prevState);
+    };
+    const handleTabChange = (e) => {
+        setActiveItem(e.value);
+        window.location.href = e.value.url;
     };
 
     const items = [
@@ -99,25 +107,21 @@ export default function Header() {
 
     const authItems = [
         {
-            label: (
-                <span style={{ display: 'flex', alignItems: 'center' }}>
-                    <img
-                        src={getProfileImage(userName)}
-                        alt="Profile"
-                        className="profile-image"
-                        style={{ width: '30px', height: '30px', borderRadius: '50%', marginRight: '5px', cursor: 'pointer' }}
-                        onClick={() => setShowProfile(true)}
-                    />
-                    {`Hello, ${userName}`}
-                </span>
-            ),
-            icon: PrimeIcons.USER,
+            label:
+                (
+                    <span style={{ display: 'flex', alignItems: 'center' }}>
+                        {currentUser ? `Hello, ${currentUser.username}` : 'Login'}
+                        {currentUser ? <img
+                            src={getProfileImage(userName)}
+                            alt="Profile"
+                            className="profile-image"
+                            style={{ width: '40px', height: '40px', border: '1px solid rgb(48, 48, 48)', borderRadius: '50%', marginRight: '5px', cursor: 'pointer' }}
+                            onClick={handleImageClick}
+                        /> : null}
+                    </span>
+                ),
+            icon: currentUser ? null : PrimeIcons.USERS,
             url: currentUser ? window.location.href : '/login',
-            // onClick: () => {
-            //     if (currentUser) {
-            //         setShowProfile(true);
-            //     }
-            // },
         },
         {
             label: 'Logout',
@@ -126,12 +130,6 @@ export default function Header() {
             onClick: logout
         }
     ];
-
-    const handleTabChange = (e) => {
-        setActiveItem(e.value);
-        window.location.href = e.value.url;
-    };
-
     return (
         <div>
             <div className="header-container">

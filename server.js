@@ -58,7 +58,7 @@ const authMiddleware = require('./middleware/authMiddleware');
 const server = express();
 const host = 'localhost';
 const port = '3000';
-const port = '3000';
+
 
 // Middleware
 server.use(cors({ origin: '*' }));

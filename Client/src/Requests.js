@@ -56,10 +56,10 @@ export async function RegisterByPostRequest(formData) {
             method: "POST",
             body: formData,
         });
-        console.log('response:',response);
+        console.log('response:', response);
         const status = response.status;
         const data = await response.json();
-        if (status === 201) {
+        if (status === 200) {
             return { status, data };
         } else {
             return { status, data: null };
