@@ -66,7 +66,7 @@ import { Button } from 'primereact/button';
 import Profile from './Profile';
 import './HomePageStyle.css';
 
-const profileImagesPath = '/profileImage/';
+const profileImagesPath = '../../../profileImage';
 
 export default function Header() {
     const { currentUser, login, logout } = useUser();
@@ -82,9 +82,9 @@ export default function Header() {
             setUserName('');
         }
     }, [currentUser]);
-
     const getProfileImage = (username) => {
-        return `userProfile${username}.png`;
+        // Construct the full path to the image using the username
+        return `profileImage/userProfile_${username}.png`;
     };
     const handleImageClick = () => {
         console.log('Image clicked, toggling showProfile');
@@ -110,9 +110,10 @@ export default function Header() {
             label:
                 (
                     <span style={{ display: 'flex', alignItems: 'center' }}>
-                        {currentUser ? `Hello, ${currentUser.username}` : 'Login'}
+                        {currentUser ? `Hello,  ${currentUser.username} ` : 'Login'}
+
                         {currentUser ? <img
-                            src={getProfileImage(userName)}
+                            src={getProfileImage(currentUser.username)}
                             alt="Profile"
                             className="profile-image"
                             style={{ width: '40px', height: '40px', border: '1px solid rgb(48, 48, 48)', borderRadius: '50%', marginRight: '5px', cursor: 'pointer' }}
