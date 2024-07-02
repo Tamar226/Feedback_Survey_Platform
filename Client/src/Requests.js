@@ -6,7 +6,7 @@ export async function getUserDetails(username, password, setworngRequest) {
             body: JSON.stringify({ username: username, password: password }),
             headers: {
                 'Content-type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                'Authorization': `Bearer ${sessionStorage.getItem('token')}`,
             },
         });
         if (!response.ok) {
@@ -34,7 +34,7 @@ export async function loginByPostRequest(username, password) {
             body: JSON.stringify({ username, password }),
             headers: {
                 'Content-type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                'Authorization': `Bearer ${sessionStorage.getItem('token')}`,
             },
         });
         const status = response.status;
@@ -47,6 +47,7 @@ export async function loginByPostRequest(username, password) {
             return { status, data: null };
         }
     } catch (error) {
+        console.error('Error:', error); 
         return { status: null, data: null };
     }
 }
@@ -59,24 +60,38 @@ export async function RegisterByPostRequest(reqBody) {
             body: JSON.stringify(reqBody),
             headers: {
                 'Content-type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                'Authorization': `Bearer ${sessionStorage.getItem('token')}`,
             }
         });
         const status = response.status;
         const data = await response.json();
-        if (status === 200) {
-            return { status, data };
-        } else {
-            return { status, data: null };
+        let message = '';
+
+        switch (status) {
+            case 200:
+                return { status, data, message: 'Registration successful' };
+            case 401:
+                message = 'Unauthorized: Invalid credentials';
+                break;
+            case 500:
+                message = 'Internal Server Error';
+                break;
+            default:
+                message = 'error occurred';
+                break;
         }
+
+        return { status, data: null, message };
     } catch (error) {
-        return { status: null, data: null };
+        console.error('An error occurred:', error);
+        return { status: null, data: null, message: 'An error occurred while processing your request' };
     }
 }
 
+
 export async function fetchSurveys () {
     try {
-        const token = localStorage.getItem('token');
+        const token = sessionStorage.getItem('token');
         const response = await fetch('http://localhost:3000/surveys',
             {
                 method: 'GET',
@@ -105,7 +120,7 @@ export async function fetchSurveyQuestions(surveyId){
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    'Authorization': `Bearer ${sessionStorage.getItem('token')}`
                 }
             });
         const status = response.status;
@@ -127,7 +142,7 @@ export async function fetchSurveyAnswers(questionId) {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    'Authorization': `Bearer ${sessionStorage.getItem('token')}`
                 }
             });
         const status = response.status;
@@ -144,7 +159,7 @@ export async function fetchSurveyAnswers(questionId) {
 }
 export async function postData(data, setLoading, typeData) {
     try {
-        const token = localStorage.getItem('token');
+        const token = sessionStorage.getItem('token');
         const response = await fetch(`http://localhost:3000/${typeData}`, {
             method: "POST",
             body: JSON.stringify(data),
@@ -171,13 +186,14 @@ export async function postData(data, setLoading, typeData) {
 }
 export async function deleteData(id, typeData) {
     try {
-        const response = await fetch(`http://localhost:8080/${typeData}/${id}`, {
+        const response = await fetch(`http://localhost:3000/${typeData}/${id}`, {
             method: "DELETE",
             headers: {
                 'Content-type': 'application/json',
-                'Authentication': `Bearer ${localStorage.getItem('token')}`
+                'Authorization': `Bearer ${sessionStorage.getItem('token')}`
             },
         });
+        console.log(response);
         if (!response.ok) {
             throw new Error("Network error executing the request");
         }
@@ -194,7 +210,7 @@ export const addSurvey = async (survey) => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authentication': `Bearer ${localStorage.getItem('token')}`
+                'Authorization': `Bearer ${sessionStorage.getItem('token')}`
             },
             body: JSON.stringify(survey)
         });
@@ -214,7 +230,7 @@ export const getSurveysBySearch = async (searchText) => {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Authentication': `Bearer ${localStorage.getItem('token')}`
+                'Authorization': `Bearer ${sessionStorage.getItem('token')}`
             }
         });
         if (!response.ok) {
@@ -233,7 +249,7 @@ export const submitSurveyResults = async (surveyId, answers, userId) => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authentication': `Bearer ${localStorage.getItem('token')}`
+                'Authorization': `Bearer ${sessionStorage.getItem('token')}`
             },
             body: JSON.stringify({
                 userId,
@@ -262,7 +278,7 @@ export const fetchSurveyDetails = async (surveyId) => {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('token')}`
+                'Authorization': `Bearer ${sessionStorage.getItem('token')}`
             }
         });
         console.log('not json:',response);
@@ -286,7 +302,7 @@ export const fetchSurveyResults = async (surveyId) => {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Authentication': 'Bearer'+ localStorage.getItem('token')
+                'Authorization': 'Bearer '+ sessionStorage.getItem('token')
             }
         });
         if (!response.ok) {
@@ -302,7 +318,7 @@ export const fetchSurveyResults = async (surveyId) => {
 
 export const getAllUsers = async ()=>{
     try {
-        const token = localStorage.getItem('token');
+        const token = sessionStorage.getItem('token');
         const response = await fetch('http://localhost:3000/role-relations',
             {
                 method: 'GET',
@@ -331,7 +347,7 @@ export const updateUserRole= async (username, role)=>{
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    'Authorization': `Bearer ${sessionStorage.getItem('token')}`,
                 },
                 body: JSON.stringify({role})
             });

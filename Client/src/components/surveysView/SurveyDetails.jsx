@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Button } from 'primereact/button';
 import { fetchSurveyQuestions, fetchSurveyAnswers, submitSurveyResults } from '../../Requests';
 import SurveyModal from './SurveyModal';
+import { useUser } from '../personalArea/UserContext';
 
 const SurveyDetails = ({ survey, onClose, userId }) => {
+    const { currentUser } = useUser(); // קבלת פרטי המשתמש מהקונטקסט
     const [questions, setQuestions] = useState([]);
     const [answers, setAnswers] = useState([]);
     const [selectedAnswers, setSelectedAnswers] = useState({});
@@ -55,7 +57,7 @@ const SurveyDetails = ({ survey, onClose, userId }) => {
                 };
             });
             console.log(formattedAnswers);
-            const result = await submitSurveyResults(survey.id, formattedAnswers, 1);
+            const result = await submitSurveyResults(survey.id, formattedAnswers, currentUser.id);
             if (result.success) {
                 console.log(result.message);
                 onClose();

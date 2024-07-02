@@ -23,7 +23,7 @@ export default function Register() {
         email: "",
         password: "",
         city: "",
-        age: 18, // Change default to a number
+        age: 18,
         gender: "male",
         job: "",
         company: "",
@@ -47,7 +47,7 @@ export default function Register() {
 
     const handleEmailBlur = (e) => {
         const { value } = e.target;
-        if (!validateEmail(value)) {
+        if (value && !validateEmail(value)) {
             setMessage("Invalid email address");
         }
     };
@@ -56,14 +56,20 @@ export default function Register() {
         const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return re.test(email);
     };
+    function validateInputs() {
+        if (!detailsRegister.username || !detailsRegister.password || !detailsRegister.email) {
+            setMessage("Please fill all the required fields");
+            return false;
+        }
+        if (!validateEmail(detailsRegister.email)) {
+            setMessage("Please check your email address");
+            return false;
+        }
+        return true;
+    }
 
     async function checkAccessPossibility() {
-        if (detailsRegister.username === "" || detailsRegister.password === "") {
-            setMessage("Please fill all the fields");
-            return;
-        }
-        if (message === "Invalid email address") {
-            setMessage("Please check your email address");
+        if (!validateInputs()) {
             return;
         }
         const res = await RegisterByPostRequest(detailsRegister);
@@ -71,7 +77,7 @@ export default function Register() {
         if (res.status === 200) {
             const user = Object.values(res.data)[0];
             const token = res.data.token;
-            localStorage.setItem('token', token);
+            sessionStorage.setItem('token', token);
             setCurrentUser(user);
             login(user);
             navigate(`/users/${user.id}`);
@@ -79,7 +85,7 @@ export default function Register() {
             if (res.code === 304) {
                 setMessage("User already exists");
             } else {
-                setMessage("Wrong username or password");
+                setMessage(res.message);
             }
             setDetailsRegister({
                 name: "",
@@ -97,8 +103,8 @@ export default function Register() {
 
     return (
         <>
-            <Card title="Register here" 
-            style={{ width: '50%', margin: '0 auto', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <Card title="Register here"
+                style={{ width: '50%', margin: '0 auto', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 <FloatLabel>
                     <InputText
                         id="name"
