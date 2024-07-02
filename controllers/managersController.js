@@ -27,7 +27,9 @@ const addManager = async (req, res) => {
         const hashPassword = await bcrypt.hash(newManager.password, 10);
         newManager.password = hashPassword;
         const addedManager = await managerService.addManager(newManager);
-        res.status(200).send(addedManager);
+        const token = jwt.sign({ id: addedManager.id, username: addedManager.username, role: 'manager' }, JWT_SECRET);
+
+        res.status(200).send({ user: addedManager, role: 'manager', token });
     } catch (error) {
         console.error('Error adding manager in controllers:', error);
         res.status(500).send('Internal Server Error');
