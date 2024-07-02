@@ -48,6 +48,12 @@ module.exports = {
 
 
 const addSurvey = async (req, res) => {
+    const userRole = req.userRole;
+
+    if (userRole !== 'reviewer' && userRole !== 'manager') {
+        return res.status(403).json({ error: 'Forbidden: Only reviewers and managers can add surveys' });
+    }
+    
     const newSurvey = req.body; // קבלת האובייקט של הסקר מהבקשה
 
     try {
@@ -131,7 +137,6 @@ const getSurveyResults = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
-
 
 
 module.exports = {

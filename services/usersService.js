@@ -59,7 +59,7 @@ async function getUserDetails(userName, password) {
             throw new Error('Invalid password');
         }
 
-        const token = jwt.sign({ id: user.id, username: user.username }, JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign({ id: user.id, username: user.username }, JWT_SECRET);
 
         return {
             hasError: false,

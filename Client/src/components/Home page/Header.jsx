@@ -17,12 +17,26 @@ export default function Header() {
     const items = [
         { label: 'Home Page', icon: PrimeIcons.SLACK, url: '/' },
         { label: 'Contact Us', icon: PrimeIcons.PHONE, url: '/ContactUs' },
-        { label: 'Surveys', icon: PrimeIcons.WAVE_PULSE, url: currentUser ? `/users/${JSON.stringify(currentUser.id)}/surveys` : '#',},
+        {
+            label: 'Surveys',
+            icon: PrimeIcons.WAVE_PULSE,
+            url: currentUser ? `/users/${currentUser.id}/surveys` : '/login' // הוספת התנאי במקרה שהמשתמש אינו מחובר
+        }
     ];
 
     const authItems = [
-        { label: currentUser ? `Hello, ${currentUser.username}` : 'Login', icon: currentUser ? PrimeIcons.USER : PrimeIcons.USERS, url: currentUser ? '/profile' : '/login', onClick: currentUser ? null : login },
-        { label: 'Logout', icon: 'pi pi-sign-out', url: '/logout', onClick: logout }
+        {
+            label: currentUser ? `Hello, ${currentUser.username}` : 'login',
+            icon: currentUser ? PrimeIcons.USER : PrimeIcons.USERS,
+            url: currentUser ? '/profile' : '/login',
+            onClick: currentUser ? null : login
+        },
+        {
+            label: 'Logout',
+            icon: 'pi pi-sign-out',
+            url: '/logout',
+            onClick: logout
+        }
     ];
 
     const handleTabChange = (e) => {
@@ -34,20 +48,35 @@ export default function Header() {
         <div>
             <div className="header-container">
                 <div className="card tab-menu-left">
-                    <TabMenu model={items} activeitem={activeItem} onTabChange={handleTabChange} />
+                    <TabMenu model={items} activeItem={activeItem} onTabChange={()=>{
+                        console.log(currentUser);
+                        handleTabChange
+                        }} />
                 </div>
                 <div className="card tab-menu-right">
-                    <TabMenu model={authItems} activeitem={activeItem} onTabChange={handleTabChange} />
+                    <TabMenu model={authItems} activeItem={activeItem} onTabChange={handleTabChange} />
                 </div>
             </div>
             <Button icon="pi pi-bars" className="p-button-primary hamburger" onClick={() => setVisible(true)} />
             <Sidebar visible={visible} onHide={() => setVisible(false)}>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                     {items.map((item, index) => (
-                        <Button key={index} label={item.label} icon={item.icon} className="p-button-text" onClick={() => window.location.href = item.url} />
+                        <Button
+                            key={index}
+                            label={item.label}
+                            icon={item.icon}
+                            className="p-button-text"
+                            onClick={() => window.location.href = item.url}
+                        />
                     ))}
                     {authItems.map((item, index) => (
-                        <Button key={index + items.length} label={item.label} icon={item.icon} className="p-button-text" onClick={item.onClick ? item.onClick : () => window.location.href = item.url} />
+                        <Button
+                            key={index + items.length}
+                            label={item.label}
+                            icon={item.icon}
+                            className="p-button-text"
+                            onClick={item.onClick ? item.onClick : () => window.location.href = item.url}
+                        />
                     ))}
                 </div>
             </Sidebar>

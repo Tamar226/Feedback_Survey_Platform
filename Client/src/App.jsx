@@ -102,7 +102,7 @@ import ManagerPage from "./components/Home page/ManagerPage";
 
 export default function App() {
   return (
-    <UserProvider>
+    <>
       <GlobalStyle />
       <PrimeReactProvider>
         <Header />
@@ -115,7 +115,7 @@ export default function App() {
           </Route>
 
           <Route path="register" element={<RegisterUser />} />
-          <Route path="manager" element={<ManagerPage />}></Route>
+          <Route path="managers/:id" element={<ManagerPage />} />
           <Route path="users/:id">
             <Route path="surveys" element={<SurveysPage />} />
             <Route path="surveys/:surveyId/results" element={<SurveyResults />} />
@@ -124,6 +124,6 @@ export default function App() {
         </Routes>
         <Footer />
       </PrimeReactProvider>
-    </UserProvider>
+    </>
   );
 }

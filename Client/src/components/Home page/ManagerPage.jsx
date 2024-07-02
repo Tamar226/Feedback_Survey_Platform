@@ -34,7 +34,7 @@ export default function RowEditingDemo() {
             case 'user':
                 return 'danger';
 
-            case 'reviewer':
+            case 'manager':
                 return 'warning';
 
             case 'reviewer':
@@ -61,7 +61,7 @@ export default function RowEditingDemo() {
             _users[index] = updatedUser;
             setUsers(_users);
         } catch (error) {
-            console.error("Error in updating user: ", err);
+            console.error("Error in updating user: ", error);
         }
     };
 

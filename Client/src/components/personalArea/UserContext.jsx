@@ -1,8 +1,16 @@
 import React, { createContext, useState, useContext } from 'react';
+import {useEffect} from 'react';
 export const UserContext = createContext();
 
 export function UserProvider({ children }) {
-  const [currentUser, setCurrentUser] = useState(null);
+  const [currentUser, setCurrentUser] = useState(() => {
+    const savedUser = localStorage.getItem('currentUser');
+    return savedUser ? JSON.parse(savedUser) : null;
+  });
+
+  useEffect(() => {
+    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+  }, [currentUser]);
 
   const login = (user) => {
     console.log(user);

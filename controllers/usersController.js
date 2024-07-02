@@ -35,7 +35,7 @@ const addUser = async (req, res) => {
         let addedUserHash = addedUser[0];
         delete addedUserHash.password;
         // Generate a JWT token for the new user
-        const token = jwt.sign({ id: addedUserHash.id, username: addedUserHash.username, role: 'user' }, JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign({ id: addedUserHash.id, username: addedUserHash.username, role: 'user' }, JWT_SECRET);
 
         res.status(200).send({ user: addedUserHash, token });
     } catch (error) {
@@ -70,7 +70,7 @@ const loginUser = async (req, res) => {
                 if (result.hasError) {
                     res.status(401).send('Authentication failed');
                 } else {
-                    const token = jwt.sign({ id: result.manager.id, username: result.manager.username, role: 'manager' }, JWT_SECRET, { expiresIn: '1h' });
+                    const token = jwt.sign({ id: result.manager.id, username: result.manager.username, role: userRole }, JWT_SECRET);
                     res.status(200).json({ user: result.manager, role: 'manager', token });
                 }
             } else {
@@ -78,7 +78,7 @@ const loginUser = async (req, res) => {
                 if (result.hasError) {
                     res.status(401).send('Authentication failed');
                 } else {
-                    const token = jwt.sign({ id: result.user.id, username: result.user.username, role: 'user' }, JWT_SECRET, { expiresIn: '1h' });
+                    const token = jwt.sign({ id: result.user.id, username: result.user.username, role: userRole }, JWT_SECRET);
                     res.status(200).json({ user: result.user, role: 'user', token });
                 }
             }

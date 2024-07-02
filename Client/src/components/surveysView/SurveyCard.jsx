@@ -10,6 +10,7 @@ const SurveyCard = ({ survey }) => {
     const navigate = useNavigate();
 
     const handleViewSurvey = () => {
+
         setSelectedSurvey(survey);
     };
 
@@ -29,7 +30,8 @@ const SurveyCard = ({ survey }) => {
                     icon="pi pi-eye"
                     rounded outlined severity="info"
                     aria-label="viewSurvey"
-                    onClick={handleViewSurvey} />
+                    onClick={handleViewSurvey} 
+                    disabled={!survey.active} />
                 <Button
                     className="viewSurveyResultsButton"
                     icon="pi pi-chart-line"

@@ -27,7 +27,7 @@ const addManager = async (req, res) => {
         const hashPassword = await bcrypt.hash(newManager.password, 10);
         newManager.password = hashPassword;
         const addedManager = await managerService.addManager(newManager);
-        const token = jwt.sign({ id: addedManager.id, username: addedManager.username, role: 'manager' }, JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign({ id: addedManager.id, username: addedManager.username, role: 'manager' }, JWT_SECRET);
 
         res.status(200).send({ user: addedManager, role: 'manager', token });
     } catch (error) {

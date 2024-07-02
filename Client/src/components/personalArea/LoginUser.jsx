@@ -25,6 +25,8 @@ export default function LoginUser() {
                 const res = await loginByPostRequest(username, password);
                 console.log(res);
                 if (res.status == 200) {
+                    const token = res.data.token;
+                    localStorage.setItem('token', token);
                     setCurrentUser(res.data.user);
                     // console.log(res.data.user.id);
                     navigate(`/${res.data.role}s/${res.data.user.id}`);

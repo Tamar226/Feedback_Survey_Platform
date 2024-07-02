@@ -62,7 +62,7 @@ async function getManagerDetails(userName, password) {
             throw new Error('Invalid password');
         }
 
-        const token = jwt.sign({ id: manager.id, username: manager.username }, JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign({ id: manager.id, username: manager.username }, JWT_SECRET);
 
         return {
             hasError: false,

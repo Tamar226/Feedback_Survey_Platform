@@ -5,7 +5,8 @@ export async function getUserDetails(username, password, setworngRequest) {
             method: "POST",
             body: JSON.stringify({ username: username, password: password }),
             headers: {
-                'Content-type': 'application/json'
+                'Content-type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`,
             },
         });
         if (!response.ok) {
@@ -32,7 +33,8 @@ export async function loginByPostRequest(username, password) {
             method: "POST",
             body: JSON.stringify({ username, password }),
             headers: {
-                'Content-type': 'application/json'
+                'Content-type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`,
             },
         });
         const status = response.status;
@@ -56,7 +58,8 @@ export async function RegisterByPostRequest(reqBody) {
             method: "POST",
             body: JSON.stringify(reqBody),
             headers: {
-                'Content-type': 'application/json'
+                'Content-type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`,
             }
         });
         const status = response.status;
@@ -73,11 +76,13 @@ export async function RegisterByPostRequest(reqBody) {
 
 export async function fetchSurveys () {
     try {
+        const token = localStorage.getItem('token');
         const response = await fetch('http://localhost:3000/surveys',
             {
                 method: 'GET',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
                 }
             });
         const status = response.status;
@@ -99,7 +104,8 @@ export async function fetchSurveyQuestions(surveyId){
             {
                 method: 'GET',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
                 }
             });
         const status = response.status;
@@ -120,7 +126,8 @@ export async function fetchSurveyAnswers(questionId) {
             {
                 method: 'GET',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
                 }
             });
         const status = response.status;
@@ -137,13 +144,13 @@ export async function fetchSurveyAnswers(questionId) {
 }
 export async function postData(data, setLoading, typeData) {
     try {
-        console.log('hii');
-        // setLoading ?? setLoading(true);
+        const token = localStorage.getItem('token');
         const response = await fetch(`http://localhost:3000/${typeData}`, {
             method: "POST",
             body: JSON.stringify(data),
             headers: {
-                'Content-type': 'application/json'
+                'Content-type': 'application/json',
+                'Authorization': `Bearer ${token}`
             },
         });
         const status = response.status;
@@ -167,7 +174,8 @@ export async function deleteData(id, typeData) {
         const response = await fetch(`http://localhost:8080/${typeData}/${id}`, {
             method: "DELETE",
             headers: {
-                'Content-type': 'application/json'
+                'Content-type': 'application/json',
+                'Authentication': `Bearer ${localStorage.getItem('token')}`
             },
         });
         if (!response.ok) {
@@ -185,7 +193,8 @@ export const addSurvey = async (survey) => {
         const response = await fetch('http://localhost:3000/surveys', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authentication': `Bearer ${localStorage.getItem('token')}`
             },
             body: JSON.stringify(survey)
         });
@@ -204,7 +213,8 @@ export const getSurveysBySearch = async (searchText) => {
         const response = await fetch(`http://localhost:3000/surveys/search?query=${encodeURIComponent(searchText)}`, {
             method: 'GET',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authentication': `Bearer ${localStorage.getItem('token')}`
             }
         });
         if (!response.ok) {
@@ -217,36 +227,13 @@ export const getSurveysBySearch = async (searchText) => {
     }
 };
 
-
-// export const submitSurveyResults = async (surveyId, answers, userId) => {
-//     try {
-//         const response = await fetch(`http://localhost:3000/surveys/${surveyId}/submitResults`, {
-//             method: 'POST',
-//             headers: {
-//                 'Content-Type': 'application/json',
-//             },
-//             body: JSON.stringify({
-//                 userId,
-//                 answers,
-//             }),
-//         });
-
-//         if (!response.ok) {
-//             throw new Error('Failed to submit survey results');
-//         }
-
-//         return await response.json();
-//     } catch (error) {
-//         console.error('Error submitting survey results:', error);
-//         throw error;
-//     }
-// };
 export const submitSurveyResults = async (surveyId, answers, userId) => {
     try {
         const response = await fetch(`http://localhost:3000/surveys/${surveyId}/submitResults`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Authentication': `Bearer ${localStorage.getItem('token')}`
             },
             body: JSON.stringify({
                 userId,
@@ -274,7 +261,8 @@ export const fetchSurveyDetails = async (surveyId) => {
         const response = await fetch(`http://localhost:3000/surveys/${surveyId}`, {
             method: 'GET',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
             }
         });
         console.log('not json:',response);
@@ -291,13 +279,14 @@ export const fetchSurveyDetails = async (surveyId) => {
         throw error;
     }
 };
-// Requests.js
+
 export const fetchSurveyResults = async (surveyId) => {
     try {
         const response = await fetch(`http://localhost:3000/surveys/${surveyId}/results`, {
             method: 'GET',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authentication': 'Bearer'+ localStorage.getItem('token')
             }
         });
         if (!response.ok) {
@@ -311,16 +300,15 @@ export const fetchSurveyResults = async (surveyId) => {
     }
 };
 
-
-
-
 export const getAllUsers = async ()=>{
     try {
+        const token = localStorage.getItem('token');
         const response = await fetch('http://localhost:3000/role-relations',
             {
                 method: 'GET',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
                 }
             });
         const status = response.status;
@@ -342,7 +330,8 @@ export const updateUserRole= async (username, role)=>{
             {
                 method: 'PUT',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
                 },
                 body: JSON.stringify({role})
             });

@@ -206,7 +206,10 @@ const getSurveyResults = async (surveyId) => {
     }
 
     const formattedResults = {};
+    const userIds = new Set(); // Use a set to store unique user IDs
+
     result.data.forEach(resultItem => {
+        userIds.add(resultItem.userId); // Add user ID to the set
         if (!formattedResults[resultItem.questionId]) {
             formattedResults[resultItem.questionId] = {
                 question: resultItem.question,
@@ -223,6 +226,7 @@ const getSurveyResults = async (surveyId) => {
     return {
         surveyName: result.data[0].surveyName,
         questions: formattedResults,
+        userIds: Array.from(userIds) // Convert the set to an array
     };
 };
 

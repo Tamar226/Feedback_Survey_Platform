@@ -129,10 +129,12 @@ import { postData } from '../../Requests';
 import { Button } from 'primereact/button';
 import { AutoComplete } from 'primereact/autocomplete';
 import './AddSurvey.css';
+import { useUser } from '../personalArea/UserContext';
 
 const AddSurvey = ({ onSurveyAdded, onClose }) => {
+    const { currentUser } = useUser();
     const [surveyData, setSurveyData] = useState({
-        userId: '',
+        userId: currentUser.id,
         surveyName: '',
         active: 1,
         category: '',
@@ -200,17 +202,6 @@ const AddSurvey = ({ onSurveyAdded, onClose }) => {
                     <button className="close-button" onClick={onClose}>✖</button>
                 </div>
                 <form onSubmit={handleSubmitSurvey} className="survey-form">
-                    <div className="form-group">
-                        <label htmlFor="userId">User ID:</label>
-                        <input
-                            type="text"
-                            id="userId"
-                            name="userId"
-                            value={surveyData.userId}
-                            onChange={handleInputChange}
-                            className="p-inputtext"
-                        />
-                    </div>
                     <div className="form-group">
                         <label htmlFor="surveyName">Survey Name:</label>
                         <input
