@@ -112,13 +112,13 @@ const saveAnswer = async (surveyId, answerId, userId) => {
 
 const getSurveyResults = async (surveyId) => {
     const query = `
-        SELECT s.surveyName, q.id as questionId, q.question, a.id as answerId, a.answer, COUNT(r.answerId) as count
+        SELECT s.surveyName, q.id as questionId, q.question, a.id as answerId, a.answer, COUNT(r.answerId) as count, r.userId
         FROM results r
         JOIN answers a ON r.answerId = a.id
         JOIN questions q ON a.questionId = q.id
         JOIN surveys s ON r.surveyId = s.id
         WHERE r.surveyId = ?
-        GROUP BY s.surveyName, q.id, a.id`;
+        GROUP BY s.surveyName, q.id, a.id, r.userId`;
     
     try {
         const [results] = await pool.execute(query, [surveyId]);
@@ -128,7 +128,6 @@ const getSurveyResults = async (surveyId) => {
         return prepareResult(true, 0, -1, null);
     }
 };
-
 
 function prepareResult(hasErrorTemp = true, affectedRowsTemp = 0, insertIdTemp = -1, dataTemp = null) {
     return {

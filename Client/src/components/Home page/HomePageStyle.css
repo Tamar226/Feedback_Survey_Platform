@@ -11,6 +11,21 @@ h3{
     padding: 0 10px;
     height: 5rem;
 }
+.custom-dialog {
+    top: 70px !important; /* Adjust the top position as needed */
+    right: 20px !important; /* Adjust the right position as needed */
+    border-radius: 10px; /* Example of rounded corners */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* Example of a shadow */
+}
+.profile-icon {
+    cursor: pointer;
+}
+
+.p-image {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+}
 
 .p-menuitem-link {
     height: 3.9rem;

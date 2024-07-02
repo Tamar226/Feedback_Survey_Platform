@@ -6,7 +6,9 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 dotenv.config();
-
+const fs = require('fs');
+const path = require('path');
+const { log } = require('console');
 const JWT_SECRET = /*process.env.JWT_SECRET*/'546442' || 'your_jwt_secret'; // יש לשמור בסוד את ה-secret
 
 const getAllUsers = async () => {
@@ -28,35 +30,75 @@ const getUserById = async (id) => {
 };
 
 const addUser = async (newUser) => {
-    // Get the role ID for 'user'
-    const userRole = await rolesService.getRoleByName('user');
+    try {
+        // Get the role ID for 'user'
+        const userRole = await rolesService.getRoleByName('user');
 
-    // Add new relation to roleRelation table
-    const newRelation = {
-        username: newUser.username,
-        roleName: userRole[0].name 
-    };
-    await roleRelationService.addRelation(newRelation);
+        // Add new relation to roleRelation table
+        const newRelation = {
+            username: newUser.username,
+            roleName: userRole[0].name
+        };
+        await roleRelationService.addRelation(newRelation);
 
-    const result = await userDataBase.addUser(newUser);
-    if (result.insertId >= 0) {
-        const insertUser = await userDataBase.getUserById(result.insertId);
-        return insertUser.data;
-    } else {
-        throw new Error('Error adding user');
+        // Upload profile image if provided
+        if (newUser.profileImage) {
+            console.log('Uploading profile image');
+            const imagePath = await uploadProfileImage(newUser.profileImage, newUser.username);
+            newUser.profileImage = imagePath;
+        }
+
+        const result = await userDataBase.addUser(newUser);
+        console.log(result);
+        if (result.insertId >= 0) {
+            const insertUser = await userDataBase.getUserById(result.insertId);
+            return insertUser.data;
+        } else {
+            throw new Error('Error adding user');
+        }
+    } catch (error) {
+        throw error;
     }
 };
 
+async function uploadProfileImage(file, username) {
+    console.log(file);
+    try {
+        const newFileName = `userProfile_${username}.png`;
+        const imagesBasePath = path.join(__dirname, '../profileImage');
+
+        // נסה ליצור את התיקייה הראשית אם לא קיימת
+        await fs.promises.mkdir(imagesBasePath, { recursive: true });
+
+        const fileBuffer = file.buffer;
+        const filePath = path.join(imagesBasePath, newFileName);
+
+        await fs.promises.writeFile(filePath, fileBuffer);
+console.log(`profileImage/${newFileName}`);
+        return `profileImage/${newFileName}`;
+    } catch (error) {
+        console.error('Error uploading profile image:', error);
+        throw error;
+    }
+}
+
 async function getUserDetails(userName, password) {
     try {
+        console.log(userName, password);
         const rows = await userDataBase.findUserByUsername(userName);
         if (rows.length === 0) {
-            throw new Error('User not found');
+            throw new Error('משתמש לא נמצא');
         }
         const user = rows[0][0];
+
+        // בודקים שהסיסמה מועברת כראוי לפונקציה bcrypt.compare
+        if (!password || typeof password !== 'string') {
+            throw new Error('סיסמה לא תקינה');
+        }
+
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
-            throw new Error('Invalid password');
+            throw new Error('סיסמה שגויה');
         }
 
         const token = jwt.sign({ id: user.id, username: user.username }, JWT_SECRET, { expiresIn: '1h' });
@@ -70,12 +112,13 @@ async function getUserDetails(userName, password) {
                 city: user.city,
                 age: user.age,
                 gender: user.gender,
-                job: user.job
+                job: user.job,
+                profileImage: user.profileImage // כלול את תמונת הפרופיל
             },
             token
         };
     } catch (error) {
-        console.error("error in services", error);
+        console.error("שגיאה בשירותים", error);
         throw error;
     }
 }

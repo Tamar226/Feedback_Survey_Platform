@@ -111,10 +111,14 @@ export default function App() {
           <Route path="/AboutUs" element={<AboutUs />} />
           <Route path="/ContactUs" element={<ContactUsPage />} />
           <Route path="login" element={<LoginUser />}>
+
           </Route>
-          <Route path="register" element={<RegisterUser />}/>
-          <Route path="surveys" element={<SurveysPage />} />
-          <Route path="surveys/:surveyId/results" element={<SurveyResults />} />
+          <Route path="users/:id">
+            <Route path="" element={<HomePage />}/>
+            <Route path="surveys/:surveyId/results" element={<SurveyResults />} />
+            <Route path="surveys" element={<SurveysPage />} />
+          </Route>
+          <Route path="register" element={<RegisterUser />} />
           <Route path="manager" element={<ManagerPage />}></Route>
         </Routes>
         <Footer />

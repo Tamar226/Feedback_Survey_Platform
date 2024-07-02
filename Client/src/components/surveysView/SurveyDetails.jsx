@@ -70,10 +70,6 @@ const SurveyDetails = ({ survey, onClose, userId }) => {
     return (
         <div className="survey-detail">
             <div className="p-card p-shadow-3 p-p-3 p-mt-5">
-                <div className="p-d-flex p-jc-between p-ai-center">
-                    <h3>{survey.surveyName}</h3>
-                    <Button icon="pi pi-times" className="p-button-rounded p-button-danger" onClick={onClose} />
-                </div>
                 {questions.length > 0 && (
                     <SurveyModal
                         survey={survey}

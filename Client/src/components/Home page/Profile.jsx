@@ -1,15 +1,15 @@
 import React from 'react';
-import { useUser } from '../Entering_the_personal_area/UserContext';
+import { useUser } from '../personalArea/UserContext'
 
 export default function ProfilePage() {
   const { currentUser } = useUser();
-
+console.log('hello my profile page');
   if (!currentUser) {
     return <p>No user is currently logged in.</p>;
   }
 
   return (
-    <div>
+    <div className="profile-card">
       <h1>User Profile</h1>
       <p><strong>Name:</strong> {currentUser.name}</p>
       <p><strong>Username:</strong> {currentUser.userName}</p>

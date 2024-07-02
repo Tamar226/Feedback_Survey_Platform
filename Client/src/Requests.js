@@ -49,19 +49,17 @@ export async function loginByPostRequest(username, password) {
     }
 }
 
-export async function RegisterByPostRequest(reqBody) {
-    console.log(reqBody);
+export async function RegisterByPostRequest(formData) {
+    console.log("form",formData);
     try {
         const response = await fetch(`http://localhost:3000/users/register`, {
             method: "POST",
-            body: JSON.stringify(reqBody),
-            headers: {
-                'Content-type': 'application/json'
-            }
+            body: formData,
         });
+        console.log('response:',response);
         const status = response.status;
         const data = await response.json();
-        if (status === 200) {
+        if (status === 201) {
             return { status, data };
         } else {
             return { status, data: null };
@@ -71,7 +69,8 @@ export async function RegisterByPostRequest(reqBody) {
     }
 }
 
-export async function fetchSurveys () {
+
+export async function fetchSurveys() {
     try {
         const response = await fetch('http://localhost:3000/surveys',
             {
@@ -88,13 +87,13 @@ export async function fetchSurveys () {
         else {
             return { status, data: null };
         }
-    }catch (error) {
+    } catch (error) {
         return { status: null, data: null };
     }
 }
 
-export async function fetchSurveyQuestions(surveyId){
-    try{
+export async function fetchSurveyQuestions(surveyId) {
+    try {
         const response = await fetch(`http://localhost:3000/questions/surveys/${surveyId}`,
             {
                 method: 'GET',
@@ -107,10 +106,10 @@ export async function fetchSurveyQuestions(surveyId){
         if (response.ok) {
             return { status, data };
         }
-    else {
+        else {
             return { status, data: null };
         }
-    }catch (error) {
+    } catch (error) {
         return { status: null, data: null };
     }
 }
@@ -152,7 +151,7 @@ export async function postData(data, setLoading, typeData) {
         if (!response.ok) {
             throw new Error("Network error executing the request");
         }
-        
+
         // setLoading ?? setLoading(false);
         console.log('seccsess');
         return { code: status, message: "success post the data", params: promiseData };
@@ -277,13 +276,13 @@ export const fetchSurveyDetails = async (surveyId) => {
                 'Content-Type': 'application/json'
             }
         });
-        console.log('not json:',response);
+        console.log('not json:', response);
         // console.log('json:',await response.json());
 
         if (!response.ok) {
             throw new Error(`Failed to fetch survey details for survey ID ${surveyId}`);
         }
-        
+
         const data = await response.json();
         return data; // Assuming your backend returns an object with survey and questions properties
     } catch (error) {
@@ -314,7 +313,7 @@ export const fetchSurveyResults = async (surveyId) => {
 
 
 
-export const getAllUsers = async ()=>{
+export const getAllUsers = async () => {
     try {
         const response = await fetch('http://localhost:3000/role-relations',
             {
@@ -331,20 +330,20 @@ export const getAllUsers = async ()=>{
         else {
             return { status, data: null };
         }
-    }catch (error) {
+    } catch (error) {
         return { status: null, data: null };
     }
 };
 
-export const updateUserRole= async (username, role)=>{
-    try{
+export const updateUserRole = async (username, role) => {
+    try {
         const response = await fetch(`http://localhost:3000/role-relations/${username}`,
             {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({role})
+                body: JSON.stringify({ role })
             });
         const status = response.status;
         const data = await response.json();
@@ -354,7 +353,7 @@ export const updateUserRole= async (username, role)=>{
         else {
             return { status, data: null };
         }
-    }catch (error) {
+    } catch (error) {
         return { status: 500, data: null };
     }
 }

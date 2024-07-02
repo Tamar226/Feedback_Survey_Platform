@@ -122,13 +122,16 @@ export default function SurveysPage() {
     const [showAddSurvey, setShowAddSurvey] = useState(false);
     const [selectedSurvey, setSelectedSurvey] = useState(null);
     const [searchText, setSearchText] = useState('');
+    const [categories, setCategories] = useState({});
 
     useEffect(() => {
         const getSurveys = async () => {
             try {
                 const result = await fetchSurveys();
                 if (result.status === 200 && result.data) {
-                    setSurveys(result.data[1][0]);
+                    const fetchedSurveys = result.data[1][0];
+                    setSurveys(fetchedSurveys);
+                    updateCategories(fetchedSurveys);
                 } else {
                     console.error("Failed to fetch surveys");
                 }
@@ -139,6 +142,18 @@ export default function SurveysPage() {
         getSurveys();
     }, []);
 
+    const updateCategories = (surveys) => {
+        const updatedCategories = {};
+        surveys.forEach(survey => {
+            const category = survey.category.toLowerCase();
+            if (!updatedCategories[category]) {
+                updatedCategories[category] = [];
+            }
+            updatedCategories[category].push(survey);
+        });
+        setCategories(updatedCategories);
+    };
+
     const handleAddSurvey = () => {
         setShowAddSurvey(true);
     };
@@ -148,7 +163,9 @@ export default function SurveysPage() {
     };
 
     const handleSurveyAdded = (newSurvey) => {
-        setSurveys([...surveys, newSurvey]);
+        const updatedSurveys = [...surveys, newSurvey];
+        setSurveys(updatedSurveys);
+        updateCategories(updatedSurveys);
         setShowAddSurvey(false);
     };
 
@@ -156,18 +173,20 @@ export default function SurveysPage() {
         setSearchText(e.target.value);
     };
 
-    const filteredSurveys = surveys.filter(survey =>
-        survey.surveyName.toLowerCase().includes(searchText.toLowerCase()) ||
-        survey.category.toLowerCase().includes(searchText.toLowerCase())
-    );
+    const handleSurveySelect = (survey) => {
+        setSelectedSurvey(survey);
+    };
 
-    const categories = {};
-    filteredSurveys.forEach(survey => {
-        if (!categories[survey.category]) {
-            categories[survey.category] = [];
-        }
-        categories[survey.category].push(survey);
-    });
+    const surveyTemplate = (survey) => {
+        return (
+            <div className="surveyItem" key={survey.id}>
+                <SurveyCard
+                    survey={survey}
+                    onSelect={() => handleSurveySelect(survey)}
+                />
+            </div>
+        );
+    };
 
     const responsiveOptions = [
         {
@@ -192,16 +211,18 @@ export default function SurveysPage() {
         }
     ];
 
-    const surveyTemplate = (survey) => {
-        return (
-            <div className="surveyItem" key={survey.id}>
-                <SurveyCard
-                    survey={survey}
-                    onSelect={() => setSelectedSurvey(survey)}
-                />
-            </div>
-        );
-    };
+    const filteredSurveys = surveys.filter(survey =>
+        survey.surveyName.toLowerCase().includes(searchText.toLowerCase()) ||
+        survey.category.toLowerCase().includes(searchText.toLowerCase())
+    );
+
+    const updatedCategories = {};
+    filteredSurveys.forEach(survey => {
+        if (!updatedCategories[survey.category]) {
+            updatedCategories[survey.category] = [];
+        }
+        updatedCategories[survey.category].push(survey);
+    });
 
     return (
         <div className="page-container">
@@ -214,19 +235,19 @@ export default function SurveysPage() {
                 />
                 <Button icon="pi pi-search" className="p-button-warning" />
             </div><br/>
-            <Button label="Add New Survey" icon="pi pi-plus" onClick={handleAddSurvey} className="p-mt-3" />   
+            <Button label="Add New Survey" icon="pi pi-plus" onClick={handleAddSurvey} className="p-mt-3" />
             {showAddSurvey && (
                 <div className="p-mt-4">
                     <AddSurvey onClose={handleCloseAddSurvey} onSurveyAdded={handleSurveyAdded} />
                 </div>
             )}
 
-            {Object.keys(categories).map(category => (
+            {Object.keys(updatedCategories).map(category => (
                 <div key={category} className='surveys-category'>
                     <h3>{category}</h3>
-                    {categories[category].length > 3 ? (
+                    {updatedCategories[category].length > 3 ? (
                         <Carousel 
-                            value={categories[category]} 
+                            value={updatedCategories[category]} 
                             numVisible={3} 
                             numScroll={1} 
                             responsiveOptions={responsiveOptions} 
@@ -237,7 +258,7 @@ export default function SurveysPage() {
                         />
                     ) : (
                         <div className="allSurveys">
-                            {categories[category].map(survey => surveyTemplate(survey))}
+                            {updatedCategories[category].map(survey => surveyTemplate(survey))}
                         </div>
                     )}
                 </div>
@@ -253,4 +274,3 @@ export default function SurveysPage() {
         </div>
     );
 }
-
