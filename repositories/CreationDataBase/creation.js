@@ -46,6 +46,7 @@ const create = async (pool) => {
         gender VARCHAR(255) NOT NULL,
         job VARCHAR(255) NOT NULL,
         company varchar(255),
+        profileImage VARCHAR(255),
         FOREIGN KEY (username) REFERENCES RoleRelation(username)
     );`);
 

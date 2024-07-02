@@ -10,8 +10,8 @@ var pool = mysql.createPool({
     // database: process.env.MYSQL_DATABASE,
     host: 'localhost',
     user: 'root',
-    // password: 'T50226',
-    password: '1570',
+    password: 'T50226',
+    // password: '1570',
     database: 'SurveysDatabase',
     port: '3306'
 }).promise();
@@ -35,11 +35,14 @@ async function getUserById(UserId) {
 
 async function addUser(newUser) {
     try {
-        const result = await pool.query(`INSERT INTO Users (name,username,email,password,city, age, gender, job, company) VALUES ('${newUser.name}','${newUser.username}','${newUser.email}','${newUser.password}','${newUser.city}','${newUser.age}','${newUser.gender}','${newUser.job}','${newUser.company}')`);
+        const result = await pool.query(`
+            INSERT INTO Users (name, username, email, password, city, age, gender, job, company, profileImage)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `, [newUser.name, newUser.username, newUser.email, newUser.password, newUser.city, newUser.age, newUser.gender, newUser.job, newUser.company, newUser.profileImage]);
+
         if (result[0].insertId > 0) {
-            return prepareResult(false, 0, result[0].insertId)
-        }
-        else {
+            return prepareResult(false, 0, result[0].insertId);
+        } else {
             return prepareResult(true, 0, 0);
         }
     } catch (error) {
@@ -47,12 +50,22 @@ async function addUser(newUser) {
     }
 }
 
+
+// async function findUserByUsername(username) {
+//     try {
+//         const rows = await pool.query('SELECT * FROM Users WHERE username = ?', [username]);
+//         return rows;
+//     } catch (error) {
+//         console.error("error in handler DB", error);
+//         throw error;
+//     }
+// }
 async function findUserByUsername(username) {
     try {
-        const rows = await pool.query('SELECT * FROM Users WHERE username = ?', [username]);
+        const rows = await pool.query('SELECT id, username, email, password, city, age, gender, job, profileImage FROM Users WHERE username = ?', [username]);
         return rows;
     } catch (error) {
-        console.error("error in handler DB", error);
+        console.error("שגיאה בטיפול במסד נתונים", error);
         throw error;
     }
 }

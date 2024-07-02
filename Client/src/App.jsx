@@ -91,8 +91,7 @@ import RegisterUser from "./components/personalArea/RegisterUser";
 import LoginUser from "./components/personalArea/LoginUser";
 import Header from "./components/Home page/Header";
 import Footer from "./components/Home page/Footer";
-// import Survey from "./components/SurveysAdding/AddSurvey";
-import { UserProvider } from './components/personalArea/UserContext';
+import { UserProvider } from "./components/personalArea/UserContext";
 import SurveysPage from "./components/surveysView/SurveysPage";
 import SurveyResults from "./components/surveysView/Results/SurveyResults";
 import AboutUs from "./components/Home page/AboutUs";
@@ -102,7 +101,7 @@ import ManagerPage from "./components/Home page/ManagerPage";
 
 export default function App() {
   return (
-    <>
+    <UserProvider>
       <GlobalStyle />
       <PrimeReactProvider>
         <Header />
@@ -112,18 +111,18 @@ export default function App() {
           <Route path="/AboutUs" element={<AboutUs />} />
           <Route path="/ContactUs" element={<ContactUsPage />} />
           <Route path="login" element={<LoginUser />}>
-          </Route>
 
-          <Route path="register" element={<RegisterUser />} />
-          <Route path="managers/:id" element={<ManagerPage />} />
+          </Route>
           <Route path="users/:id">
-            <Route path="surveys" element={<SurveysPage />} />
+            <Route path="" element={<HomePage />}/>
             <Route path="surveys/:surveyId/results" element={<SurveyResults />} />
+            <Route path="surveys" element={<SurveysPage />} />
           </Route>
-
+          <Route path="register" element={<RegisterUser />} />
+          <Route path="manager" element={<ManagerPage />}></Route>
         </Routes>
         <Footer />
       </PrimeReactProvider>
-    </>
+    </UserProvider>
   );
 }

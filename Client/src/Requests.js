@@ -52,8 +52,8 @@ export async function loginByPostRequest(username, password) {
     }
 }
 
-export async function RegisterByPostRequest(reqBody) {
-    console.log(reqBody);
+export async function RegisterByPostRequest(formData) {
+    console.log("form",formData);
     try {
         const response = await fetch(`http://localhost:3000/users/register`, {
             method: "POST",
@@ -88,7 +88,6 @@ export async function RegisterByPostRequest(reqBody) {
     }
 }
 
-
 export async function fetchSurveys () {
     try {
         const token = sessionStorage.getItem('token');
@@ -108,13 +107,13 @@ export async function fetchSurveys () {
         else {
             return { status, data: null };
         }
-    }catch (error) {
+    } catch (error) {
         return { status: null, data: null };
     }
 }
 
-export async function fetchSurveyQuestions(surveyId){
-    try{
+export async function fetchSurveyQuestions(surveyId) {
+    try {
         const response = await fetch(`http://localhost:3000/questions/surveys/${surveyId}`,
             {
                 method: 'GET',
@@ -128,10 +127,10 @@ export async function fetchSurveyQuestions(surveyId){
         if (response.ok) {
             return { status, data };
         }
-    else {
+        else {
             return { status, data: null };
         }
-    }catch (error) {
+    } catch (error) {
         return { status: null, data: null };
     }
 }
@@ -164,8 +163,7 @@ export async function postData(data, setLoading, typeData) {
             method: "POST",
             body: JSON.stringify(data),
             headers: {
-                'Content-type': 'application/json',
-                'Authorization': `Bearer ${token}`
+                'Content-type': 'application/json'
             },
         });
         const status = response.status;
@@ -174,7 +172,7 @@ export async function postData(data, setLoading, typeData) {
         if (!response.ok) {
             throw new Error("Network error executing the request");
         }
-        
+
         // setLoading ?? setLoading(false);
         console.log('seccsess');
         return { code: status, message: "success post the data", params: promiseData };
@@ -243,6 +241,30 @@ export const getSurveysBySearch = async (searchText) => {
     }
 };
 
+
+// export const submitSurveyResults = async (surveyId, answers, userId) => {
+//     try {
+//         const response = await fetch(`http://localhost:3000/surveys/${surveyId}/submitResults`, {
+//             method: 'POST',
+//             headers: {
+//                 'Content-Type': 'application/json',
+//             },
+//             body: JSON.stringify({
+//                 userId,
+//                 answers,
+//             }),
+//         });
+
+//         if (!response.ok) {
+//             throw new Error('Failed to submit survey results');
+//         }
+
+//         return await response.json();
+//     } catch (error) {
+//         console.error('Error submitting survey results:', error);
+//         throw error;
+//     }
+// };
 export const submitSurveyResults = async (surveyId, answers, userId) => {
     try {
         const response = await fetch(`http://localhost:3000/surveys/${surveyId}/submitResults`, {
@@ -281,13 +303,13 @@ export const fetchSurveyDetails = async (surveyId) => {
                 'Authorization': `Bearer ${sessionStorage.getItem('token')}`
             }
         });
-        console.log('not json:',response);
+        console.log('not json:', response);
         // console.log('json:',await response.json());
 
         if (!response.ok) {
             throw new Error(`Failed to fetch survey details for survey ID ${surveyId}`);
         }
-        
+
         const data = await response.json();
         return data; // Assuming your backend returns an object with survey and questions properties
     } catch (error) {
@@ -295,7 +317,7 @@ export const fetchSurveyDetails = async (surveyId) => {
         throw error;
     }
 };
-
+// Requests.js
 export const fetchSurveyResults = async (surveyId) => {
     try {
         const response = await fetch(`http://localhost:3000/surveys/${surveyId}/results`, {
@@ -316,7 +338,10 @@ export const fetchSurveyResults = async (surveyId) => {
     }
 };
 
-export const getAllUsers = async ()=>{
+
+
+
+export const getAllUsers = async () => {
     try {
         const token = sessionStorage.getItem('token');
         const response = await fetch('http://localhost:3000/role-relations',
@@ -335,13 +360,13 @@ export const getAllUsers = async ()=>{
         else {
             return { status, data: null };
         }
-    }catch (error) {
+    } catch (error) {
         return { status: null, data: null };
     }
 };
 
-export const updateUserRole= async (username, role)=>{
-    try{
+export const updateUserRole = async (username, role) => {
+    try {
         const response = await fetch(`http://localhost:3000/role-relations/${username}`,
             {
                 method: 'PUT',
@@ -349,7 +374,7 @@ export const updateUserRole= async (username, role)=>{
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${sessionStorage.getItem('token')}`,
                 },
-                body: JSON.stringify({role})
+                body: JSON.stringify({ role })
             });
         const status = response.status;
         const data = await response.json();
@@ -359,7 +384,7 @@ export const updateUserRole= async (username, role)=>{
         else {
             return { status, data: null };
         }
-    }catch (error) {
+    } catch (error) {
         return { status: 500, data: null };
     }
 }
