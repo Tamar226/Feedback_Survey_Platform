@@ -119,7 +119,7 @@ export default function App() {
             <Route path="surveys" element={<SurveysPage />} />
           </Route>
           <Route path="register" element={<RegisterUser />} />
-          <Route path="manager" element={<ManagerPage />}></Route>
+          <Route path="managers/:id" element={<ManagerPage />}></Route>
         </Routes>
         <Footer />
       </PrimeReactProvider>

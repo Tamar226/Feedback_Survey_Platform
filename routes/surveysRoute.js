@@ -8,7 +8,7 @@ surveysRouter.get('/:surveyId', surveysController.getSurveyById);
 surveysRouter.get('/:search', surveysController.getSurveysBySearch);
 surveysRouter.post('/', getUserRoleFromToken, surveysController.addSurvey);
 surveysRouter.put('/:surveyId', surveysController.updateSurvey);
-surveysRouter.delete('/:surveyId', surveysController.deleteSurvey);
+surveysRouter.delete('/:surveyId',getUserRoleFromToken, surveysController.deleteSurvey);
 surveysRouter.post('/:surveyId/submitResults', surveysController.submitSurveyResults);
 surveysRouter.get('/:surveyId/results', surveysController.getSurveyResults);
 

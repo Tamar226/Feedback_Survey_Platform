@@ -1,0 +1,29 @@
+.last-surveys-container {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.last-surveys {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: space-around;
+}
+
+.survey-item {
+    width: calc(33.33% - 20px); /* עבור מסך גדול יותר */
+    margin-bottom: 20px;
+}
+
+@media (max-width: 768px) {
+    .survey-item {
+        width: calc(50% - 20px); /* עבור מסך בינוני */
+    }
+}
+
+@media (max-width: 576px) {
+    .survey-item {
+        width: 100%; /* עבור מסך קטן */
+    }
+}

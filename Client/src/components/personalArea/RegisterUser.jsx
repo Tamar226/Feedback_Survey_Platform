@@ -228,6 +228,7 @@ export default function Register() {
         password: "",
         city: "",
         age: 18,
+        age: 18,
         gender: "male",
         job: "",
         company: "",
@@ -251,7 +252,7 @@ export default function Register() {
 
     const handleEmailBlur = (e) => {
         const { value } = e.target;
-        if (!validateEmail(value)) {
+        if (value && !validateEmail(value)) {
             setMessage("Invalid email address");
         }
     };
@@ -277,8 +278,15 @@ export default function Register() {
             setMessage("Please fill all the fields");
             return;
         }
-        if (message === "Invalid email address") {
+        if (!validateEmail(detailsRegister.email)) {
             setMessage("Please check your email address");
+            return false;
+        }
+        return true;
+    }
+
+    async function checkAccessPossibility() {
+        if (!validateInputs()) {
             return;
         }
 
@@ -295,16 +303,17 @@ export default function Register() {
         });
         console.log('resdata:', res.data);
         if (res.status === 200) {
-            console.log('succsses add user!!');
-            setCurrentUser(res.data.user);
-            // console.log(res.data.user.id);
-            navigate(`/users/${res.data.user.id}`);
-        }
-        else if (res.code !== 100) {
+            const user = Object.values(res.data)[0];
+            const token = res.data.token;
+            sessionStorage.setItem('token', token);
+            setCurrentUser(user);
+            login(user);
+            navigate(`/users/${user.id}`);
+        } else if (res.code !== 100) {
             if (res.code === 304) {
                 setMessage("User already exists");
             } else {
-                setMessage("Wrong username or password");
+                setMessage(res.message);
             }
             setDetailsRegister({
                 name: "",

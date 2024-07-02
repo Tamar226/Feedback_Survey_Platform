@@ -57,7 +57,9 @@ h3 {
 .viewSurveyResultsButton {
     color: rgb(255, 153, 0);
 }
-
+.deleteSurveyButton{
+    color: rgb(247, 49, 165);
+}
 @media (max-width: 768px) {
     .surveyItem {
         flex: 0 1 calc(50% - 20px);

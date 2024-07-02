@@ -10,8 +10,8 @@ var pool = mysql.createPool({
     host: 'localhost',
     user: 'root',
     // password: 'a1b2c3d4',
-    password: 'T50226',
-    // password: '1570',
+    // password: 'T50226',
+    password: '1570',
     database: 'SurveysDatabase',
     port: '3306'
 }).promise();
@@ -120,16 +120,24 @@ const getSurveyResults = async (surveyId) => {
         JOIN surveys s ON r.surveyId = s.id
         WHERE r.surveyId = ?
         GROUP BY s.surveyName, q.id, a.id, r.userId`;
-    
+
+    console.log('Executing query with surveyId:', surveyId);
+
     try {
         const [results] = await pool.execute(query, [surveyId]);
+        console.log('Query results:', results);
+        
+        // Check if results are empty and return an object with surveyId if so
+        if (results.length === 0) {
+            return prepareResult(false, 0, -1, { surveyId, questions: [], userIds: [] });
+        }
+
         return prepareResult(false, results.length, -1, results);
     } catch (error) {
         console.error('Error fetching survey results:', error);
         return prepareResult(true, 0, -1, null);
     }
 };
-
 
 
 function prepareResult(hasErrorTemp = true, affectedRowsTemp = 0, insertIdTemp = -1, dataTemp = null) {

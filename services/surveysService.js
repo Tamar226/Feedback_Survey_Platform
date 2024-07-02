@@ -205,11 +205,16 @@ const getSurveyResults = async (surveyId) => {
         throw new Error('Error fetching survey results');
     }
 
-    const formattedResults = {};
-    const userIds = new Set(); // Use a set to store unique user IDs
+    if (result.data.questions && result.data.questions.length === 0) {
+        return {
+            surveyId: result.data.surveyId,
+            questions: [],
+            userIds: []
+        };
+    }
 
+    const formattedResults = {};
     result.data.forEach(resultItem => {
-        userIds.add(resultItem.userId); // Add user ID to the set
         if (!formattedResults[resultItem.questionId]) {
             formattedResults[resultItem.questionId] = {
                 question: resultItem.question,
@@ -226,10 +231,9 @@ const getSurveyResults = async (surveyId) => {
     return {
         surveyName: result.data[0].surveyName,
         questions: formattedResults,
-        userIds: Array.from(userIds) // Convert the set to an array
+        userIds: [...new Set(result.data.map(item => item.userId))]
     };
 };
-
 
 
 

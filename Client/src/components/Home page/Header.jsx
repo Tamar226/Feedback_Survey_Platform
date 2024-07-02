@@ -125,17 +125,25 @@ export default function Header() {
             url: currentUser ? window.location.href : '/login',
         },
         {
-            label: 'Logout',
+            /*label: 'Logout',*/
             icon: 'pi pi-sign-out',
-            url: '/logout',
-            onClick: logout
-        }
+            url: '/',
+            onClick: () => {
+                console.log('logout');
+                logout(); // Logout user
+                sessionStorage.clear(); // Clear session storage
+                window.location.href = '/'; // Redirect to home page or any other page
+            }        }
     ];
+
     return (
         <div>
             <div className="header-container">
                 <div className="card tab-menu-left">
-                    <TabMenu model={items} activeItem={activeItem} onTabChange={handleTabChange} />
+                    <TabMenu model={items} activeItem={activeItem} onTabChange={() => {
+                        console.log(currentUser);
+                        handleTabChange
+                    }} />
                 </div>
                 <div className="card tab-menu-right">
                     <TabMenu model={authItems} activeItem={activeItem} onTabChange={handleTabChange} />

@@ -97,6 +97,10 @@ const updateSurvey = async (req, res) => {
 };
 
 const deleteSurvey = async (req, res) => {
+    const userRole = req.userRole;
+    if (userRole !== 'manger' && userRole !== 'reviewer') {
+        return res.status(403).json({ error: 'Forbidden: Only managers and reviewers can delete surveys' });
+    }
     const surveyId = req.params.surveyId;
     try {
         const deleteMessage = await surveyService.deleteSurvey(surveyId);
@@ -129,7 +133,7 @@ const getSurveyResults = async (req, res) => {
         const surveyResults = await surveyService.getSurveyResults(surveyId);
 
         if (!surveyResults || !surveyResults.questions || Object.keys(surveyResults.questions).length === 0) {
-            return res.status(404).json({ message: 'No results found for this survey' });
+            return res.status(200).json({ surveyId, questions: [], userIds: [] });
         }
 
         res.status(200).json(surveyResults);
@@ -137,7 +141,6 @@ const getSurveyResults = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
-
 
 module.exports = {
     getAllSurveys,
