@@ -17,7 +17,6 @@ const Profile = ({ onClose }) => {
         style={{ width: '60px', height: '60px', border: '1px solid rgb(48, 48, 48)', borderRadius: '50%', position:'absolute',marginLeft: '60%', cursor: 'pointer' }}
       />
       <h1>User Profile</h1>
-      <p><strong>Name:</strong> {currentUser.name}</p>
       <p><strong>Username:</strong> {currentUser.username}</p>
       <p><strong>Email:</strong> {currentUser.email}</p>
       <p><strong>City:</strong> {currentUser.city}</p>

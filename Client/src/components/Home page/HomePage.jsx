@@ -7,7 +7,6 @@ import './HomePageStyle.css';
 
 const HomePage = () => {
   const [showPopup, setShowPopup] = useState(false);
-  const [showProfile, setShowProfile] = useState(false);
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowPopup(true);
@@ -15,17 +14,15 @@ const HomePage = () => {
 
     return () => clearTimeout(timer);
   }, []);
-  const onClose = () => {
-    setShowProfile(false);
-  }
+  
   return (
     <>
       <div className="homepage-background"></div>
       <AboutUs />
       <LastSurveys />
       <ContactUs />
-      <button onClick={() => setShowProfile(true)}>pofile</button>
-      {showProfile && <div className='profileDiv'><Profile onClose={onClose} /></div>}
+      
+      
       {showPopup && (
         <div className="popup-container">
           <div className="popup-overlay">

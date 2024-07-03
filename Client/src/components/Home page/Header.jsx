@@ -10,8 +10,6 @@ import { Button } from 'primereact/button';
 import Profile from './Profile';
 import './HomePageStyle.css';
 
-const profileImagesPath = '../../../profileImage';
-
 export default function Header() {
     const { currentUser, login, logout } = useUser();
     const [activeItem, setActiveItem] = useState(null);
@@ -26,15 +24,6 @@ export default function Header() {
             setUserName('');
         }
     }, [currentUser]);
-    const getProfileImage = (username) => {
-        // Construct the full path to the image using the username
-        return `profileImage/userProfile_${username}.png`;
-    };
-
-    const handleImageClick = () => {
-        console.log('Image clicked, toggling showProfile');
-        setShowProfile(prevState => !prevState);
-    };
 
     const handleTabChange = (e) => {
         setActiveItem(e.value);
@@ -56,15 +45,6 @@ export default function Header() {
             label: (
                 <span style={{ display: 'flex', alignItems: 'center' }}>
                     {currentUser ? `Hello, ${currentUser.username}` : 'Login'}
-                    {currentUser ? (
-                        <img
-                            src={getProfileImage(userName)}
-                            alt="Profile"
-                            className="profile-image"
-                            style={{ width: '40px', height: '40px', border: '1px solid rgb(48, 48, 48)', borderRadius: '50%', marginLeft: '5px', cursor: 'pointer' }}
-                            onClick={handleImageClick}
-                        />
-                    ) : null}
                 </span>
             ),
             icon: currentUser ? null : PrimeIcons.USERS,
