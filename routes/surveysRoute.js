@@ -5,7 +5,6 @@ const getUserRoleFromToken = require('../middleware/getUserRoleFromToken');
 
 surveysRouter.get('/', surveysController.getAllSurveys);
 surveysRouter.get('/:surveyId', surveysController.getSurveyById);
-surveysRouter.get('/:search', surveysController.getSurveysBySearch);
 surveysRouter.post('/', getUserRoleFromToken, surveysController.addSurvey);
 surveysRouter.put('/:surveyId', surveysController.updateSurvey);
 surveysRouter.delete('/:surveyId',getUserRoleFromToken, surveysController.deleteSurvey);

@@ -244,7 +244,7 @@ const SurveyResults = () => {
 
     const numberOfQuestions = Object.keys(results).length;
     const totalRespondents = numberOfQuestions > 0 ? totalResponses / numberOfQuestions : 0;
-
+ const str=`${totalRespondents}`
     return (
         <div className="survey-results-container" ref={resultsRef}>
              <Button className='buttonDownload' label="Download Results Us PDF" icon="pi pi-download" onClick={downloadPDF} />

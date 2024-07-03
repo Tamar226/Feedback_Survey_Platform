@@ -3,17 +3,12 @@ const dotenv = require ('dotenv');
 dotenv.config({path:'../.env'});
 
 var pool = mysql.createPool({
-    // host: process.env.MYSQL_HOST,
-    // user: process.env.MYSQL_USER,
-    // password: process.env.MYSQL_PASSWORD,
-    // database: process.env.MYSQL_DATABASE,
-    host: 'localhost',
-    user: 'root',
-    // password: 'a1b2c3d4',
+    host: process.env.MYSQL_HOST,
+    user: process.env.MYSQL_USER,
+    password: process.env.MYSQL_PASSWORD,
+    database: process.env.MYSQL_DATABASE,
+    // host: 'localhost',
     // password: 'T50226',
-    password: '1570',
-    database: 'SurveysDatabase',
-    port: '3306'
 }).promise();
 
 async function getAllSurveys() {
@@ -32,29 +27,6 @@ async function getSurveyById(surveyId) {
         throw error;
     }
 }
-
-async function getSurveysBySearch(searchText) {
-    try {
-        const query = `
-            SELECT *
-            FROM surveys
-            WHERE surveyName LIKE ?
-               OR managerId LIKE ?
-               OR active = ?
-        `;
-        const params = [`%${searchText}%`, `%${searchText}%`, searchText === 'active' ? 1 : 0];
-        const results = await pool.query(query, params);
-
-        if (results.length === 0) {
-            return prepareResult(true, 0, -1, null); 
-        } else {
-            return prepareResult(false, results.length, -1, results); 
-        }
-    } catch (error) {
-        throw error;
-    }
-}
-
 async function addSurvey(newSurvey) {
     try {
         const result = await pool.query(`
@@ -152,7 +124,6 @@ function prepareResult(hasErrorTemp = true, affectedRowsTemp = 0, insertIdTemp =
 module.exports = {
     getAllSurveys,
     getSurveyById,
-    getSurveysBySearch,
     addSurvey,
     updateSurvey,
     deleteSurveyById,

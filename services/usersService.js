@@ -52,7 +52,15 @@ const addUser = async (newUser) => {
         console.log(result);
         if (result.insertId >= 0) {
             const insertUser = await userDataBase.getUserById(result.insertId);
-            return insertUser.data;
+
+            let url = insertUser.profileImage
+            const imagePath = path.resolve(__dirname, url.profile_);
+            const imageData = await fs.promises.readFile(imagePath);
+            const imageBase64 = Buffer.from(imageData).toString('base64');
+            return {
+                data: insertUser.data,
+                imageBase64: imageBase64
+            };
         } else {
             throw new Error('Error adding user');
         }
@@ -67,15 +75,14 @@ async function uploadProfileImage(file, username) {
         const newFileName = `userProfile_${username}.png`;
         const imagesBasePath = path.join(__dirname, '../profileImage');
 
-        // נסה ליצור את התיקייה הראשית אם לא קיימת
         await fs.promises.mkdir(imagesBasePath, { recursive: true });
 
         const fileBuffer = file.buffer;
         const filePath = path.join(imagesBasePath, newFileName);
 
         await fs.promises.writeFile(filePath, fileBuffer);
-console.log(`profileImage/${newFileName}`);
-        return `profileImage/${newFileName}`;
+        console.log(`../profileImage/${newFileName}`);
+        return `../profileImage/${newFileName}`;
     } catch (error) {
         console.error('Error uploading profile image:', error);
         throw error;

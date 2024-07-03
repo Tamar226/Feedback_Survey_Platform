@@ -4,7 +4,7 @@ const Answers = ({ answers, questionId, onAnswerChange, selectedAnswer }) => {
     return (
         <div>
             {answers.map(answer => (
-                <div key={answer.id}>
+                <div className='cardAnswers' key={answer.id}>
                     <input
                         type="radio"
                         name={`question-${questionId}`}

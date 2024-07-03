@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import SurveyCard from './SurveyCard';
-import AddSurvey from '../surveysAdding/AddSurvey';
+import AddSurvey from '../SurveysAdding/AddSurvey';
 import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 import { Carousel } from 'primereact/carousel';
@@ -124,7 +124,7 @@ export default function SurveysPage() {
 
     return (
         <div className="page-container">
-            <h2>Active Surveys</h2>
+            <h1>Surveys</h1>
             <div className="p-inputgroup">
                 <InputText
                     placeholder="Search by survey name, category, or active status..."

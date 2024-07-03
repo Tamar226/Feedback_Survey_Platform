@@ -80,36 +80,6 @@ const updateUser = async (req, res) => {
     }
 };
 
-// const loginUser = async (req, res) => {
-
-//     try {
-//         const userName = req.body.username;
-//         const password = req.body.password;
-//         const userRelation = await roleRelationService.getRelationByUsername(userName);
-//         if (userRelation.length > 0) {
-//             const userRole = userRelation[0].roleName;
-//             if (userRole == 'manager') {
-//                 const result = await managerService.getManagerDetails(userName, password);
-//                 if (result.hasError) {
-//                     res.status(401).send('Authentication failed');
-//                 } else {
-//                     res.status(200).json([result.manager, 'manager']);
-//                 }
-//             }
-//             else {
-//                 const result = await userService.getUserDetails(userName, password);
-//                 if (result.hasError) {
-//                     res.status(401).send('Authentication failed');
-//                 } else {
-//                     res.status(200).json([result.user, 'user']);
-//                 }
-//             }
-//         }
-//     } catch (error) {
-//         console.error('an error in userscontroller:' + error);
-//         res.status(500).send('Internal Server Error');
-//     }
-// };
 const loginUser = async (req, res) => {
     try {
         const userName = req.body.username;

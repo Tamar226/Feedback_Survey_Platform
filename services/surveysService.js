@@ -94,19 +94,6 @@ const getSurveyById = async (surveyId) => {
         questions: questionsResult.data,
     };
 };
-async function getSurveysBySearch(searchText) {
-    try {
-        const result = await surveysRepository.getSurveysBySearch(searchText);
-
-        if (result.hasError) {
-            throw new Error(`Failed to fetch surveys by search: ${result.data}`);
-        }
-        return result.data;
-    } catch (error) {
-        throw error;
-    }
-}
-
 
 const addSurvey = async (newSurvey) => {
     try {
@@ -241,7 +228,6 @@ const getSurveyResults = async (surveyId) => {
 module.exports = {
     getAllSurveys,
     getSurveyById,
-    getSurveysBySearch,
     addSurvey,
     updateSurvey,
     deleteSurvey,
