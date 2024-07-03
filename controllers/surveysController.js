@@ -89,8 +89,8 @@ const updateSurvey = async (req, res) => {
     const surveyId = req.params.surveyId;
     const updatedSurveyData = req.body;
     try {
-        const updateMessage = await surveyService.updateSurvey(surveyId, updatedSurveyData);
-        res.status(200).send(updateMessage);
+        const updateSurvey = await surveyService.updateSurvey(surveyId, updatedSurveyData);
+        res.status(200).send(updateSurvey);
     } catch (error) {
         res.status(404).send(error.message);
     }

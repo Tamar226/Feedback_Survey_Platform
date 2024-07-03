@@ -182,7 +182,7 @@ const AddSurvey = ({ onSurveyAdded, onClose }) => {
     const handleSubmitSurvey = async (e) => {
         e.preventDefault();
         try {
-            const response = await postData(surveyData, null, 'surveys');
+            const response = await postData(surveyData, 'surveys');
             if (response.code === 201) {
                 onSurveyAdded(response.params[0]);
             } else {

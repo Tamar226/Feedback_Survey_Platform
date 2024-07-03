@@ -29,24 +29,6 @@ const getUserById = async (req, res) => {
     }
 };
 
-// const addUser = async (req, res) => {
-//     const newUser = req.body;
-//     try {
-//         const hashPassword = await bcrypt.hash(newUser.password, 10);
-//         newUser.password = hashPassword;
-
-//         // Add profile image field to newUser object
-//         newUser.profileImage = req.file ? req.file.path : null;
-
-//         const addedUser = await userService.addUser(newUser);
-//         let addedUserHash = addedUser[0];
-//         delete addedUserHash.password;
-//         res.status(201).send([addedUserHash]);
-//     } catch (error) {
-//         console.error('Error adding user in controllers:', error);
-//         res.status(500).send('Internal Server Error');
-//     }
-// };
 const addUser = async (req, res) => {
     const newUser = req.body;
     try {

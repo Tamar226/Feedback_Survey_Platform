@@ -1,32 +1,34 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Card } from 'primereact/card';
 import { Button } from 'primereact/button';
-import { PrimeIcons } from 'primereact/api';
 import { Toast } from 'primereact/toast';
 import { useNavigate } from 'react-router-dom';
 import SurveyDetails from './SurveyDetails';
-import { fetchSurveyResults, deleteData, postData } from '../../Requests';
+import { fetchSurveyResults, deleteData, putData, fetchSurveyDetails } from '../../Requests';
 import { useUser } from '../personalArea/UserContext';
 
-
-const SurveyCard = ({ survey }) => {
-    const { currentUser } = useUser(); // קבלת פרטי המשתמש מהקונטקסט
+const SurveyCard = ({ survey, onSurveyDelete }) => {
+    const { currentUser } = useUser();
     const [selectedSurvey, setSelectedSurvey] = useState(null);
+    const [currentSurvey, setCurrentSurvey] = useState(survey);
     const navigate = useNavigate();
     const toast = useRef(null);
 
+    useEffect(() => {
+        setCurrentSurvey(survey);
+    }, [survey]);
+
     const handleViewSurvey = async () => {
         try {
-            const results = await fetchSurveyResults(survey.id);
+            const results = await fetchSurveyResults(currentSurvey.id);
             const userIds = results.userIds;
 
-            // check if currentUser.id is already in the userIds array
             if (userIds.includes(currentUser.id)) {
                 toast.current.show({ severity: 'error', summary: 'Notice', detail: 'You have already participated in this survey.', life: 3000 });
                 return;
             }
 
-            setSelectedSurvey(survey);
+            setSelectedSurvey(currentSurvey);
         } catch (error) {
             console.error("Error fetching survey results:", error);
         }
@@ -37,25 +39,23 @@ const SurveyCard = ({ survey }) => {
     };
 
     const handleViewSurveyResults = () => {
-        if (survey.active) {
-            // הסקר אקטיבי, רק המשתמש הנוכחי יכול להמשיך
-            if (currentUser.id === survey.userId) {
-                navigate(`/users/${currentUser.id}/surveys/${survey.id}/results`);
+        if (currentSurvey.active) {
+            if (currentUser.id === currentSurvey.userId) {
+                navigate(`/users/${currentUser.id}/surveys/${currentSurvey.id}/results`);
             } else {
-                // המשתמש הנוכחי אינו בעל הסקר, הצג הודעת שגיאה
                 toast.current.show({ severity: 'error', summary: 'Notice', detail: 'Only the survey owner can view results when the survey is active.' });
             }
         } else {
-            // הסקר לא אקטיבי, כל משתמש יכול להמשיך
-            navigate(`/users/${currentUser.id}/surveys/${survey.id}/results`);
+            navigate(`/users/${currentUser.id}/surveys/${currentSurvey.id}/results`);
         }
     };
-    const handledeleteSurvey = async () => {
-        if (currentUser.id === survey.userId) {
-            const result = await deleteData(survey.id, 'surveys');
-            if (result.success) {
+
+    const handleDeleteSurvey = async () => {
+        if (currentUser.id === currentSurvey.userId) {
+            const result = await deleteData(currentSurvey.id, 'surveys');
+            if (result.status === 200) {
                 toast.current.show({ severity: 'success', summary: 'Success', detail: 'Survey deleted successfully.' });
-                navigate('/users/surveys');
+                onSurveyDelete(currentSurvey.id); // Call the callback to remove the survey from the list
             } else {
                 toast.current.show({ severity: 'error', summary: 'Error', detail: 'Failed to delete survey.' });
             }
@@ -63,20 +63,31 @@ const SurveyCard = ({ survey }) => {
             toast.current.show({ severity: 'error', summary: 'Notice', detail: 'Only the survey owner can delete the survey.' });
         }
     };
-    
+
     const handleUpdateSurvey = async () => {
-        //  להוסיף בדיקת הרשאה- רק אם המשתמש מנהל או סוקר
-        const result = await postData(survey.id, 'surveys');
-        if (result.success) {
-            toast.current.show({ severity: 'success', summary: 'Success', detail: 'Survey deleted successfully.' });
-            navigate('/users/surveys');
+        if (currentUser.id === currentSurvey.userId) {
+            const upSurvey = {
+                surveyName: currentSurvey.surveyName,
+                active: !currentSurvey.active,
+                userId: currentSurvey.userId,
+                questions: currentSurvey.questions,
+                userIds: currentSurvey.userIds
+            };
+            const result = await putData(currentSurvey.id, upSurvey, 'surveys');
+            if (result.status === 200) {
+                const updatedSurvey = await fetchSurveyDetails(currentSurvey.id);
+                setCurrentSurvey(updatedSurvey);
+                toast.current.show({ severity: 'success', summary: 'Success', detail: 'Survey updated successfully.' });
+            } else {
+                toast.current.show({ severity: 'error', summary: 'Error', detail: 'Failed to update survey.' });
+            }
         } else {
-            toast.current.show({ severity: 'error', summary: 'Error', detail: 'Failed to delete survey.' });
+            toast.current.show({ severity: 'error', summary: 'Notice', detail: 'Only the survey owner can update the survey.' });
         }
     };
 
     return (
-        <Card className='surveyCard' title={survey.surveyName} subTitle={survey.active ? "Active" : "Inactive"}>
+        <Card className='surveyCard' title={currentSurvey.surveyName} subTitle={currentSurvey.active ? "Active" : "Inactive"}>
             <Toast ref={toast} position="center" />
             <div className='SurveysButtonsContainer'>
                 <Button
@@ -85,25 +96,29 @@ const SurveyCard = ({ survey }) => {
                     rounded outlined severity="info"
                     aria-label="viewSurvey"
                     onClick={handleViewSurvey}
-                    disabled={!survey.active} />
+                    disabled={!currentSurvey.active} />
                 <Button
                     className="viewSurveyResultsButton"
                     icon="pi pi-chart-line"
                     rounded outlined severity="info"
                     aria-label="viewSurveyResults"
                     onClick={handleViewSurveyResults} />
-                <Button
-                    className="deleteSurveyButton"
-                    icon="pi pi-trash"
-                    rounded outlined severity="info"
-                    aria-label="viewSurveyResults"
-                    onClick={handledeleteSurvey} />
-                <Button
-                    className="updateSurveyButton"
-                    icon="pi pi-ban"
-                    rounded outlined severity="info"
-                    aria-label="updataSurveyStatus"
-                    onClick={handleUpdateSurvey} />
+                {currentUser && currentUser.id === currentSurvey.userId && (
+                    <>
+                        <Button
+                            className="deleteSurveyButton"
+                            icon="pi pi-trash"
+                            rounded outlined severity="info"
+                            aria-label="deleteSurvey"
+                            onClick={handleDeleteSurvey} />
+                        <Button
+                            className="updateSurveyButton"
+                            icon="pi pi-pencil"
+                            rounded outlined severity="info"
+                            aria-label="updateSurvey"
+                            onClick={handleUpdateSurvey} />
+                    </>
+                )}
             </div>
             {selectedSurvey && (
                 <SurveyDetails survey={selectedSurvey} onClose={handleCloseSurveyDetail} />
@@ -113,4 +128,3 @@ const SurveyCard = ({ survey }) => {
 };
 
 export default SurveyCard;
-

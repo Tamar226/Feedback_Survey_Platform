@@ -153,7 +153,7 @@ const addSurvey = async (newSurvey) => {
 async function updateSurvey(surveyId, updatedSurveyData) {
     const result = await surveysRepository.updateSurvey(surveyId, updatedSurveyData);
     if (result.affectedRows > 0) {
-        return `Survey with ID ${surveyId} updated successfully`;
+        return result.data;
     } else {
         throw new Error(`Survey with ID ${surveyId} not found`);
     }

@@ -78,7 +78,7 @@ async function updateSurvey(surveyId, updatedSurveyData) {
     try {
         const result = await pool.query('UPDATE surveys SET ? WHERE id = ?', [updatedSurveyData, surveyId]);
         if (result[0].affectedRows > 0) {
-            return prepareResult(false, result[0].affectedRows, 0);
+            return prepareResult(false, result[0].affectedRows, 0, updatedSurveyData);
         } else {
             return prepareResult(true, 0, 0);
         }

@@ -38,26 +38,35 @@ export async function loginByPostRequest(username, password) {
             },
         });
         const status = response.status;
-        const data = await response.json();
+        let data;
+
+        // Check if the response is JSON
+        const contentType = response.headers.get('content-type');
+        if (contentType && contentType.includes('application/json')) {
+            data = await response.json();
+        } else {
+            data = await response.text();
+        }
         console.log(data);
 
         if (status === 200) {
             return { status, data };
         } else {
-            return { status, data: null };
+            return { status, data: null, message: data };
         }
     } catch (error) {
         console.error('Error:', error); 
-        return { status: null, data: null };
+        return { status: null, data: null, message: 'An error occurred while processing your request' };
     }
 }
+
 
 export async function RegisterByPostRequest(formData) {
     console.log("form",formData);
     try {
         const response = await fetch(`http://localhost:3000/users/register`, {
             method: "POST",
-            body: JSON.stringify(reqBody),
+            body: JSON.stringify(formData),
             headers: {
                 'Content-type': 'application/json',
                 'Authorization': `Bearer ${sessionStorage.getItem('token')}`,
@@ -156,14 +165,15 @@ export async function fetchSurveyAnswers(questionId) {
         return { status: null, data: null };
     }
 }
-export async function postData(data, setLoading, typeData) {
+export async function postData(data, typeData) {
     try {
         const token = sessionStorage.getItem('token');
         const response = await fetch(`http://localhost:3000/${typeData}`, {
             method: "POST",
             body: JSON.stringify(data),
             headers: {
-                'Content-type': 'application/json'
+                'Content-type': 'application/json',
+                'Authorization': `Bearer ${token}`
             },
         });
         const status = response.status;
@@ -338,9 +348,6 @@ export const fetchSurveyResults = async (surveyId) => {
     }
 };
 
-
-
-
 export const getAllUsers = async () => {
     try {
         const token = sessionStorage.getItem('token');
@@ -385,6 +392,37 @@ export const updateUserRole = async (username, role) => {
             return { status, data: null };
         }
     } catch (error) {
+        return { status: 500, data: null };
+    }
+}
+
+export async function putData(id, data, typeData, responseType = 'json') {
+    try {
+        const response = await fetch(`http://localhost:3000/${typeData}/${id}`, {
+            method: "PUT",
+            body: JSON.stringify(data),
+            headers: {
+                'Content-type': 'application/json',
+                'Authorization': `Bearer ${sessionStorage.getItem('token')}`,
+            },
+        });
+        const status = response.status;
+        
+        if (!response.ok) {
+            throw new Error("Network response was not ok");
+        }
+
+        let responseData;
+        if (responseType === 'text') {
+            responseData = await response.text();
+        } else {
+            responseData = await response.json();
+        }
+
+        return { status, data: responseData };
+    }
+    catch (error) {
+        console.error("Error:", error);
         return { status: 500, data: null };
     }
 }
