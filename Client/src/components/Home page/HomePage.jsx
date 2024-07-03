@@ -2,25 +2,28 @@ import React, { useState, useEffect } from 'react';
 import ContactUs from './ContactUs';
 import AboutUs from './AboutUs';
 import LastSurveys from './LastSurveys';
-import './HomePageStyle.css'; 
+import Profile from './Profile';
+import './HomePageStyle.css';
 
 const HomePage = () => {
   const [showPopup, setShowPopup] = useState(false);
-
+const [showProfile, setShowProfile] = useState(false);
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowPopup(true);
-    }, 3000); 
+    }, 3000);
 
     return () => clearTimeout(timer);
   }, []);
-
+ 
   return (
     <>
       <div className="homepage-background"></div>
       <AboutUs />
-      <LastSurveys/>
+      <LastSurveys />
       <ContactUs />
+      <button onClick={()=>setShowProfile(true)}>pofile</button>
+      {showProfile&&<div><Profile/></div>}
       {showPopup && (
         <div className="popup-container">
           <div className="popup-overlay">

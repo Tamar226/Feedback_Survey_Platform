@@ -10,7 +10,7 @@ import { Button } from 'primereact/button';
 import Profile from './Profile';
 import './HomePageStyle.css';
 
-const profileImagesPath = '/profileImage/';
+const profileImagesPath = '../../../profileImage';
 
 export default function Header() {
     const { currentUser, login, logout } = useUser();
@@ -26,9 +26,9 @@ export default function Header() {
             setUserName('');
         }
     }, [currentUser]);
-
     const getProfileImage = (username) => {
-        return `userProfile${username}.png`;
+        // Construct the full path to the image using the username
+        return `profileImage/userProfile_${username}.png`;
     };
 
     const handleImageClick = () => {
