@@ -26,6 +26,15 @@ export default function Header() {
             setUserName('');
         }
     }, [currentUser]);
+    const getProfileImage = (username) => {
+        // Construct the full path to the image using the username
+        return `profileImage/userProfile_${username}.png`;
+    };
+
+    const handleImageClick = () => {
+        console.log('Image clicked, toggling showProfile');
+        setShowProfile(prevState => !prevState);
+    };
 
     const handleTabChange = (e) => {
         setActiveItem(e.value);
@@ -44,20 +53,27 @@ export default function Header() {
 
     const authItems = [
         {
-            label:
-                (
-                    <span style={{ display: 'flex', alignItems: 'center' }}>
-                        {currentUser ? `Hello,  ${currentUser.username} ` : 'Login'}
-                    </span>
-                ),
+            label: (
+                <span style={{ display: 'flex', alignItems: 'center' }}>
+                    {currentUser ? `Hello, ${currentUser.username}` : 'Login'}
+                    {currentUser ? (
+                        <img
+                            src={getProfileImage(userName)}
+                            alt="Profile"
+                            className="profile-image"
+                            style={{ width: '40px', height: '40px', border: '1px solid rgb(48, 48, 48)', borderRadius: '50%', marginLeft: '5px', cursor: 'pointer' }}
+                            onClick={handleImageClick}
+                        />
+                    ) : null}
+                </span>
+            ),
             icon: currentUser ? null : PrimeIcons.USERS,
             url: currentUser ? window.location.href : '/login',
         },
         {
-            /*label: 'Logout',*/
+            label: 'Logout',
             icon: 'pi pi-sign-out',
-            url: '/',
-            onClick: () => {
+            command: () => {
                 console.log('logout');
                 logout(); // Logout user
                 sessionStorage.clear(); // Clear session storage
@@ -70,10 +86,7 @@ export default function Header() {
         <div>
             <div className="header-container">
                 <div className="card tab-menu-left">
-                    <TabMenu model={items} activeItem={activeItem} onTabChange={() => {
-                        console.log(currentUser);
-                        handleTabChange
-                    }} />
+                    <TabMenu model={items} activeItem={activeItem} onTabChange={handleTabChange} />
                 </div>
                 <div className="card tab-menu-right">
                     <TabMenu model={authItems} activeItem={activeItem} onTabChange={handleTabChange} />
@@ -97,7 +110,7 @@ export default function Header() {
                             label={item.label}
                             icon={item.icon}
                             className="p-button-text"
-                            onClick={item.onClick ? item.onClick : () => window.location.href = item.url}
+                            onClick={item.command ? item.command : () => window.location.href = item.url}
                         />
                     ))}
                 </div>
