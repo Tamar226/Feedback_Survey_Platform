@@ -4,12 +4,12 @@ dotenv.config({path:'../.env'});
 dotenv.config();
 
 var pool = mysql.createPool({
-    // host: process.env.MYSQL_HOST,
+    host: process.env.MYSQL_HOST,
     user: process.env.MYSQL_USER,
-    // password: process.env.MYSQL_PASSWORD,
+    password: process.env.MYSQL_PASSWORD,
     database: process.env.MYSQL_DATABASE,
-    host: 'localhost',
-    password: 'T50226',
+    // host: 'localhost',
+    // password: 'T50226',
 });
 
 async function getAllRoleRelations() {
