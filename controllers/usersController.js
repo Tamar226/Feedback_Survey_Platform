@@ -29,24 +29,6 @@ const getUserById = async (req, res) => {
     }
 };
 
-// const addUser = async (req, res) => {
-//     const newUser = req.body;
-//     try {
-//         const hashPassword = await bcrypt.hash(newUser.password, 10);
-//         newUser.password = hashPassword;
-
-//         // Add profile image field to newUser object
-//         newUser.profileImage = req.file ? req.file.path : null;
-
-//         const addedUser = await userService.addUser(newUser);
-//         let addedUserHash = addedUser[0];
-//         delete addedUserHash.password;
-//         res.status(201).send([addedUserHash]);
-//     } catch (error) {
-//         console.error('Error adding user in controllers:', error);
-//         res.status(500).send('Internal Server Error');
-//     }
-// };
 const addUser = async (req, res) => {
     const newUser = req.body;
     try {
@@ -98,36 +80,6 @@ const updateUser = async (req, res) => {
     }
 };
 
-// const loginUser = async (req, res) => {
-
-//     try {
-//         const userName = req.body.username;
-//         const password = req.body.password;
-//         const userRelation = await roleRelationService.getRelationByUsername(userName);
-//         if (userRelation.length > 0) {
-//             const userRole = userRelation[0].roleName;
-//             if (userRole == 'manager') {
-//                 const result = await managerService.getManagerDetails(userName, password);
-//                 if (result.hasError) {
-//                     res.status(401).send('Authentication failed');
-//                 } else {
-//                     res.status(200).json([result.manager, 'manager']);
-//                 }
-//             }
-//             else {
-//                 const result = await userService.getUserDetails(userName, password);
-//                 if (result.hasError) {
-//                     res.status(401).send('Authentication failed');
-//                 } else {
-//                     res.status(200).json([result.user, 'user']);
-//                 }
-//             }
-//         }
-//     } catch (error) {
-//         console.error('an error in userscontroller:' + error);
-//         res.status(500).send('Internal Server Error');
-//     }
-// };
 const loginUser = async (req, res) => {
     try {
         const userName = req.body.username;
