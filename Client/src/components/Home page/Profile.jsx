@@ -11,7 +11,7 @@ const Profile = ({ onClose }) => {
     <div><br />
       <Button style={{ color: 'black' }} onClick={onClose} icon="pi pi-times" rounded text severity="danger" aria-label="Cancel" />
       <img
-        src={`../profileImage/userProfile_${currentUser.userName}.png`}
+        src={`data:image/png;base64,${currentUser.profileImage}`}
         alt="Profile"
         className="profile-image"
         style={{ width: '60px', height: '60px', border: '1px solid rgb(48, 48, 48)', borderRadius: '50%', position:'absolute',marginLeft: '60%', cursor: 'pointer' }}
