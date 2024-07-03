@@ -11,16 +11,9 @@
     z-index: 1000; 
 }
 
-/* .modal-content {
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    max-width: 90%;
-    max-height: 90%;
-    overflow-y: auto;
-} */
-
+.cardAnswers{
+    text-align: left;
+}
 .modal-header {
     display: flex;
     justify-content: space-between;
