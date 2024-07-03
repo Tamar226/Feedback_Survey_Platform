@@ -13,16 +13,6 @@ const getAllSurveys = async (req, res) => {
     }
 };
 
-// const getSurveyById = async (req, res) => {
-//     const id = req.params.surveyId;
-//     try {
-//         const Survey = await surveyService.getSurveyById(id);
-//         res.status(200).send(Survey);
-//     } catch (error) {
-//         res.status(404).send(error.message);
-//     }
-// };
-
 const getSurveyById = async (req, res) => {
     const id = req.params.surveyId;
     try {
@@ -32,20 +22,6 @@ const getSurveyById = async (req, res) => {
         res.status(404).send({ error: error.message });
     }
 };
-const getSurveysBySearch = async (req, res) => {
-    const searchText = req.query.searchText;
-    try {
-        const surveys = await surveyService.getSurveysBySearch(searchText);
-        res.status(200).json(surveys);
-    } catch (error) {
-        res.status(500).send(error.message);
-    }
-};
-
-module.exports = {
-    getSurveysBySearch,
-};
-
 
 const addSurvey = async (req, res) => {
     const userRole = req.userRole;
@@ -145,7 +121,6 @@ const getSurveyResults = async (req, res) => {
 module.exports = {
     getAllSurveys,
     getSurveyById,
-    getSurveysBySearch,
     addSurvey,
     updateSurvey,
     deleteSurvey,
