@@ -1,7 +1,15 @@
 .last-surveys-container {
+    background-image: url('C:\Users\PC\.Full Stack\Survey_Project\client\src\Images\Black Doodle Group Project Presentation (9).png');
+    background-size: cover;
+    background-position: center;
+    width: 99%;
     padding: 20px;
-    max-width: 1200px;
     margin: 0 auto;
+    text-align: center;
+    min-height: 350px;
+    margin: 20px auto;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .last-surveys {
@@ -9,6 +17,7 @@
     flex-wrap: wrap;
     gap: 20px;
     justify-content: space-around;
+    
 }
 
 .survey-item {

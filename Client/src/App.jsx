@@ -98,8 +98,19 @@ import AboutUs from "./components/Home page/AboutUs";
 import HomePage from "./components/Home page/HomePage";
 import ContactUsPage from "./components/Information/ContactUsPage";
 import ManagerPage from "./components/Home page/ManagerPage";
-
+import { useUser } from "./components/personalArea/UserContext";
+import { useState,useEffect } from "react";
 export default function App() {
+    const { currentUser } = useUser();
+    const [userName, setUserName] = useState('');
+    useEffect(() => {
+        if (currentUser) {
+            setUserName(currentUser.username);
+        } else {
+            setUserName('');
+        }
+    }, [currentUser]);
+    
   return (
     <UserProvider>
       <GlobalStyle />
