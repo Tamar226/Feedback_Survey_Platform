@@ -96,5 +96,5 @@ We would like to express our gratitude to the following open-source projects and
 
 ### Contributors
 
--[Tamar] https://github.com/Tamar226
--[Hadas] https://github.com/hadas354
+- [Tamar226](https://github.com/Tamar226)
+- [Hadas354](https://github.com/hadas354)
