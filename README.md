@@ -94,7 +94,7 @@ We would like to express our gratitude to the following open-source projects and
 - [MySQL](https://www.mysql.com/)
 - [PrimeReact](https://www.primefaces.org/primereact/)
 
-### Contributors
+## Contributors
 
 - [Tamar226](https://github.com/Tamar226)
 - [Hadas354](https://github.com/hadas354)
