@@ -42,7 +42,7 @@ const addUser = async (newUser) => {
         await roleRelationService.addRelation(newRelation);
 
         // Upload profile image if provided
-        if (newUser.profileImage) {
+        if (newUser.profileImage!==undefined ) {
             console.log('Uploading profile image');
             const imagePath = await uploadProfileImage(newUser.profileImage, newUser.username);
             newUser.profileImage = imagePath;
@@ -54,9 +54,12 @@ const addUser = async (newUser) => {
             const insertUser = await userDataBase.getUserById(result.insertId);
 
             let url = insertUser.profileImage
-            const imagePath = path.resolve(__dirname, url.profile_);
-            const imageData = await fs.promises.readFile(imagePath);
-            const imageBase64 = Buffer.from(imageData).toString('base64');
+            let imageBase64=null; //if the picture will not upload
+            if (url){
+                const imagePath = path.resolve(__dirname, url.profile_);
+                const imageData = await fs.promises.readFile(imagePath);
+                const imageBase64 = Buffer.from(imageData).toString('base64');
+            }
             return {
                 data: insertUser.data,
                 imageBase64: imageBase64

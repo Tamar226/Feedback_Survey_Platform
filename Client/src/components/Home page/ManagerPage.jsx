@@ -82,8 +82,8 @@ export default function RowEditingDemo() {
             />
         );
     };
-
     const rolesBodyTemplate = (rowData) => {
+        console.log(rowData);
         return <Tag value={rowData.roleName} severity={getSeverity(rowData.roleName)}></Tag>;
     };
 

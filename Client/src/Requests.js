@@ -72,7 +72,6 @@ export async function RegisterByPostRequest(formData) {
                 'Authorization': `Bearer ${sessionStorage.getItem('token')}`,
             }
         });
-        console.log(response);
         const status = response.status;
         const data = await response.json();
         let message = '';
@@ -348,6 +347,9 @@ export const fetchSurveyResults = async (surveyId) => {
         throw error;
     }
 };
+
+
+
 
 export const getAllUsers = async () => {
     try {

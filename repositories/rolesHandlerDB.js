@@ -7,8 +7,11 @@ var pool = mysql.createPool({
     user: process.env.MYSQL_USER,
     password: process.env.MYSQL_PASSWORD,
     database: process.env.MYSQL_DATABASE,
-    // host: 'localhost',
+    host: 'localhost',
     // password: 'T50226',
+    password: '1570',
+        user: 'root',
+    database:'surveysdatabase'
 }).promise();
 
 async function getAllRoles() {

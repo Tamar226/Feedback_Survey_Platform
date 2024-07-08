@@ -8,9 +8,11 @@ var pool = mysql.createPool({
     user: process.env.MYSQL_USER,
     password: process.env.MYSQL_PASSWORD,
     database: process.env.MYSQL_DATABASE,
-    // host: 'localhost',
+    host: 'localhost',
     // password: 'T50226',
-    // database:'SurveysDatabase'
+    password: '1570',
+        user: 'root',
+    database:'surveysdatabase'
 }).promise();
 
 async function getAllUsers() {
@@ -35,7 +37,7 @@ async function addUser(newUser) {
         const result = await pool.query(`
             INSERT INTO Users (name, username, email, password, city, age, gender, job, company, profileImage)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        `, [newUser.name, newUser.username, newUser.email, newUser.password, newUser.city, newUser.age, newUser.gender, newUser.job, newUser.company, newUser.profileImage]);
+        `, [newUser.name, newUser.username, newUser.email, newUser.password, newUser.city, newUser.age, newUser.gender, newUser.job, newUser.company, newUser.profileImage||null]);
 
         if (result[0].insertId > 0) {
             return prepareResult(false, 0, result[0].insertId);

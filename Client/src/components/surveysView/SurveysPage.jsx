@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import SurveyCard from './SurveyCard';
-import AddSurvey from '../SurveysAdding/AddSurvey';
+import AddSurvey from '../surveysAdding/AddSurvey';
 import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 import { Carousel } from 'primereact/carousel';
@@ -142,7 +142,7 @@ export default function SurveysPage() {
 
             {Object.keys(updatedCategories).map(category => (
                 <div key={category} className='surveys-category'>
-                    <h3>{category}</h3>
+                    <h3 className='surveyCategory'>{category}</h3>
                     {updatedCategories[category].length > 3 ? (
                         <Carousel 
                             value={updatedCategories[category]} 

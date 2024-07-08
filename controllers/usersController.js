@@ -48,7 +48,7 @@ const addUser = async (req, res) => {
         }
 
         // Remove password from display before sending to client
-        let addedUserHash = addedUser[0];
+        let addedUserHash = addedUser.data[0];
         delete addedUserHash.password;
 
         // If the added user is already existing and not modified, send a 304 response
