@@ -66,7 +66,7 @@ cd server npx sequelize-cli db:migrate
 
 
 ```sh
-cd server npm start
+npm start
 ```
 
 2. In a separate terminal, start the frontend development server:
@@ -74,7 +74,8 @@ cd server npm start
 
 
 ```sh
-cd client npm run dev
+cd client 
+npm run dev
 ```
 
 3. Open your web browser and visit `http://localhost:5173` to access the Survey_Project application.
@@ -83,6 +84,17 @@ cd client npm run dev
 
 Contributions are welcome! If you find any issues or have suggestions for improvements, please open an issue or submit a pull request.
 
-## License
+## Acknowledgments
 
-This project is licensed under the [MIT License](LICENSE).
+We would like to express our gratitude to the following open-source projects and libraries that were instrumental in building Survey_Project:
+
+- [React](https://reactjs.org/)
+- [Node.js](https://nodejs.org/)
+- [Express.js](https://expressjs.com/)
+- [MySQL](https://www.mysql.com/)
+- [PrimeReact](https://www.primefaces.org/primereact/)
+
+### Contributors
+
+-[Tamar] https://github.com/Tamar226
+-[Hadas] https://github.com/hadas354
