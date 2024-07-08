@@ -56,7 +56,20 @@ cd client npm install cd ../server npm install
 
 
 ```sh
-cd server npx sequelize-cli db:migrate
+cd repositories
+cd CreationDataBase
+node runDB.js
+```
+
+#### Frontend packages
+```sh
+cd client 
+npm install react react-dom @emotion/react @emotion/styled axios primeicons primereact react-router-dom
+```
+
+#### Backend packages
+```sh
+npm install express mysql2 sequelize
 ```
 
 ### Running the Application
